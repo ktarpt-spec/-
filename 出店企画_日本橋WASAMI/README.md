@@ -11,10 +11,10 @@
 ## 再生成（src/）
 ```
 python3 src/geometry.py src/build/floors.json        # 各階プラン（ここを編集）
-python3 src/plans.py output/drawings <cad1f.pkl>      # 平面図
+python3 src/plans.py output/drawings                  # 平面図（1Fは募集図面スキャンを下図に使用）
 python3 src/elevations.py output/drawings             # 立面図・サイン
 cd src && node render_all.mjs ../output/images        # パース（three.js）
 python3 build_pdf.py ../output && node shot.mjs ../output/添付資料.html ../output/添付資料_平面図・立面図・内外装イメージ.pdf
 python3 fill_xlsx.py <貸主様式.xlsx> ../output/出店企画書_fukka日本橋院.xlsx
 ```
-※ `cad1f.pkl` は貸主提供の1F DWG から建築レイヤを抽出したもの（DWG自体はリポジトリに含めていません）。
+※ 面積：1F 98.36㎡（約29.75坪）、4F・5F 各G229.86㎡（約69.53坪）。1Fの下図は `src/assets/plan_1F_scan.png`（貸主の募集図面）。

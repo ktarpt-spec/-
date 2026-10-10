@@ -231,7 +231,11 @@ function treatRoom(r) {
     box(0.5, 0.025, 0.22, M.wood, mm(r.x1 - 160), 1.55, -mm(r.y0 + 1100)).rotation.y = Math.PI / 2
     box(0.3, 0.06, 0.18, M.towel, mm(r.x1 - 160), 1.6, -mm(r.y0 + 1100)).rotation.y = Math.PI / 2
   } else {
-    bed((r.x0 + r.x1) / 2 - 200, r.y1 - 650, Math.PI / 2)
+    bed(r.x0 + 1275, r.y1 - 650, Math.PI / 2)
+    stool(r.x1 - 420, r.y1 - 1500)
+    box(0.4, 0.25, 0.35, M.woodH, mm(r.x1 - 400), 0.125, -mm(r.y0 + 375))
+    box(0.5, 0.025, 0.22, M.wood, mm(r.x0 + 110), 1.55, -mm(r.y0 + 900)).rotation.y = Math.PI / 2
+    box(0.3, 0.06, 0.18, M.towel, mm(r.x0 + 110), 1.6, -mm(r.y0 + 900)).rotation.y = Math.PI / 2
   }
 }
 
@@ -289,7 +293,7 @@ function reception(rc, f) {
 }
 
 // ------------------------------------------------------------ shell (floors 4/5)
-const COLS = [1708, 4408, 7108, 9808, 12508, 15208, 17908, 20608]
+const COLS = [422, 3122, 5822, 8522, 11222, 13922, 16622, 19322]
 function upperShell(f) {
   const W = f.W, D = f.D, CH = f.ch_render
   // 道路側（Y1面）窓
@@ -304,11 +308,17 @@ function upperShell(f) {
   for (const c of COLS) box(0.8, mm(CH), 0.45, M.wall, mm(c), mm(CH) / 2, -mm(D - 175))
   wallSeg(W + 150, D + 250, W + 150, -100, CH, M.wall, [], 300)
   // コア側壁（EVホール開口）
-  wallSeg(-300, -50, 9750, -50, CH, M.wall, [], 100)
-  wallSeg(12350, -50, W + 300, -50, CH, M.wall, [], 100)
-  wallSeg(9750, -2600, 12350, -2600, CH, M.wall, [], 100)
-  box(1.0, 2.1, 0.04, M.metal, mm(10500), 1.05, mm(2550))
-  box(1.0, 2.1, 0.04, M.metal, mm(11600), 1.05, mm(2550))
+  const [e0, e1, ed] = f.evh
+  wallSeg(-300, -50, e0, -50, CH, M.wall, [{ a: f.stair_door[0] + 300, b: f.stair_door[1] + 300, top: 2100 }], 100)
+  wallSeg(e1, -50, W + 300, -50, CH, M.wall, [], 100)
+  wallSeg(e0, -50, e0, ed, CH, M.wall, [], 100); wallSeg(e1, -50, e1, ed, CH, M.wall, [], 100)
+  wallSeg(e0, ed, e1, ed, CH, M.wall, [], 100)
+  box(0.9, 2.1, 0.04, M.metal, mm(e0 - 1), 1.05, mm(-ed - 1200)).rotation.y = Math.PI / 2
+  box(0.9, 2.1, 0.04, M.metal, mm(e1 + 1), 1.05, mm(-ed - 1200)).rotation.y = Math.PI / 2
+  box(0.9, 2.1, 0.04, M.door, mm((f.stair_door[0] + f.stair_door[1]) / 2), 1.05, mm(80))
+  // 既設カウンターキッチン（給湯）
+  const pt = f.rooms.find(r => r.id === 'pt')
+  if (pt) { box(mm(pt.x1 - pt.x0), 0.85, mm(pt.y1 - pt.y0 - 200), M.white, mm((pt.x0 + pt.x1) / 2), 0.425, -mm((pt.y0 + pt.y1) / 2)); box(mm(pt.x1 - pt.x0), 0.03, mm(pt.y1 - pt.y0 - 200), M.top, mm((pt.x0 + pt.x1) / 2), 0.86, -mm((pt.y0 + pt.y1) / 2)) }
   const ceil = new THREE.Mesh(new THREE.PlaneGeometry(mm(W + 600), mm(D + 3000)), M.ceil); ceil.rotation.x = Math.PI / 2
   ceil.position.set(mm(W / 2), mm(CH), -mm(D / 2 - 1300)); ceil.receiveShadow = true; scene.add(ceil)
   const fl = new THREE.Mesh(new THREE.PlaneGeometry(mm(W + 600), mm(D + 6000)), M.carpet); fl.rotation.x = -Math.PI / 2
@@ -382,15 +392,15 @@ function buildUpper(key) {
     if (r.kind === 'treat') rects.push([r.x0 + 500, (r.y0 + r.y1) / 2, r.x1 - 500, (r.y0 + r.y1) / 2 + 1])
     if (r.kind === 'room' || r.kind === 'service') rects.push([r.x0 + 400, (r.y0 + r.y1) / 2, r.x1 - 400, (r.y0 + r.y1) / 2 + 1])
   }
-  rects.push([300, 5500, 9500, 5501], [13200, 5500, 22700, 5501])
-  rects.push([13000, 2600, 17200, 2601], [7400, 2600, 9800, 2601], [5000, 700, 9600, 701])
-  if (f.lounge) rects.push([8000, 3000, 15000, 3001])
+  rects.push([300, 5500, 8500, 5501], [12200, 5500, 20700, 5501])
+  rects.push([12400, 2600, 16200, 2601], [3200, 2600, 8200, 2601], [2600, 700, 10600, 701])
+  if (f.lounge) rects.push([7600, 3000, 12600, 3001])
   ceilingLights(f, rects)
   const pts = []
   for (let x = 1500; x < f.W; x += 3000) { pts.push([x, 5500]); pts.push([x, 2600]) }
   for (const r of f.rooms) if (r.kind === 'treat') pts.push([(r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2])
   addPointLights(f, pts, 1.6, 5)
-  plant(17300, 4500, 1.3); plant(7600, 1700, 1.0)
+  if (f.floor === '4F') { plant(16300, 4500, 1.3); plant(8200, 1800, 1.0) } else { plant(12500, 4500, 1.3) }
 }
 
 function build1F() {
@@ -399,34 +409,40 @@ function build1F() {
   const fl = new THREE.Mesh(new THREE.PlaneGeometry(mm(W + 2000), mm(D + 2000)), M.carpet); fl.rotation.x = -Math.PI / 2; fl.position.set(mm(W / 2), 0, -mm(D / 2)); fl.receiveShadow = true; scene.add(fl)
   const ceil = new THREE.Mesh(new THREE.PlaneGeometry(mm(W + 2000), mm(D + 2000)), M.ceil); ceil.rotation.x = Math.PI / 2; ceil.position.set(mm(W / 2), mm(CH), -mm(D / 2)); scene.add(ceil)
   // 外周壁
-  wallSeg(-150, -100, -150, 4950, CH, M.wall, [{ a: 1650, b: 3350, top: 2900, bottom: 150 }], 300)   // 道路側 SSW-2
-  wallSeg(-300, -150, W + 300, -150, CH, M.wall, [{ a: 3150, b: 3950, top: 2100 }], 300)            // 館内側
+  wallSeg(-150, -100, -150, 4260, CH, M.wall, [{ a: 1650, b: 3350, top: 2900, bottom: 150 }], 300)   // 道路側 SSW-2
+  wallSeg(-300, -150, W + 300, -150, CH, M.wall, [{ a: 2900, b: 3700, top: 2100 }], 300)            // 館内側
   wallSeg(-300, D + 150, W + 300, D + 150, CH, M.wall, [], 300)
-  wallSeg(W + 150, -100, W + 150, D + 100, CH, M.wall, [], 300)
+  const [n0, n1] = f.notch
+  wallSeg(W + 150, -100, W + 150, n1 + 150, CH, M.wall, [], 300)
+  wallSeg(W + 300, n1 + 150, n0 + 150, n1 + 150, CH, M.wall, [], 300)
+  wallSeg(n0 + 150, n1, n0 + 150, D + 300, CH, M.wall, [], 300)
   for (const c of f.columns) box(0.8, mm(CH), 0.4, M.wall, mm(c[0]), mm(CH) / 2, -mm(D - 200))
   // 道路側窓の外：明るい外光＋木調ルーバー（600mm後退）
   const sky = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 2.8), M.sky); sky.rotation.y = Math.PI / 2; sky.position.set(-0.32, 1.5, -mm(2500)); scene.add(sky)
   for (let i = 0; i < 12; i++) box(0.04, 2.4, 0.06, M.wood, mm(650), 1.3, -mm(1600 + i * 155))
   box(0.36, 0.12, 0.02, new THREE.MeshStandardMaterial({ map: logoTex('#f4efe6', '#24418f', 512, 170, 120) }), mm(700), 1.75, -mm(2450)).rotation.y = -Math.PI / 2
   // エントランス（既設アプローチ）とのガラス間仕切
-  wallSeg(1900, 4950, 1900, D, CH, M.glass, [{ a: 200, b: 1400, top: 2400 }], 30)
-  wallSeg(0, 4950, 1900, 4950, CH, M.wall, [], 100)
+  const vs = f.rooms.find(r => r.id === 'vest')
+  wallSeg(vs.x1, vs.y0, vs.x1, D, CH, M.glass, [{ a: 400, b: 1600, top: 2400 }], 30)
+  wallSeg(0, vs.y0, vs.x1, vs.y0, CH, M.wall, [], 100)
   // MRI室は天井まで（シールド）
   roomWalls(f)
   // 受付
   reception(f.reception, f)
   for (const [x, y, rot] of f.chairs) chair(x, y, rot)
-  // MRI
-  const mriR = f.rooms.find(r => r.id === 'mri'); const mx = mm((mriR.x0 + mriR.x1) / 2 + 300)
-  const gan = new THREE.Mesh(new RoundedBoxGeometry(2.2, 2.0, 1.8, 6, 0.35), M.mri); gan.position.set(mx, 1.0, -mm(mriR.y0 + 3400)); gan.castShadow = true; scene.add(gan)
-  const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.33, 1.82, 48), M.dark); hole.rotation.x = Math.PI / 2; hole.position.set(mx, 1.0, -mm(mriR.y0 + 3400)); scene.add(hole)
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.06, 16, 64), M.mriBlue); ring.position.set(mx, 1.0, -mm(mriR.y0 + 2490)); scene.add(ring)
-  box(0.6, 0.75, 2.0, M.mri, mx, 0.375, -mm(mriR.y0 + 1400)); box(0.55, 0.06, 2.0, M.bed, mx, 0.78, -mm(mriR.y0 + 1400))
+  // MRI（ボア軸をX方向に配置）
+  const mriR = f.rooms.find(r => r.id === 'mri')
+  const gx = mm(mriR.x1 - 1500), gz = -mm((mriR.y0 + mriR.y1) / 2)
+  const gan = new THREE.Mesh(new RoundedBoxGeometry(1.8, 2.0, 2.2, 6, 0.35), M.mri); gan.position.set(gx, 1.0, gz); gan.castShadow = true; scene.add(gan)
+  const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.33, 1.82, 48), M.dark); hole.rotation.z = Math.PI / 2; hole.position.set(gx, 1.0, gz); scene.add(hole)
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.06, 16, 64), M.mriBlue); ring.rotation.y = Math.PI / 2; ring.position.set(gx - 0.91, 1.0, gz); scene.add(ring)
+  const tl = mm(mriR.x1 - 2400 - mriR.x0 - 450)
+  box(tl, 0.75, 0.6, M.mri, mm(mriR.x0 + 450) + tl / 2, 0.375, gz); box(tl, 0.06, 0.55, M.bed, mm(mriR.x0 + 450) + tl / 2, 0.78, gz)
   // 診察・処置
   const ex = f.rooms.find(r => r.id === 'ex'); box(1.4, 0.72, 0.6, M.wood, mm(ex.x0 + 900), 0.36, -mm(ex.y0 + 600)); bed(ex.x1 - 550, ex.y1 - 1150)
   const tr = f.rooms.find(r => r.id === 'tr'); bed(tr.x0 + 1400, tr.y0 + 1250, Math.PI / 2)
-  ceilingLights(f, [[600, 1500, 3400, 1501], [600, 3300, 3400, 3301], [5300, 3500, 9700, 3501], [5400, 5300, 7700, 5301], [5400, 1450, 7700, 1451], [10500, 3300, 13400, 3301]])
-  addPointLights(f, [[1500, 1500], [1500, 4000], [3500, 2500], [7500, 3500], [12000, 3300]], 2.2, 6)
+  ceilingLights(f, [[600, 1500, 3400, 1501], [600, 3300, 3400, 3301], [5300, 3500, 9500, 3501], [5400, 5300, 7700, 5301], [5400, 1450, 7700, 1451], [10300, 2200, 13400, 2201]])
+  addPointLights(f, [[1500, 1500], [1500, 4000], [3500, 2500], [7500, 3500], [11800, 2200]], 2.2, 6)
   plant(300, 4600, 1.2); plant(3300, 300, 0.9)
 }
 
@@ -441,7 +457,7 @@ function buildExterior() {
   const glassEx = new THREE.MeshStandardMaterial({ color: 0x55636f, roughness: 0.12, metalness: 0.35 })
   const warm = new THREE.MeshStandardMaterial({ color: 0xfff1d8, emissive: 0xffe6bf, emissiveIntensity: 0.6 })
   // 立面：u(左=X1)→ X、高さ → Y、建物面 Z=0
-  const parts = [[0, 2.3, 'entry'], [2.3, 3.9, 'panel'], [3.9, 5.6, 'window'], [5.6, 7.3, 'panel'], [7.3, 10.3, 'ecp'], [10.3, BW, 'bldg']]
+  const parts = [[0, 2.3, 'entry'], [2.3, 3.3, 'panel'], [3.3, 5.0, 'window'], [5.0, 6.8, 'panel'], [6.8, 10.3, 'ecp'], [10.3, BW, 'bldg']]
   const h1 = H1 - 0.9
   for (const [a, b, k] of parts) {
     const w = b - a, cx = a + w / 2
@@ -511,14 +527,14 @@ function buildExterior() {
 // ------------------------------------------------------------ views
 const VIEWS = {
   // 4F 待合から受付を望む（銀座院の構図）
-  v4_lobby: { build: () => buildUpper('4F'), pos: [17400, 250, 1450], look: [10200, 3900, 1150], fov: 64 },
-  v4_aisle: { build: () => buildUpper('4F'), pos: [22800, 5500, 1500], look: [4000, 5300, 1250], fov: 66 },
-  v4_room: { build: () => buildUpper('4F'), pos: [12600, 6400, 1500], look: [11000, 8600, 1000], fov: 72, hideCeil: false },
-  v5_free: { build: () => buildUpper('5F'), pos: [15200, 1900, 1450], look: [7800, 4700, 1100], fov: 64 },
+  v4_lobby: { build: () => buildUpper('4F'), pos: [16400, 300, 1450], look: [9200, 3900, 1150], fov: 64 },
+  v4_aisle: { build: () => buildUpper('4F'), pos: [20800, 5500, 1500], look: [3000, 5300, 1250], fov: 66 },
+  v4_room: { build: () => buildUpper('4F'), pos: [12900, 6350, 1500], look: [11100, 8600, 1000], fov: 72 },
+  v5_free: { build: () => buildUpper('5F'), pos: [13600, 1600, 1450], look: [7000, 4300, 1100], fov: 64 },
   v1_lobby: { build: build1F, pos: [350, 500, 1500], look: [4300, 4700, 1200], fov: 68 },
-  v1_mri: { build: build1F, pos: [10400, 400, 1600], look: [12400, 4200, 900], fov: 75 },
-  ax4: { build: () => buildUpper('4F'), pos: [16500, -15500, 24000], look: [11500, 3600, 0], fov: 29, cutaway: true },
-  ax5: { build: () => buildUpper('5F'), pos: [16500, -15500, 24000], look: [11500, 3600, 0], fov: 29, cutaway: true },
+  v1_mri: { build: build1F, pos: [10100, 3900, 1600], look: [12600, 1500, 900], fov: 75 },
+  ax4: { build: () => buildUpper('4F'), pos: [15000, -15500, 24000], look: [10500, 3000, 0], fov: 29, cutaway: true },
+  ax5: { build: () => buildUpper('5F'), pos: [15000, -15500, 24000], look: [10500, 3000, 0], fov: 29, cutaway: true },
   ax1: { build: build1F, pos: [10000, -11000, 15500], look: [6900, 3300, 0], fov: 33, cutaway: true },
   ext: { build: buildExterior, pos: null, fov: 52, exterior: true },
   ext_entry: { build: buildExterior, pos: null, fov: 44, exterior: true },

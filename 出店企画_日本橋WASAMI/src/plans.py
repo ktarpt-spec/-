@@ -1,6 +1,7 @@
 """平面計画図（A3横・SVG）を生成する"""
 import math, pickle, sys, os
-from geometry import FLOORS, CAD_ORIGIN, GRID_Y, area, treat_count
+import base64
+from geometry import FLOORS, AREA, SCAN_1F, area, treat_count
 
 PAGE_W, PAGE_H = 420, 297
 FONT = "'IPAGothic','IPAPGothic',sans-serif"
@@ -70,42 +71,41 @@ def north_marker(g, x, y):
     g.text(x, y + 8.5, "X1通り側", 2.0, fill=C["sub"])
 
 
-def draw_floor(f, ox, oy, s, cad=None):
+def draw_floor(f, ox, oy, s, scan=None):
     """ox,oy = 図面上の貸室原点(x=0,y=0)位置[mm-paper]、s = 縮尺(paper/real)"""
     g = SVG()
     P = lambda x, y: (ox + x * s, oy - y * s)
     W, D = f["W"], f["D"]
 
-    # --- 1F: 既存CAD（建築レイヤ）を背景に
-    if cad is not None:
-        cx0, cy0 = CAD_ORIGIN[f["floor"]]
-        a, b = P(-2400, D + 1400); c, d = P(W + 1700, -3200)
-        g.add(f'<clipPath id="cadclip"><rect x="{a}" y="{b}" width="{c-a}" height="{d-b}"/></clipPath><g clip-path="url(#cadclip)">')
-        for L, geo in cad:
-            if isinstance(geo, tuple):
-                continue
-            xs = [p[0] - cx0 for p in geo]; ys = [p[1] - cy0 for p in geo]
-            if max(xs) < -1800 or min(xs) > W + 1800 or max(ys) < -2600 or min(ys) > D + 1300:
-                continue
-            pts = " ".join(f"{ox + x*s:.2f},{oy - y*s:.2f}" for x, y in zip(xs, ys))
-            g.add(f'<polyline points="{pts}" fill="none" stroke="#b9b3ad" stroke-width="0.12"/>')
-        g.add('</g>')
+    # --- 1F: 募集図面（貸主提供）を下図に
+    if scan is not None:
+        path, cx0, cy0, iw, ih = scan
+        k = 1000 / SCAN_1F["px_per_m"] * s          # px → paper
+        x0 = ox + (cx0 - SCAN_1F["px0"]) * k
+        y0 = oy - (SCAN_1F["py0"] - cy0) * k
+        b64 = base64.b64encode(open(path, "rb").read()).decode()
+        g.add(f'<image x="{x0:.2f}" y="{y0:.2f}" width="{iw*k:.2f}" height="{ih*k:.2f}" opacity="0.55" '
+              f'href="data:image/png;base64,{b64}"/>')
 
-    # --- 貸室床
-    x, y = P(0, D)
-    g.rect(x, y, W * s, D * s, fill=C["tint"])
+    # --- 貸室床（切欠きを除く）
+    nt = f.get("notch")
+    pts = [(0, 0), (W, 0), (W, nt[1]), (nt[0], nt[1]), (nt[0], D), (0, D)] if nt else [(0, 0), (W, 0), (W, D), (0, D)]
+    g.add('<polygon points="' + " ".join("%.2f,%.2f" % P(*q) for q in pts) + f'" fill="{C["tint"]}" opacity="0.92"/>')
 
     # --- コア（上階）
     for r in f.get("core", []):
         x, y = P(r["x0"], r["y1"])
-        g.rect(x, y, (r["x1"] - r["x0"]) * s, (r["y1"] - r["y0"]) * s, fill=C["core"], st=C["shell"], sw=0.35)
+        tc_ = r["kind"] == "tcore"
+        g.rect(x, y, (r["x1"] - r["x0"]) * s, (r["y1"] - r["y0"]) * s, fill=C["tint"] if tc_ else C["core"], st=C["shell"], sw=0.3)
         cxp, cyp = P((r["x0"] + r["x1"]) / 2, (r["y0"] + r["y1"]) / 2)
-        g.text(cxp, cyp + 0.8, r["name"], 2.2, fill=C["sub"])
+        g.text(cxp, cyp + 0.8, r["name"], 2.0, fill=C["text"] if tc_ else C["sub"], weight="bold" if tc_ else "normal")
     if f.get("core"):
-        x, y = P(0, 0)
-        g.text(ox + 4550 * s / 2, oy + 5100 * s / 2, "（共用部・他区画）", 2.2, fill=C["sub"])
-        g.text(ox + (W / 2) * s, oy + 5100 * s + 4.5,
-               "※コア形状は1階CAD・募集図面からの想定。実寸はビル側図面にて要確認", 2.0, fill=C["sub"])
+        g.text(ox + (W / 2) * s, oy + 4800 * s + 4.5,
+               "※コアは募集図面（4・5階）をもとに作図。実寸はビル側図面にて要確認", 2.0, fill=C["sub"])
+        e0, e1, _ = f["evh"]
+        p1, p2 = P(e0, 0), P(e1, 0)
+        g.line(*p1, *p2, st=C["red"], w=0.35, dash="1,0.6")
+        g.text((p1[0] + p2[0]) / 2, p1[1] + 3.0, "防火扉（随時閉鎖・既設）", 1.7, fill=C["red"])
 
     # --- 部屋（塗り）
     for r in f["rooms"]:
@@ -116,7 +116,7 @@ def draw_floor(f, ox, oy, s, cad=None):
             g.rect(x, y, (r["x1"] - r["x0"]) * s, (r["y1"] - r["y0"]) * s, fill=fill)
 
     # --- 外壁（上階：模式表現）
-    if cad is None:
+    if scan is None:
         t = 250 * s
         x, y = P(0, D)
         g.path(f"M{x - t},{oy} L{x - t},{y - t} L{x + W*s + t},{y - t} L{x + W*s + t},{oy}",
@@ -203,9 +203,10 @@ def draw_floor(f, ox, oy, s, cad=None):
     # --- 避難経路矢印（上階）
     cor = [r for r in f["rooms"] if r["kind"] == "corridor" and f["floor"] != "1F"]
     for r in cor:
-        ax, ay = P(r["x1"] - 300, 700); bx, by = P(r["x0"] + 1300, 700)
+        ax, ay = P(r["x1"] - 300, 700); bx, by = P(f.get("stair_door", (r["x0"], 0))[1] + 300, 700)
         g.line(ax, ay, bx, by, st=C["accent"], w=0.4, dash="1.2,0.8", extra='marker-end="url(#arr)"')
-        sx, sy = P(r["x0"] + 900, 0)
+        sd = f.get("stair_door", (r["x0"], r["x0"] + 900))
+        sx, sy = P((sd[0] + sd[1]) / 2, 0)
         g.line(sx - 900 * s / 2 * 1.4, sy, sx + 900 * s / 2 * 1.4, sy, st="white", w=wt * 1.4)
         g.path(f"M{sx-0.63*900*s},{sy} A{900*s},{900*s} 0 0 1 {sx+0.63*900*s},{sy}", st=C["wall"], sw=0.18)
 
@@ -216,6 +217,7 @@ def draw_floor(f, ox, oy, s, cad=None):
         cx, cy = P(*(r.get("lp") or ((r["x0"] + r["x1"]) / 2, (r["y0"] + r["y1"]) / 2)))
         a = area(r)
         if r["kind"] == "treat":
+            cx, cy = P((r["x0"] + r["x1"]) / 2, r["y0"] + 650)
             g.text(cx, cy - 2.3, r["name"].replace("\n", " "), 1.9, weight="bold")
             g.text(cx, cy + 0.2, f"{a:.1f}㎡", 1.7, fill=C["sub"])
         elif r["kind"] == "corridor":
@@ -231,13 +233,21 @@ def draw_floor(f, ox, oy, s, cad=None):
         cx, cy = P(rc["cx"] + 150 * math.cos(m), rc["cy"] + 150 * math.sin(m))
         g.text(cx, cy + 0.9, "受付", 2.6, weight="bold")
 
+    # --- 区画線（リースライン）
+    if f["floor"] == "1F":
+        nt = f["notch"]
+        pts = [(0, 0), (W, 0), (W, nt[1]), (nt[0], nt[1]), (nt[0], D), (0, D)]
+    else:
+        e0, e1, ed = f["evh"]
+        pts = [(0, -4800), (2000, -4800), (2000, 0), (e0, 0), (e0, ed), (e1, ed), (e1, 0), (W, 0), (W, D), (0, D)]
+    g.add('<polygon points="' + " ".join("%.2f,%.2f" % P(*q) for q in pts) + f'" fill="none" stroke="{C["red"]}" stroke-width="0.45"/>')
     # --- 寸法
     dims(g, f, P, s)
     # --- 通り芯
-    for k, v in GRID_Y.items():
+    for k, v in f["grid"].items():
         if -500 < v < W + 500:
             px, py = P(v, D)
-            go = 30 if f["floor"] != "1F" else 15
+            go = 30
             g.line(px, py - 2, px, py - go + 2.4, st="#999", w=0.12, dash="2,0.6,0.4,0.6")
             g.circle(px, py - go, 2.4, fill="white", st="#777", sw=0.2)
             g.text(px, py - go + 0.9, k, 2.0, fill="#555")
@@ -289,13 +299,16 @@ def furniture(g, f, P, s):
                 box(x1 - 650, y0 + 250, x1 - 250, y0 + 600, fill="#f4efe8")
             else:
                 box(x0 + 300, y1 - 1050, x0 + 2250, y1 - 250, fill="#fff", rx=0.6)
+                box(x0 + 2000, y1 - 980, x0 + 2230, y1 - 320, fill="#f2ede6", rx=0.3)
+                a, b = P(x1 - 420, y1 - 1500); g.circle(a, b, 190 * s)
+                box(x1 - 600, y0 + 200, x1 - 200, y0 + 550, fill="#e8dccb")
         elif r["kind"] == "mri":
-            mx = (x0 + x1) / 2 + 300
-            box(mx - 1100, y0 + 2400, mx + 1100, y0 + 4400, fill="#dfe6ec", st=C["blue"], sw=0.25, rx=1.5)
-            a, b = P(mx, y0 + 3400); g.circle(a, b, 330 * s, fill="white", st=C["blue"], sw=0.2)
-            box(mx - 300, y0 + 400, mx + 300, y0 + 2400, fill="white", st=C["blue"], sw=0.2, rx=0.5)
-            a, b = P(mx, y0 + 3400)
-            g.text(a + 9, b - 6, "MRI装置", 1.8, fill=C["blue"])
+            my = (y0 + y1) / 2
+            gx = x1 - 1500
+            box(gx - 1000, my - 1100, gx + 1000, my + 1100, fill="#dfe6ec", st=C["blue"], sw=0.25, rx=1.5)
+            a, b = P(gx, my); g.circle(a, b, 330 * s, fill="white", st=C["blue"], sw=0.2)
+            box(x0 + 450, my - 300, gx - 1000, my + 300, fill="white", st=C["blue"], sw=0.2, rx=0.5)
+            g.text(a, b + 13.5, "MRI装置（機種により要調整）", 1.6, fill=C["blue"])
         elif r["id"] == "ex":
             box(x0 + 200, y0 + 300, x0 + 1600, y0 + 900)
             a, b = P(x0 + 900, y0 + 1350); g.circle(a, b, 230 * s)
@@ -312,18 +325,19 @@ def furniture(g, f, P, s):
         elif r["id"] == "mech":
             box(x0 + 150, y1 - 700, x1 - 150, y1 - 150, fill="#e6e6e6")
             box(x0 + 150, y0 + 1000, x0 + 900, y1 - 900, fill="#e6e6e6")
-        elif r["id"] in ("lm", "lw", "sl"):
-            n = int((x1 - x0 - 300) / 400) if r["id"] != "sl" else int((y1 - y0 - 300) / 400)
-            if r["id"] == "sl":
-                for i in range(n):
-                    box(x0 + 100, y0 + 150 + i * 400, x0 + 550, y0 + 550 + i * 400, fill="#e8dccb")
-                box(x0 + 1300, y0 + 1300, x0 + 1800, y0 + 2600, fill="#f4efe8", rx=0.4)
-            else:
-                for i in range(n):
-                    yy = y0 + 100 if r["id"] == "lm" else y1 - 550
-                    box(x0 + 150 + i * 400, yy, x0 + 550 + i * 400, yy + 450, fill="#e8dccb")
-                cy = (y0 + y1) / 2 + (300 if r["id"] == "lm" else -300)
-                box(x0 + 700, cy - 200, x0 + 1800, cy + 200, fill="#f4efe8", rx=0.4)
+        elif r["id"] in ("lm", "slm", "slw", "mch"):
+            n = int((y1 - y0 - 300) / 400)
+            for i in range(n):
+                box(x0 + 100, y0 + 150 + i * 400, x0 + 550, y0 + 550 + i * 400, fill="#e8dccb")
+            if x1 - x0 > 1300:
+                box(x1 - 550, y0 + 500, x1 - 150, y0 + 1500, fill="#f4efe8", rx=0.4)
+        elif r["id"] == "lw":
+            n = int((x1 - x0 - 300) / 400)
+            for i in range(n):
+                box(x0 + 150 + i * 400, y0 + 100, x0 + 550 + i * 400, y0 + 550, fill="#e8dccb")
+            box(x0 + 150, y1 - 550, x0 + 1500, y1 - 100, fill="#efe4d2")
+            for i in range(2):
+                a, b = P(x0 + 450 + i * 700, y1 - 850); g.circle(a, b, 180 * s)
         elif r["id"] == "pw":
             box(x0 + 100, y0 + 150, x0 + 550, y1 - 300, fill="#efe4d2")
             for i in range(3):
@@ -342,7 +356,7 @@ def furniture(g, f, P, s):
                 a, b = P(x0 + 1350, y0 + yy); g.circle(a, b, 230 * s)
         elif r["id"] in ("of5", "st4"):
             box(x0 + 150, y0 + 200, x1 - 150, y0 + 900, fill="#f4efe8")
-            for i in range(2):
+            for i in range(2 if x1 - x0 > 2000 else 1):
                 a, b = P(x0 + 750 + i * 1100, y0 + 1300); g.circle(a, b, 220 * s)
             box(x0 + 150, y1 - 550, x1 - 150, y1 - 150, fill="#ecebe8")
         elif r["kind"] == "service" and r["id"] not in ("bk",):
@@ -425,7 +439,7 @@ def dims(g, f, P, s):
     yb = D + 2600 / (s * 100) * 0 + 1200
     if f["floor"] == "1F":
         hdim(0, W, D + 1900, f"{W:,}")
-        for a, b in [(0, 5000), (5000, 8000), (8000, 10000), (10000, W)]:
+        for a, b in [(0, 5000), (5000, 8000), (8000, 9800), (9800, W)]:
             hdim(a, b, D + 1150, f"{b-a:,}")
         vdim(0, D, -1300, f"{D:,}")
         for a, b in [(0, 2900), (2900, 4100), (4100, D)]:
@@ -461,60 +475,59 @@ def summary_table(g, x, y, f):
     return yy
 
 
-def make_plan(floor, cad=None):
+SCAN = ("assets/plan_1F_scan.png", 450, 380, 2650, 1720)   # 募集図面（1階）切出し：path, 左上px, 幅, 高さ
+
+
+def make_plan(floor):
     f = FLOORS[floor]
+    s = 1 / 100
+    scale = "1/100"
     if floor == "1F":
-        s = 1 / 60
-        ox, oy = 62, 190
-        g0 = draw_floor(f, ox, oy, s, cad=cad)
-        scale = "1/60"
+        ox, oy = 42, 142
+        g0 = draw_floor(f, ox, oy, s, scan=(os.path.join(os.path.dirname(__file__), SCAN[0]),) + SCAN[1:])
     else:
-        s = 1 / 85
-        ox, oy = 34, 168
+        ox, oy = 48, 150
         g0 = draw_floor(f, ox, oy, s)
-        scale = "1/85"
     g = SVG()
     g.o = g0.o
     tc = treat_count()
+    m2, tsubo = AREA[floor]
     notes = {
-        "1F": ["・既存建物線（グレー）は貸主提供CAD（1階総合図）より。赤字の動線・室配置が当社計画（C工事）。",
+        "1F": ["・下図（グレー）は貸主提供の募集図面（1階 店舗区画）。赤線＝貸室区画（98.36㎡）、着色部・室配置が当社計画（C工事）。",
                "・MRIは床荷重5,000N/㎡（1～3F設定）の1階に配置。機種決定後に重量・磁場・シールド・搬入経路をビル側と協議。",
                "・道路側ガラス面から600mm以内には造作・サインを設けない（内装マニュアル7-(7)）。",
-               "・トイレは館内共用トイレ（1F HCWC含む）を利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
+               "・トイレは館内共用トイレを利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
         "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。間仕切は上部開放の欄間式（欄間h=500）とし防災設備を大部屋仕様のまま活用。",
-               "・受付は銀座院と同様にフロア中央へ配置。EVホール～避難階段附室の経路は廊下状に整備（内装マニュアル6-(7)）。",
+               "・受付は銀座院と同様にフロア中央へ配置。EVホール（区画内）～避難階段附室の経路は廊下状に整備（内装マニュアル6-(7)）。",
                "・EVホール入口の防火扉の開閉を妨げる造作・什器は設けない。床荷重3,000N/㎡内で計画。",
-               "・平面寸法は募集図面（G229.86㎡）・1F CADからの想定値。実施設計時にビル側白図で確定。"],
-        "5F": [f"・施術室 {tc['5F']}室、フリースペース、スタッフ休憩室・スタッフ更衣室・事務室を配置。",
+               "・平面形状は募集図面（4・5階 G229.86㎡）をもとに作図。実施設計時にビル側白図で寸法を確定。"],
+        "5F": [f"・施術室 {tc['5F']}室、フリースペース、スタッフ休憩室・スタッフ更衣室（男女）・事務室を配置。",
                "・フリースペースは施術前後の待合・カウンセリング・セミナー兼用のラウンジとして計画。",
-               "・EVホール～避難階段附室の経路は廊下状に整備（4Fと同一）。窓側は施術室の自然光を確保。",
-               "・平面寸法は募集図面・1F CADからの想定値。実施設計時にビル側白図で確定。"],
+               "・EVホール（区画内）～避難階段附室の経路は廊下状に整備（4Fと同一）。窓側は施術室の自然光を確保。",
+               "・平面形状は募集図面（4・5階 G229.86㎡）をもとに作図。実施設計時にビル側白図で寸法を確定。"],
     }[floor]
     no = {"1F": "A-01", "4F": "A-02", "5F": "A-03"}[floor]
     title_block(g, f["title"], scale, no, notes)
-    # 凡例・面積
-    lx = 330 if floor != "1F" else 330
     if floor == "1F":
-        legend(g, 330, 26, [(C["tint"], "貸室（約99.7㎡）"), ("#f8f4ee", "診察・処置・操作室"),
-                            (C["mri"], "MRI室（シールド工事）"), (C["service"], "機械室・バックヤード"),
-                            ("#eeeeee", "既設アプローチ（風除）")])
-        summary_table(g, 330, 60, f)
-        g.text(14, 20, "← 正面道路（Y1通り・歩道）", 2.6, anchor="start", fill=C["red"], weight="bold")
-        north_marker(g, 395, 115)
-    else:
-        legend(g, 330, 70, [(C["treat"], "施術室（銀座院仕様）"), ("#f8f4ee", "個室（更衣・カウンセリング等）"),
-                             (C["service"], "バックヤード"), ("url(#hatch)", "避難経路（廊下状）"),
-                             (C["core"], "共用部（コア）")])
+        legend(g, 330, 70, [(C["tint"], f"貸室 {m2}㎡（約{tsubo}坪）"), ("#f8f4ee", "診察・処置・操作・更衣"),
+                            (C["mri"], "MRI室（シールド工事）"), (C["service"], "機械室"),
+                            ("#eeeeee", "既設アプローチ（区画内）")])
         summary_table(g, 330, 104, f)
+        g.text(14, 20, "← 正面道路（Y1通り・歩道）", 2.6, anchor="start", fill=C["red"], weight="bold")
+    else:
+        legend(g, 330, 70, [(C["tint"], f"貸室 G{m2}㎡（約{tsubo}坪）"), (C["treat"], "施術室（銀座院仕様）"),
+                            ("#f8f4ee", "個室（更衣・カウンセリング等）"), (C["service"], "バックヤード"),
+                            ("url(#hatch)", "避難経路（廊下状）"), (C["core"], "共用部（コア）")])
+        summary_table(g, 330, 108, f)
         g.text(14, 20, "← 正面道路（Y1通り）", 2.6, anchor="start", fill=C["red"], weight="bold")
-        north_marker(g, 395, 38)
+    north_marker(g, 395, 38)
     g.text(PAGE_W / 2, 18, f"{f['title']}", 4.2, weight="bold")
+    g.text(PAGE_W / 2, 24.5, f"貸室面積 {'G' if floor != '1F' else ''}{m2}㎡（約{tsubo}坪）", 3.0, fill=C["red"], weight="bold")
     return g.svg()
 
 
 if __name__ == "__main__":
     out = sys.argv[1]
-    cad = pickle.load(open(sys.argv[2], "rb")) if len(sys.argv) > 2 else None
     for fl in ("1F", "4F", "5F"):
-        open(os.path.join(out, f"plan_{fl}.svg"), "w").write(make_plan(fl, cad if fl == "1F" else None))
+        open(os.path.join(out, f"plan_{fl}.svg"), "w").write(make_plan(fl))
     print("ok", treat_count())

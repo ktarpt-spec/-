@@ -11,10 +11,10 @@ BW = 14300         # 正面（Y1面）外壁幅（X3～X1 外々・CADより）
 # 正面ファサード 1F 構成（u: 立面左端 = X1側 からの距離）
 F1_PARTS = [  # (u0, u1, kind, label)
     (0, 2300, "entry", "当社専用アプローチ（既設）"),
-    (2300, 3900, "panel", "パネルA"),
-    (3900, 5600, "window", "SSW-2（既設ガラス）"),
-    (5600, 7300, "panel", "パネルA"),
-    (7300, 10300, "ecp", "ECP（防災センター）"),
+    (2300, 3300, "panel", "パネルA"),
+    (3300, 5000, "window", "SSW-2（既設ガラス）"),
+    (5000, 6800, "panel", "パネルA"),
+    (6800, 10300, "ecp", "ECP（防災センター）"),
     (10300, BW, "bldg_entry", "ビルエントランス"),
 ]
 
@@ -53,7 +53,7 @@ def whole_elevation(g, ox, oy, s):
     for i in (3, 4):
         y0 = oy - (H1 + HT * i) * s
         g.rect(ox - 2, y0, BW * s + 4, HT * s, fill="none", st=C["red"], sw=0.35, extra='stroke-dasharray="1.2,0.6"')
-    g.rect(ox - 2, oy - H1 * s, 7300 * s + 2, H1 * s, fill="none", st=C["red"], sw=0.35, extra='stroke-dasharray="1.2,0.6"')
+    g.rect(ox - 2, oy - H1 * s, 6800 * s + 2, H1 * s, fill="none", st=C["red"], sw=0.35, extra='stroke-dasharray="1.2,0.6"')
     g.line(ox - 10, oy, ox + BW * s + 10, oy, st="#333", w=0.4)
     g.text(ox + BW * s + 3, oy + 0.8, "GL", 2.0, anchor="start")
     labels = [("1F", H1 / 2)] + [(f"{i+1}F", H1 + HT * (i - 1) + HT / 2) for i in range(1, FLOORS)]
@@ -141,10 +141,10 @@ def front_detail(g, ox, oy, s):
         g.add(f'<text x="{vx-0.8}" y="{oy-(a+b)/2*s}" font-size="1.8" fill="#444" text-anchor="middle" font-family="{FONT}" '
               f'transform="rotate(-90 {vx-0.8} {oy-(a+b)/2*s})">{lab}</text>')
     # 当社区画
-    g.rect(ox - 0.5, oy - H1 * s, 7300 * s + 1, H1 * s, fill="none", st=C["red"], sw=0.35, extra='stroke-dasharray="1.5,0.8"')
+    g.rect(ox - 0.5, oy - H1 * s, 6800 * s + 1, H1 * s, fill="none", st=C["red"], sw=0.35, extra='stroke-dasharray="1.5,0.8"')
     g.text(ox + 1, oy - H1 * s - 1.5, "当社区画（1F・正面）", 2.2, anchor="start", fill=C["red"], weight="bold")
     # 引出し注記
-    wx = ox + 3900 * s; ex = ox
+    wx = ox + 3300 * s; ex = ox
     callout(g, wx + 9, oy - 1575 * s, ox + 40, oy - top * s - 10,
             "①木調縦ルーバー（不燃・ガラス面より600mm以上後退）＋小型ロゴ　非照明・背面から電球色の間接光のみ")
     callout(g, ex + 7, oy - 1900 * s, ox + 4, oy - top * s - 16,
@@ -198,7 +198,7 @@ def make():
     title_block(g, "外観立面図・サイン計画図", "1/300・1/70", "A-04",
                 ["・1F階高4,950は貸主CAD（展開図 1FL→2FL）より。基準階階高3,900、2F以上の外装は完成予想CGからの模式表現。",
                  "・サイン位置・形状はビル側指定（内装マニュアル7-(6)）に準拠。最終仕様は運営管理者と協議のうえ承認を得る。",
-                 "・正面の当社区画は既設アプローチ・SSW-2ガラス面を含む約7.3m。ガラス面への熱割れ計算が必要なフィルム等は使用しない。"])
+                 "・正面の当社区画は既設アプローチ・SSW-2ガラス面を含む約6.8m（1階 98.36㎡区画）。ガラス面への熱割れ計算が必要なフィルム等は使用しない。"])
     g.text(PAGE_W / 2, 18, "外観立面図・サイン計画図（正面 Y1通り）", 4.2, weight="bold")
     whole_elevation(g, 30, 248, 1 / 300)
     front_detail(g, 92, 205, 1 / 70)

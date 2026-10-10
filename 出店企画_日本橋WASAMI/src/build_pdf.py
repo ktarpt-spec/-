@@ -1,6 +1,6 @@
 """添付資料（A3横）HTML を組み立てる。 usage: build_pdf.py <outdir>  → <outdir>/添付資料.html"""
 import os, sys
-from geometry import FLOORS, area, treat_count
+from geometry import FLOORS, AREA, area, treat_count
 
 out = sys.argv[1]
 D = lambda p: open(os.path.join(out, "drawings", p)).read()
@@ -59,7 +59,7 @@ pages.append(f'''<div class="pg" style="background:#f6f1e8">
  <div style="font-family:Inter,sans-serif;font-size:15mm;color:#24418f;margin-top:16mm;font-weight:500">fukka</div>
  <div style="font-size:5.2mm;margin-top:2mm">日本橋院（仮称）</div>
  <div style="margin-top:16mm;font-size:3.6mm;line-height:1.9;border-top:0.4mm solid #9a7b55;padding-top:5mm">
-  物件：日本橋WASAMIビル（東京都中央区日本橋三丁目）<br>計画区画：1階 店舗区画（約99.7㎡）<br>　　　　　4階・5階（募集面積 G229.86㎡）<br>
+  物件：日本橋WASAMIビル（東京都中央区日本橋三丁目）<br>計画区画：1階 店舗区画 98.36㎡（約29.75坪）<br>　　　　　4階・5階 各 G229.86㎡（約69.53坪）<br>　　　　　合計 約168.8坪<br>
   内容：平面計画図・立面図・サイン計画・外観／内観イメージ・仕上表<br>2026年10月　基本計画</div>
 </div></div>''')
 
@@ -69,10 +69,11 @@ for k, f in FLOORS.items():
     items = "、".join(dict.fromkeys(r["name"].replace("\n", "") for r in f["rooms"]
                                      if r["name"] and r["kind"] not in ("corridor", "existing") and not r["name"].startswith("施術室")))
     t = f"施術室 {tc[k]}室、" if tc[k] else ""
-    fl_rows += f"<tr><th>{k}</th><td>{t}{items}</td></tr>"
+    m2, tb = AREA[k]
+    fl_rows += f"<tr><th>{k}<br><span style='font-weight:normal;font-size:2.6mm'>{m2}㎡<br>約{tb}坪</span></th><td>{t}{items}</td></tr>"
 overview = f'''
 <div style="position:absolute;left:0;top:0;width:180mm">
- <div class="kpi"><div><b>3</b><span>フロア（1F・4F・5F）</span></div><div><b>{N}</b><span>施術室（4F {tc["4F"]}室＋5F {tc["5F"]}室）</span></div><div><b>1</b><span>MRI室（1F）</span></div></div>
+ <div class="kpi"><div><b>168.8<small style="font-size:3.5mm">坪</small></b><span>1F 29.75坪＋4F・5F 各69.53坪</span></div><div><b>{N}</b><span>施術室（4F {tc["4F"]}室＋5F {tc["5F"]}室）</span></div><div><b>1</b><span>MRI室（1F）</span></div></div>
  <h3 style="font-size:4.2mm;margin:7mm 0 2.5mm">コンセプト</h3>
  <p style="font-size:3.3mm;line-height:1.75;margin:0">銀座院の空間（白い塗り壁、木目、ベージュ系カーペット、中央の円形受付と木の天井リング）をそのまま拡大し、
  施術ブースを増やした「銀座院の大型版」として計画します。1階は道路から直接入れる既設アプローチを活かした医療フロア（診察・処置・MRI）、
@@ -114,7 +115,7 @@ pages.append(page("内装イメージ　1階（診察・処置・MRI・受付待
 p4 = f'''{img("v4_lobby.png", 0, 0, 236, 148)}{img("v4_aisle.png", 242, 0, 146, 91)}{img("v4_room.png", 242, 128, 146, 91)}
 {cap(0, 152, 236, "4F 受付・待合（フロア中央の受付）", "EVホールから自動ドアを入ると正面に受付。銀座院と同じ円形カウンター、木の天井リング、棚とロゴ壁の構成を拡大して再現しています。", "4F")}
 {cap(242, 94, 146, "施術室前の通路", "窓側に施術室を並べ、木目の引戸と白い壁で統一。", "4F")}
-{cap(242, 222, 146, "施術室（約6.4㎡）", "ベッド・スツール・荷物かご・棚。窓側で自然光を確保。", "4F")}
+{cap(242, 222, 146, "施術室（約6.6㎡）", "ベッド・スツール・荷物かご・棚。窓側で自然光を確保。", "4F")}
 '''
 pages.append(page("内装イメージ　4階（受付・待合・更衣室・施術室）", "INTERIOR IMAGE 4F", p4, "P.9"))
 
@@ -154,7 +155,7 @@ p11 = f'''<div style="position:absolute;left:0;top:0;width:220mm"><h3 style="fon
 <table><tr><th>部位</th><th>仕上</th><th>備考</th></tr>{fr}</table></div>
 <div style="position:absolute;left:230mm;top:0;width:158mm"><h3 style="font-size:4.2mm;margin:0 0 3mm">内装マニュアル（ビル規定）への対応</h3>
 <table>{rr}</table>
-<p class="note" style="margin-top:5mm">※本資料は出店審査用の基本計画です。寸法・面積は募集資料および1F CADからの想定値で、
+<p class="note" style="margin-top:5mm">※本資料は出店審査用の基本計画です。面積は募集資料（1F 98.36㎡、4・5F 各G229.86㎡）による。図面寸法は募集図面・1F CADからの読取り値で、
 実施設計時にビル側の白図・設備図に基づき確定します。パースはイメージで、実際の仕上・家具とは異なる場合があります。</p></div>'''
 pages.append(page("仕上表・ビル規定への対応", "FINISH SCHEDULE / COMPLIANCE", p11, "P.11"))
 
