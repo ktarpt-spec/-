@@ -1,0 +1,1373 @@
+{
+ "1F": {
+  "floor": "1F",
+  "W": 13900,
+  "D": 6550,
+  "ch": 3700,
+  "partition_h": 2700,
+  "title": "1階 平面計画図（診察・処置・MRI・受付待合）",
+  "rooms": [
+   {
+    "id": "vest",
+    "name": "エントランス\n（既設アプローチ）",
+    "x0": 0,
+    "y0": 4950,
+    "x1": 1900,
+    "y1": 6550,
+    "kind": "existing",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": [
+     950,
+     5300
+    ]
+   },
+   {
+    "id": "ex",
+    "name": "診察室",
+    "x0": 5000,
+    "y0": 4100,
+    "x1": 8000,
+    "y1": 6550,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "S",
+      "at": 6500,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": [
+     6300,
+     6050
+    ]
+   },
+   {
+    "id": "tr",
+    "name": "処置室",
+    "x0": 5000,
+    "y0": 0,
+    "x1": 8000,
+    "y1": 2900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 6500,
+      "w": 1000,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": [
+     6500,
+     2350
+    ]
+   },
+   {
+    "id": "op",
+    "name": "MRI操作室",
+    "x0": 8000,
+    "y0": 0,
+    "x1": 10000,
+    "y1": 2900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 9000,
+      "w": 800,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": [
+     9000,
+     900
+    ]
+   },
+   {
+    "id": "mech",
+    "name": "MRI機械室",
+    "x0": 8000,
+    "y0": 4100,
+    "x1": 10000,
+    "y1": 6550,
+    "kind": "service",
+    "doors": [
+     {
+      "side": "S",
+      "at": 9000,
+      "w": 800,
+      "type": "swing"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "mri",
+    "name": "MRI室\n（磁気シールド）",
+    "x0": 10000,
+    "y0": 0,
+    "x1": 13900,
+    "y1": 6550,
+    "kind": "mri",
+    "doors": [
+     {
+      "side": "W",
+      "at": 3500,
+      "w": 1200,
+      "type": "swing"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": [
+     11000,
+     1500
+    ]
+   },
+   {
+    "id": "corr",
+    "name": "廊下",
+    "x0": 5000,
+    "y0": 2900,
+    "x1": 10000,
+    "y1": 4100,
+    "kind": "corridor",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "wait",
+    "name": "待合",
+    "x0": 0,
+    "y0": 0,
+    "x1": 3900,
+    "y1": 4950,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": [
+     1500,
+     4150
+    ]
+   }
+  ],
+  "reception": {
+   "cx": 4500,
+   "cy": 5350,
+   "r": 1200,
+   "a0": 100,
+   "a1": 260,
+   "back": [
+    4600,
+    4250,
+    4950,
+    6450
+   ]
+  },
+  "chairs": [
+   [
+    800,
+    1000,
+    90
+   ],
+   [
+    800,
+    2000,
+    90
+   ],
+   [
+    800,
+    3000,
+    90
+   ],
+   [
+    1750,
+    1000,
+    90
+   ],
+   [
+    1750,
+    2000,
+    90
+   ],
+   [
+    1750,
+    3000,
+    90
+   ],
+   [
+    2700,
+    1000,
+    90
+   ],
+   [
+    2700,
+    2000,
+    90
+   ],
+   [
+    2700,
+    3000,
+    90
+   ]
+  ],
+  "openings": [
+   {
+    "side": "W",
+    "a": 1550,
+    "b": 3250,
+    "kind": "window",
+    "note": "道路側ガラス面（サイン規制範囲）"
+   },
+   {
+    "side": "E",
+    "a": 250,
+    "b": 4950,
+    "kind": "window",
+    "note": "駐車場側ガラス"
+   }
+  ],
+  "entrances": [
+   {
+    "side": "S",
+    "at": 3250,
+    "w": 800,
+    "note": "館内側出入口（既設SD-27）"
+   },
+   {
+    "side": "X",
+    "at": [
+     1900,
+     5750
+    ],
+    "w": 1200,
+    "note": "アプローチ扉"
+   }
+  ],
+  "columns": [
+   [
+    1708,
+    6550
+   ],
+   [
+    4408,
+    6550
+   ],
+   [
+    7108,
+    6550
+   ],
+   [
+    9808,
+    6550
+   ],
+   [
+    12508,
+    6550
+   ]
+  ]
+ },
+ "4F": {
+  "floor": "4F",
+  "W": 23000,
+  "D": 8600,
+  "ch": 2800,
+  "partition_h": 2300,
+  "title": "4階 平面計画図（受付・待合・更衣室・施術室）",
+  "rooms": [
+   {
+    "id": "401",
+    "name": "施術室\n401",
+    "x0": 0,
+    "y0": 6100,
+    "x1": 2550,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 1275.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "402",
+    "name": "施術室\n402",
+    "x0": 2550,
+    "y0": 6100,
+    "x1": 5100,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 3825.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "403",
+    "name": "施術室\n403",
+    "x0": 5100,
+    "y0": 6100,
+    "x1": 7650,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 6375.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "404",
+    "name": "施術室\n404",
+    "x0": 7650,
+    "y0": 6100,
+    "x1": 10200,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 8925.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "405",
+    "name": "施術室\n405",
+    "x0": 10200,
+    "y0": 6100,
+    "x1": 12750,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 11475.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "406",
+    "name": "施術室\n406",
+    "x0": 12750,
+    "y0": 6100,
+    "x1": 15300,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 14025.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "407",
+    "name": "施術室\n407",
+    "x0": 15300,
+    "y0": 6100,
+    "x1": 17850,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 16575.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "408",
+    "name": "施術室\n408",
+    "x0": 17850,
+    "y0": 6100,
+    "x1": 20400,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 19125.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "409",
+    "name": "施術室\n409",
+    "x0": 20400,
+    "y0": 6100,
+    "x1": 22950,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 21675.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "cor",
+    "name": "避難経路（廊下状）",
+    "x0": 4550,
+    "y0": 0,
+    "x1": 12350,
+    "y1": 1400,
+    "kind": "corridor",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "lm",
+    "name": "更衣室（男性）",
+    "x0": 0,
+    "y0": 0,
+    "x1": 2800,
+    "y1": 2300,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "E",
+      "at": 1150,
+      "w": 800,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "lw",
+    "name": "更衣室（女性）",
+    "x0": 0,
+    "y0": 2300,
+    "x1": 2800,
+    "y1": 4900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "E",
+      "at": 3600,
+      "w": 800,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "pw",
+    "name": "パウダー\nコーナー",
+    "x0": 2800,
+    "y0": 0,
+    "x1": 4550,
+    "y1": 4900,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": [
+     3900,
+     3300
+    ]
+   },
+   {
+    "id": "cs",
+    "name": "カウンセリング室",
+    "x0": 4550,
+    "y0": 1400,
+    "x1": 7300,
+    "y1": 4900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "E",
+      "at": 3800,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "w1",
+    "name": "待合",
+    "x0": 7300,
+    "y0": 1400,
+    "x1": 10000,
+    "y1": 4900,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": [
+     8750,
+     4500
+    ]
+   },
+   {
+    "id": "w2",
+    "name": "待合",
+    "x0": 12600,
+    "y0": 0,
+    "x1": 17600,
+    "y1": 4900,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": [
+     15100,
+     3900
+    ]
+   },
+   {
+    "id": "st4",
+    "name": "スタッフ\nステーション",
+    "x0": 17600,
+    "y0": 0,
+    "x1": 20300,
+    "y1": 4900,
+    "kind": "service",
+    "doors": [
+     {
+      "side": "N",
+      "at": 18950,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "sp4",
+    "name": "物品・\nリネン庫",
+    "x0": 20300,
+    "y0": 0,
+    "x1": 23000,
+    "y1": 4900,
+    "kind": "service",
+    "doors": [
+     {
+      "side": "N",
+      "at": 21650,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ais",
+    "name": "",
+    "x0": 0,
+    "y0": 4900,
+    "x1": 23000,
+    "y1": 6100,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": false,
+    "lp": null
+   }
+  ],
+  "reception": {
+   "cx": 11300,
+   "cy": 3250,
+   "r": 1150,
+   "a0": 195,
+   "a1": 345,
+   "back": [
+    10100,
+    4250,
+    12500,
+    4650
+   ]
+  },
+  "chairs": [
+   [
+    13300,
+    1000,
+    180
+   ],
+   [
+    14300,
+    1000,
+    180
+   ],
+   [
+    15300,
+    1000,
+    180
+   ],
+   [
+    16300,
+    1000,
+    180
+   ],
+   [
+    13300,
+    2300,
+    180
+   ],
+   [
+    14300,
+    2300,
+    180
+   ],
+   [
+    15300,
+    2300,
+    180
+   ],
+   [
+    16300,
+    2300,
+    180
+   ],
+   [
+    7900,
+    2200,
+    90
+   ],
+   [
+    7900,
+    3200,
+    90
+   ],
+   [
+    7900,
+    4200,
+    90
+   ],
+   [
+    9600,
+    2200,
+    270
+   ],
+   [
+    9600,
+    3200,
+    270
+   ]
+  ],
+  "entrances": [
+   {
+    "side": "CORE",
+    "at": 11275,
+    "w": 1600,
+    "note": "自動ドア（エントランス）"
+   }
+  ],
+  "columns": [
+   [
+    1708,
+    8600
+   ],
+   [
+    4408,
+    8600
+   ],
+   [
+    7108,
+    8600
+   ],
+   [
+    9808,
+    8600
+   ],
+   [
+    12508,
+    8600
+   ],
+   [
+    15208,
+    8600
+   ],
+   [
+    17908,
+    8600
+   ],
+   [
+    20608,
+    8600
+   ]
+  ],
+  "openings": [
+   {
+    "side": "W",
+    "a": 300,
+    "b": 8300,
+    "kind": "window"
+   },
+   {
+    "side": "N",
+    "a": 300,
+    "b": 22700,
+    "kind": "window"
+   }
+  ],
+  "core": [
+   {
+    "id": "st",
+    "name": "特別避難階段",
+    "x0": 4550,
+    "y0": -5100,
+    "x1": 7050,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ev1",
+    "name": "乗用EV",
+    "x0": 7150,
+    "y0": -2600,
+    "x1": 9650,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "evh",
+    "name": "EVホール",
+    "x0": 9750,
+    "y0": -5100,
+    "x1": 12350,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ev2",
+    "name": "非常用EV",
+    "x0": 12450,
+    "y0": -2600,
+    "x1": 14650,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "wc",
+    "name": "共用トイレ\n（男女別）",
+    "x0": 14850,
+    "y0": -5100,
+    "x1": 19950,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ps",
+    "name": "PS・EPS／\nメンテ階段",
+    "x0": 20050,
+    "y0": -5100,
+    "x1": 23000,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   }
+  ]
+ },
+ "5F": {
+  "floor": "5F",
+  "W": 23000,
+  "D": 8600,
+  "ch": 2800,
+  "partition_h": 2300,
+  "title": "5階 平面計画図（施術室・フリースペース・スタッフ休憩室）",
+  "rooms": [
+   {
+    "id": "501",
+    "name": "施術室\n501",
+    "x0": 0,
+    "y0": 6100,
+    "x1": 2550,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 1275.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "502",
+    "name": "施術室\n502",
+    "x0": 2550,
+    "y0": 6100,
+    "x1": 5100,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 3825.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "503",
+    "name": "施術室\n503",
+    "x0": 5100,
+    "y0": 6100,
+    "x1": 7650,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 6375.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "504",
+    "name": "施術室\n504",
+    "x0": 7650,
+    "y0": 6100,
+    "x1": 10200,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 8925.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "505",
+    "name": "施術室\n505",
+    "x0": 10200,
+    "y0": 6100,
+    "x1": 12750,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 11475.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "506",
+    "name": "施術室\n506",
+    "x0": 12750,
+    "y0": 6100,
+    "x1": 15300,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 14025.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "507",
+    "name": "施術室\n507",
+    "x0": 15300,
+    "y0": 6100,
+    "x1": 17850,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 16575.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "508",
+    "name": "施術室\n508",
+    "x0": 17850,
+    "y0": 6100,
+    "x1": 20400,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 19125.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "509",
+    "name": "施術室\n509",
+    "x0": 20400,
+    "y0": 6100,
+    "x1": 22950,
+    "y1": 8600,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "S",
+      "at": 21675.0,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "cor",
+    "name": "避難経路（廊下状）",
+    "x0": 4550,
+    "y0": 0,
+    "x1": 12350,
+    "y1": 1400,
+    "kind": "corridor",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "sr",
+    "name": "スタッフ休憩室",
+    "x0": 0,
+    "y0": 0,
+    "x1": 4550,
+    "y1": 4900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 3700,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "sl",
+    "name": "スタッフ\n更衣室",
+    "x0": 4550,
+    "y0": 1400,
+    "x1": 7300,
+    "y1": 4900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 6400,
+      "w": 800,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "fs",
+    "name": "フリースペース",
+    "x0": 7300,
+    "y0": 1400,
+    "x1": 15500,
+    "y1": 4900,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": [
+     12300,
+     4500
+    ]
+   },
+   {
+    "id": "fs0",
+    "name": "",
+    "x0": 12350,
+    "y0": 0,
+    "x1": 15500,
+    "y1": 1400,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": false,
+    "lp": null
+   },
+   {
+    "id": "510",
+    "name": "施術室\n510",
+    "x0": 15500,
+    "y0": 2300,
+    "x1": 18100,
+    "y1": 4900,
+    "kind": "treat",
+    "doors": [
+     {
+      "side": "N",
+      "at": 16800,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ln5",
+    "name": "リネン・\n洗濯室",
+    "x0": 15500,
+    "y0": 0,
+    "x1": 18100,
+    "y1": 2300,
+    "kind": "service",
+    "doors": [
+     {
+      "side": "W",
+      "at": 1150,
+      "w": 800,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "of5",
+    "name": "事務室",
+    "x0": 18100,
+    "y0": 0,
+    "x1": 20800,
+    "y1": 4900,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 19450,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "sp5",
+    "name": "物品庫",
+    "x0": 20800,
+    "y0": 0,
+    "x1": 23000,
+    "y1": 4900,
+    "kind": "service",
+    "doors": [
+     {
+      "side": "N",
+      "at": 21900,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ais",
+    "name": "",
+    "x0": 0,
+    "y0": 4900,
+    "x1": 23000,
+    "y1": 6100,
+    "kind": "open",
+    "doors": [],
+    "sub": null,
+    "label": false,
+    "lp": null
+   }
+  ],
+  "reception": null,
+  "chairs": [],
+  "lounge": {
+   "x0": 7800,
+   "y0": 1900,
+   "x1": 15000,
+   "y1": 4500
+  },
+  "entrances": [
+   {
+    "side": "CORE",
+    "at": 11275,
+    "w": 1600,
+    "note": "自動ドア（スタッフ・患者）"
+   }
+  ],
+  "columns": [
+   [
+    1708,
+    8600
+   ],
+   [
+    4408,
+    8600
+   ],
+   [
+    7108,
+    8600
+   ],
+   [
+    9808,
+    8600
+   ],
+   [
+    12508,
+    8600
+   ],
+   [
+    15208,
+    8600
+   ],
+   [
+    17908,
+    8600
+   ],
+   [
+    20608,
+    8600
+   ]
+  ],
+  "openings": [
+   {
+    "side": "W",
+    "a": 300,
+    "b": 8300,
+    "kind": "window"
+   },
+   {
+    "side": "N",
+    "a": 300,
+    "b": 22700,
+    "kind": "window"
+   }
+  ],
+  "core": [
+   {
+    "id": "st",
+    "name": "特別避難階段",
+    "x0": 4550,
+    "y0": -5100,
+    "x1": 7050,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ev1",
+    "name": "乗用EV",
+    "x0": 7150,
+    "y0": -2600,
+    "x1": 9650,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "evh",
+    "name": "EVホール",
+    "x0": 9750,
+    "y0": -5100,
+    "x1": 12350,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ev2",
+    "name": "非常用EV",
+    "x0": 12450,
+    "y0": -2600,
+    "x1": 14650,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "wc",
+    "name": "共用トイレ\n（男女別）",
+    "x0": 14850,
+    "y0": -5100,
+    "x1": 19950,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   },
+   {
+    "id": "ps",
+    "name": "PS・EPS／\nメンテ階段",
+    "x0": 20050,
+    "y0": -5100,
+    "x1": 23000,
+    "y1": 0,
+    "kind": "core",
+    "doors": [],
+    "sub": null,
+    "label": true,
+    "lp": null
+   }
+  ]
+ }
+}
