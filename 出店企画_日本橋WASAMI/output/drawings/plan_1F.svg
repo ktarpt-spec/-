@@ -35,15 +35,11 @@
 <text x="166.00" y="133.70" font-size="1.6" fill="#2d5c8a" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >MRI装置（機種により要調整）</text>
 <rect x="141.50" y="78.00" width="29.30" height="5.50" fill="#e6e6e6" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="141.50" y="85.50" width="7.50" height="2.90" fill="#e6e6e6" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<g transform="translate(50.00,135.00) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(50.00,125.50) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(50.00,116.00) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(59.50,135.00) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(59.50,125.50) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(59.50,116.00) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(69.00,135.00) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(69.00,125.50) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
-<g transform="translate(69.00,116.00) rotate(0)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
+<g transform="translate(51.00,131.00) rotate(-180)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
+<g transform="translate(61.00,131.00) rotate(-180)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
+<g transform="translate(71.00,131.00) rotate(-180)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
+<g transform="translate(56.00,120.00) rotate(-180)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
+<g transform="translate(66.00,120.00) rotate(-180)"><rect x="-3.0" y="-3.0" width="6.0" height="6.0" rx="0.6" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15"/><rect x="-3.0" y="-3.0" width="6.0" height="1.3" fill="#d8c9b5"/></g>
 <path d="M84.92,76.68 A12.0,12.0 0 0 0 84.92,100.32 L85.87,94.90 A6.5,6.5 0 0 1 85.87,82.10 Z" fill="#c7a57c" stroke="#7d6347" stroke-width="0.2" />
 <rect x="88.00" y="77.50" width="3.50" height="22.00" fill="#d9c3a3" stroke="#7d6347" stroke-width="0.2" rx="0"/>
 <text x="77.50" y="75.00" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >ロゴ壁・収納棚</text>
@@ -75,12 +71,18 @@
 <line x1="102.00" y1="112.45" x2="113.50" y2="112.45" stroke="#2b2522" stroke-width="0.35" />
 <line x1="127.00" y1="113.00" x2="135.00" y2="113.00" stroke="white" stroke-width="1.8" />
 <line x1="127.00" y1="112.45" x2="136.20" y2="112.45" stroke="#2b2522" stroke-width="0.35" />
+<line x1="140.00" y1="135.00" x2="140.00" y2="120.00" stroke="white" stroke-width="1.7" />
+<line x1="139.65" y1="135.00" x2="139.65" y2="120.00" stroke="#2d5c8a" stroke-width="0.2" />
+<line x1="140.35" y1="135.00" x2="140.35" y2="120.00" stroke="#2d5c8a" stroke-width="0.2" />
+<text x="138.80" y="127.50" font-size="1.5" fill="#2d5c8a" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >観察窓</text>
 <line x1="127.00" y1="101.00" x2="135.00" y2="101.00" stroke="white" stroke-width="1.8" />
 <line x1="127.00" y1="101.55" x2="136.20" y2="101.55" stroke="#2b2522" stroke-width="0.35" />
 <line x1="140.00" y1="112.50" x2="140.00" y2="101.50" stroke="white" stroke-width="3.0" />
 <path d="M140.0,112.5 L151.0,112.5 A11.0,11.0 0 0 0 140.0,101.5" fill="none" stroke="#2b2522" stroke-width="0.18" />
 <line x1="140.00" y1="91.50" x2="140.00" y2="83.50" stroke="white" stroke-width="1.8" />
 <path d="M140.0,91.5 L148.0,91.5 A8.0,8.0 0 0 0 140.0,83.5" fill="none" stroke="#2b2522" stroke-width="0.18" />
+<circle cx="45.00" cy="139.00" r="2.80" fill="#cfdcc4" stroke="#8aa07a" stroke-width="0.15"/>
+<circle cx="77.00" cy="139.00" r="2.80" fill="#cfdcc4" stroke="#8aa07a" stroke-width="0.15"/>
 <line x1="72.00" y1="157.00" x2="72.00" y2="133.00" stroke="#7a726b" stroke-width="0.35" marker-end="url(#arr)"/>
 <text x="72.00" y="160.20" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >館内側出入口（既設）</text>
 <line x1="16.00" y1="88.00" x2="68.30" y2="88.00" stroke="#b5523b" stroke-width="0.5" marker-end="url(#arr)"/>
@@ -99,7 +101,7 @@
 <text x="155.00" y="105.52" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >17.9㎡</text>
 <text x="156.00" y="86.50" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >MRI機械室</text>
 <text x="156.00" y="89.52" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >7.1㎡</text>
-<text x="116.00" y="107.90" font-size="2.2" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >廊下</text>
+<text x="116.00" y="107.90" font-size="2.0" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >廊下</text>
 <text x="57.00" y="103.00" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >待合</text>
 <text x="85.50" y="89.40" font-size="2.6" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >受付</text>
 <polygon points="42.00,142.00 181.00,142.00 181.00,98.40 172.30,98.40 172.30,76.50 42.00,76.50" fill="none" stroke="#b5523b" stroke-width="0.45"/>

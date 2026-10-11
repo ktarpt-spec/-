@@ -109,7 +109,7 @@ def draw_floor(f, ox, oy, s, scan=None):
 
     # --- 部屋（塗り）
     for r in f["rooms"]:
-        fill = dict(treat=C["treat"], mri=C["mri"], service=C["service"], corridor="url(#hatch)",
+        fill = dict(treat=C["treat"], mri=C["mri"], service=C["service"], corridor="url(#hatch)", hall="#f3ebdd",
                     room="#f8f4ee", existing="#eeeeee").get(r["kind"])
         if fill:
             x, y = P(r["x0"], r["y1"])
@@ -148,7 +148,7 @@ def draw_floor(f, ox, oy, s, scan=None):
     # --- 間仕切壁
     wt = max(0.6, 100 * s)
     for r in f["rooms"]:
-        if r["kind"] in ("open", "existing"):
+        if r["kind"] in ("open", "existing", "hall"):
             continue
         x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
         edges = dict(S=((x0, y0), (x1, y0)), N=((x0, y1), (x1, y1)), W=((x0, y0), (x0, y1)), E=((x1, y0), (x1, y1)))
@@ -174,10 +174,31 @@ def draw_floor(f, ox, oy, s, scan=None):
     for r in f["rooms"]:
         for dd in r["doors"]:
             door(g, r, dd, P, s, wt)
+        for w in r.get("windows", []):   # 観察窓
+            xx = r["x1"] if w["side"] == "E" else r["x0"]
+            p1, p2 = P(xx, w["a"]), P(xx, w["b"])
+            g.line(*p1, *p2, st="white", w=wt * 1.7)
+            for o in (-0.35, 0.35):
+                g.line(p1[0] + o, p1[1], p2[0] + o, p2[1], st=C["blue"], w=0.2)
+            g.text(p1[0] - 1.2, (p1[1] + p2[1]) / 2, "観察窓", 1.5, fill=C["blue"], anchor="end")
+    # --- 上階：階段附室・トイレへの扉（廊下に面する）
+    if f.get("stair_door"):
+        for (a, b), lab in ((f["stair_door"], "特別避難階段へ"), (f["toilet_door"], "共用トイレへ")):
+            p1, p2 = P(a, 0), P(b, 0)
+            g.line(*p1, *p2, st="white", w=wt * 1.6)
+            g.path(f"M{p1[0]},{p1[1]} L{p1[0]},{p1[1] + (b-a)*s} A{(b-a)*s},{(b-a)*s} 0 0 0 {p2[0]},{p2[1]}", st=C["wall"], sw=0.18)
+            g.text((p1[0] + p2[0]) / 2, p1[1] + (b - a) * s + 3.0, lab, 1.7, fill=C["accent"], weight="bold")
+    for (px_, py_) in f.get("plants", []):
+        a, b = P(px_, py_); g.circle(a, b, 280 * s, fill="#cfdcc4", st="#8aa07a", sw=0.15)
 
     # --- エントランス
     for e in f.get("entrances", []):
-        if e["side"] == "CORE":
+        if e["side"] == "EVH":
+            ax, ay = P(e["at"], -3600)
+            bx, by = P(e["at"], 1300)
+            g.line(ax, ay, bx, by, st=C["red"], w=0.45, extra='marker-end="url(#arr)"')
+            g.text(ax + 1.5, ay + 3, "患者動線（EVより）", 2.1, fill=C["red"], weight="bold", anchor="start")
+        elif e["side"] == "CORE":
             a, b = e["at"] - e["w"] / 2, e["at"] + e["w"] / 2
             p1, p2 = P(a, 1400), P(b, 1400)
             g.line(*p1, *p2, st="white", w=wt * 1.6)
@@ -219,9 +240,9 @@ def draw_floor(f, ox, oy, s, scan=None):
         if r["kind"] == "treat":
             cx, cy = P((r["x0"] + r["x1"]) / 2, r["y0"] + 650)
             g.text(cx, cy - 2.3, r["name"].replace("\n", " "), 1.9, weight="bold")
-            g.text(cx, cy + 0.2, f"{a:.1f}㎡", 1.7, fill=C["sub"])
-        elif r["kind"] == "corridor":
-            g.text(cx, cy + 0.9, r["name"], 2.2, fill=C["accent"], weight="bold")
+            g.text(cx, cy + 0.2, f"{a:.1f}㎡（約{a/1.62:.1f}畳）", 1.6, fill=C["sub"])
+        elif r["kind"] in ("corridor", "hall"):
+            g.text(cx, cy + 0.9, r["name"], 2.0, fill=C["accent"], weight="bold")
         else:
             big = 2.5 if s > 0.011 else 2.3
             g.text(cx, cy - 1.0, r["name"], big, weight="bold")
@@ -497,14 +518,14 @@ def make_plan(floor):
                "・MRIは床荷重5,000N/㎡（1～3F設定）の1階に配置。機種決定後に重量・磁場・シールド・搬入経路をビル側と協議。",
                "・道路側ガラス面から600mm以内には造作・サインを設けない（内装マニュアル7-(7)）。",
                "・トイレは館内共用トイレを利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
-        "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。間仕切は上部開放の欄間式（欄間h=500）とし防災設備を大部屋仕様のまま活用。",
-               "・受付は銀座院と同様にフロア中央へ配置。EVホール（区画内）～避難階段附室の経路は廊下状に整備（内装マニュアル6-(7)）。",
-               "・EVホール入口の防火扉の開閉を妨げる造作・什器は設けない。床荷重3,000N/㎡内で計画。",
-               "・平面形状は募集図面（4・5階 G229.86㎡）をもとに作図。実施設計時にビル側白図で寸法を確定。"],
-        "5F": [f"・施術室 {tc['5F']}室、フリースペース、スタッフ休憩室・スタッフ更衣室（男女）・事務室を配置。",
-               "・フリースペースは施術前後の待合・カウンセリング・セミナー兼用のラウンジとして計画。",
-               "・EVホール（区画内）～避難階段附室の経路は廊下状に整備（4Fと同一）。窓側は施術室の自然光を確保。",
-               "・平面形状は募集図面（4・5階 G229.86㎡）をもとに作図。実施設計時にビル側白図で寸法を確定。"],
+        "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。各室 約6.5㎡（約4畳）。間仕切は上部開放の欄間式（欄間h=500）。",
+               "・受付はEVホール正面・フロア中央に大きく配置（銀座院と同じ円形カウンター＋木の天井リング）。ロビーは柱・壁のない開放的な空間。",
+               "・特別避難階段・共用トイレへは廊下・通路で直接つながる計画（EVホール～階段附室を廊下状に確保：内装マニュアル6-(7)）。",
+               "・X1側（施術室側）は窓なし。平面形状は募集図面（4・5階 G229.86㎡）をもとに作図、実施設計時にビル側白図で寸法を確定。"],
+        "5F": [f"・施術室 {tc['5F']}室（各 約6.5㎡・約4畳）、フリースペース、スタッフ休憩室・スタッフ更衣室（男女）・物品庫を5階に集約。",
+               "・フリースペースは施術前後の待合・カウンセリング・セミナー兼用のラウンジ。",
+               "・特別避難階段・共用トイレへは廊下・通路で直接つながる計画（4Fと同一）。",
+               "・X1側（施術室側）は窓なし。平面形状は募集図面（4・5階 G229.86㎡）をもとに作図、実施設計時にビル側白図で寸法を確定。"],
     }[floor]
     no = {"1F": "A-01", "4F": "A-02", "5F": "A-03"}[floor]
     title_block(g, f["title"], scale, no, notes)
@@ -517,7 +538,7 @@ def make_plan(floor):
     else:
         legend(g, 330, 70, [(C["tint"], f"貸室 G{m2}㎡（約{tsubo}坪）"), (C["treat"], "施術室（銀座院仕様）"),
                             ("#f8f4ee", "個室（更衣・カウンセリング等）"), (C["service"], "バックヤード"),
-                            ("url(#hatch)", "避難経路（廊下状）"), (C["core"], "共用部（コア）")])
+                            ("#f3ebdd", "廊下・通路（階段・トイレへ）"), (C["core"], "共用部（コア）")])
         summary_table(g, 330, 108, f)
         g.text(14, 20, "← 正面道路（Y1通り）", 2.6, anchor="start", fill=C["red"], weight="bold")
     north_marker(g, 395, 38)

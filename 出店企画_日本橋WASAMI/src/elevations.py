@@ -100,15 +100,17 @@ def front_detail(g, ox, oy, s):
             g.rect(x0 + w / 2 - 300 * s, oy - 1750 * s, 600 * s, 220 * s, fill="#f4efe6", st="none")
             logo(g, x0 + w / 2, oy - 1575 * s, 140 * s * 1.25)
         elif k == "entry":
-            g.rect(x0, oy - hh * s, w, hh * s, fill="#4d4640", st="#555", sw=0.2)
-            # 奥の木調壁＋ロゴ（リースライン内）
-            g.rect(x0 + 1.2, oy - (hh - 300) * s, w - 2.4, (hh - 300) * s, fill="#b8946a", st="none")
+            # 既設アプローチ（風除室）：道路側は既設ガラス扉、奥に当社の木調欄間＋ロゴと店内へのガラス扉
+            g.rect(x0, oy - hh * s, w, hh * s, fill="#cdd8df", st="#555", sw=0.3)
+            g.rect(x0 + 0.8, oy - (hh - 200) * s, w - 1.6, (hh - 200) * s, fill="#b8946a", st="none")   # 奥の木調壁（透視）
             for j in range(1, 10):
-                g.line(x0 + 1.2 + j * (w - 2.4) / 10, oy - (hh - 300) * s, x0 + 1.2 + j * (w - 2.4) / 10, oy, st="#a07c54", w=0.15)
-            logo(g, x0 + w / 2, oy - 1900 * s, 220 * s * 1.25, color="#f3ead9")
-            # 間接照明
-            g.rect(x0 + 1.2, oy - (hh - 300) * s, w - 2.4, 1.0, fill="#fff3d6", st="none")
-            g.rect(x0 + w * 0.3, oy - 2200 * s, w * 0.4, 2200 * s, fill="none", st="#e8dcc6", sw=0.2)
+                g.line(x0 + 0.8 + j * (w - 1.6) / 10, oy - (hh - 200) * s, x0 + 0.8 + j * (w - 1.6) / 10, oy - 2500 * s, st="#a07c54", w=0.15)
+            g.rect(x0 + w * 0.27, oy - 2400 * s, w * 0.46, 2400 * s, fill="#efe6d6", st="#8b7355", sw=0.2)       # 奥：店内へのガラス扉
+            logo(g, x0 + w / 2, oy - 2950 * s, 200 * s * 1.25, color="#f3ead9")
+            g.rect(x0 + 0.8, oy - (hh - 200) * s, w - 1.6, 0.8, fill="#fff3d6", st="none")                 # 間接照明
+            # 道路側の既設ガラス扉（両開き）
+            g.rect(x0 + 0.4, oy - 2600 * s, w - 0.8, 2600 * s, fill="none", st="#555", sw=0.35)
+            g.line(x0 + w / 2, oy - 2600 * s, x0 + w / 2, oy, st="#555", w=0.3)
         elif k == "bldg_entry":
             g.rect(x0, oy - hh * s, w, hh * s, fill="#b9c6d0", st="#555", sw=0.3)
             for j in range(1, 4):
@@ -147,8 +149,8 @@ def front_detail(g, ox, oy, s):
     wx = ox + 3300 * s; ex = ox
     callout(g, wx + 9, oy - 1575 * s, ox + 40, oy - top * s - 10,
             "①木調縦ルーバー（不燃・ガラス面より600mm以上後退）＋小型ロゴ　非照明・背面から電球色の間接光のみ")
-    callout(g, ex + 7, oy - 1900 * s, ox + 4, oy - top * s - 16,
-            "②アプローチ奥壁：木調パネル＋ロゴ（箱文字 H≒180・アイボリー）　リースライン内・グレアのない間接照明")
+    callout(g, ex + 7, oy - 2950 * s, ox + 4, oy - top * s - 16,
+            "②アプローチ（既設ガラス扉の奥）：木調壁・欄間に店名ロゴ（H≒160・アイボリー）　リースライン内・グレアのない間接照明")
     callout(g, ox + (10300 + 720) * s, oy - 1530 * s, ox + 150, oy - top * s - 4,
             "③S1：ビル共用案内板に店名・ロゴ（ビル標準仕様／乳半アクリル・LED内照）", anchor="start")
     g.text(ox + BW * s / 2, oy + 21, "1階 正面部分立面図（サイン位置・使用素材）", 2.6, weight="bold")
