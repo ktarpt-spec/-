@@ -187,7 +187,7 @@ def draw_floor(f, ox, oy, s, scan=None):
             g.text(p1[0] - 1.2, (p1[1] + p2[1]) / 2, "観察窓", 1.5, fill=C["blue"], anchor="end")
     # --- 上階：階段附室・トイレへの扉（廊下に面する）
     if f.get("stair_door"):
-        for (a, b), lab in ((f["stair_door"], "特別避難階段へ"), (f["toilet_door"], "共用トイレへ")):
+        for (a, b), lab in ((f["stair_door"], "特別避難階段へ"), (f["toilet_door"], "共用トイレへ"), (f["store_door"], "倉庫へ")):
             p1, p2 = P(a, 0), P(b, 0)
             g.line(*p1, *p2, st="white", w=wt * 1.6)
             g.path(f"M{p1[0]},{p1[1]} L{p1[0]},{p1[1] + (b-a)*s} A{(b-a)*s},{(b-a)*s} 0 0 0 {p2[0]},{p2[1]}", st=C["wall"], sw=0.18)
@@ -245,7 +245,7 @@ def draw_floor(f, ox, oy, s, scan=None):
             a += sum(area(o) for o in f["rooms"] if o["id"] == "mri2")
         if r["kind"] == "treat":
             portrait = (r["y1"] - r["y0"]) > (r["x1"] - r["x0"]) - 100
-            cx, cy = P((r["x0"] + r["x1"]) / 2 + (450 if portrait else 0), r["y0"] + (260 if portrait else 650))
+            cx, cy = P((r["x0"] + r["x1"]) / 2, r["y0"] + (1450 if portrait else 380))
             g.text(cx, cy - 2.3, r["name"].replace("\n", " "), 1.9, weight="bold")
             g.text(cx, cy + 0.2, f"{a:.1f}㎡（約{a/1.62:.1f}畳）", 1.6, fill=C["sub"])
         elif r["kind"] in ("corridor", "hall"):
@@ -317,19 +317,17 @@ def furniture(g, f, P, s):
         x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
         cx = (x0 + x1) / 2
         if r["kind"] == "treat":
-            # ベッド（窓側に頭）＋ワゴン＋スツール＋荷物カゴ
-            if y1 - y0 > x1 - x0 - 100:
-                bx0 = x0 + 250
-                box(bx0, y1 - 2150, bx0 + 800, y1 - 200, fill="#fff", rx=0.6)
-                box(bx0 + 120, y1 - 600, bx0 + 680, y1 - 280, fill="#f2ede6", rx=0.4)
-                box(x1 - 650, y1 - 650, x1 - 200, y1 - 200, fill="#e8dccb")
-                a, b = P(x1 - 520, y1 - 1500); g.circle(a, b, 200 * s)
-                box(x1 - 650, y0 + 250, x1 - 250, y0 + 600, fill="#f4efe8")
-            else:
-                box(x0 + 300, y1 - 1050, x0 + 2250, y1 - 250, fill="#fff", rx=0.6)
-                box(x0 + 2000, y1 - 980, x0 + 2230, y1 - 320, fill="#f2ede6", rx=0.3)
-                a, b = P(x1 - 420, y1 - 1500); g.circle(a, b, 190 * s)
-                box(x1 - 600, y0 + 200, x1 - 200, y0 + 550, fill="#e8dccb")
+            # ベッド（壁・柱型から離して配置）＋スツール＋荷物かご
+            if y1 - y0 > x1 - x0 - 100:     # 縦長の部屋：ベッドを奥（南）の壁沿いに横向き
+                box(x0 + 175, y0 + 200, x0 + 2125, y0 + 1000, fill="#fff", rx=0.6)
+                box(x0 + 1800, y0 + 280, x0 + 2050, y0 + 920, fill="#f2ede6", rx=0.3)
+                a, b = P(x1 - 450, y1 - 500); g.circle(a, b, 190 * s)
+                box(x0 + 150, y1 - 550, x0 + 550, y1 - 150, fill="#e8dccb")
+            else:                            # 横長の部屋：北側柱型から500mm離す
+                box(x0 + 300, y1 - 1300, x0 + 2250, y1 - 500, fill="#fff", rx=0.6)
+                box(x0 + 2000, y1 - 1220, x0 + 2230, y1 - 580, fill="#f2ede6", rx=0.3)
+                a, b = P(x0 + 450, y1 - 1650); g.circle(a, b, 190 * s)
+                box(x1 - 600, y0 + 150, x1 - 200, y0 + 500, fill="#e8dccb")
         elif r["kind"] == "mri" and r.get("mri_axis") == "y":
             # 1.5T 超電導MRI（ボア軸＝Y方向）。ガントリーを北側、寝台を南側（操作室の観察窓側）に配置
             gx, gy = x0 + 2100, 4350
@@ -340,14 +338,13 @@ def furniture(g, f, P, s):
             # 5ガウスライン目安（破線）
             g.add(f'<ellipse cx="{a:.2f}" cy="{b:.2f}" rx="{2000*s:.2f}" ry="{2500*s:.2f}" fill="none" stroke="{C["blue"]}" stroke-width="0.15" stroke-dasharray="1,0.8"/>')
         elif r["id"] == "ex":
-            box(x0 + 200, y0 + 300, x0 + 1600, y0 + 900)
-            a, b = P(x0 + 900, y0 + 1350); g.circle(a, b, 230 * s)
-            a, b = P(x0 + 1900, y0 + 1300); g.circle(a, b, 230 * s)
+            box(x0 + 200, y1 - 750, x0 + 1600, y1 - 150)
+            a, b = P(x0 + 900, y1 - 1100); g.circle(a, b, 230 * s)
+            a, b = P(x0 + 1100, y0 + 1300); g.circle(a, b, 230 * s)
             box(x1 - 900, y1 - 2100, x1 - 200, y1 - 200, rx=0.5)
         elif r["id"] == "tr":
-            box(x0 + 400, y0 + 900, x0 + 2400, y0 + 1600, rx=0.5)
-            box(x0 + 150, y0 + 150, x0 + 1600, y0 + 600, fill="#ecebe8")
-            box(x1 - 700, y0 + 150, x1 - 200, y0 + 600, fill="#ecebe8")
+            box(x0 + 950, y0 + 550, x0 + 1650, y0 + 2450, rx=0.5)
+            box(x0 + 100, y0 + 900, x0 + 550, y0 + 2400, fill="#ecebe8")
         elif r["id"] == "op":
             box(x0 + 150, y1 - 750, x1 - 150, y1 - 150, fill="#ecebe8")
             a, b = P(x0 + 1000, y1 - 1150); g.circle(a, b, 220 * s)
@@ -362,24 +359,26 @@ def furniture(g, f, P, s):
             if x1 - x0 > 1300:
                 box(x1 - 550, y0 + 500, x1 - 150, y0 + 1500, fill="#f4efe8", rx=0.4)
         elif r["id"] == "lw":
-            n = int((x1 - x0 - 300) / 400)
+            # ロッカーは東側の壁沿い（扉と干渉しない）、パウダーは北側の壁沿い
+            n = int((y1 - y0 - 400) / 400)
             for i in range(n):
-                box(x0 + 150 + i * 400, y0 + 100, x0 + 550 + i * 400, y0 + 550, fill="#e8dccb")
-            box(x0 + 150, y1 - 550, x0 + 1500, y1 - 100, fill="#efe4d2")
-            for i in range(2):
-                a, b = P(x0 + 450 + i * 700, y1 - 850); g.circle(a, b, 180 * s)
+                box(x1 - 550, y0 + 200 + i * 400, x1 - 100, y0 + 600 + i * 400, fill="#e8dccb")
+            box(x0 + 150, y1 - 550, x0 + 2000, y1 - 100, fill="#efe4d2")
+            for i in range(3):
+                a, b = P(x0 + 450 + i * 600, y1 - 850); g.circle(a, b, 180 * s)
+            box(x0 + 900, y0 + 900, x0 + 1900, y0 + 1300, fill="#f4efe8", rx=0.4)
         elif r["id"] == "pw":
             box(x0 + 100, y0 + 150, x0 + 550, y1 - 300, fill="#efe4d2")
             for i in range(3):
                 a, b = P(x0 + 800, y0 + 600 + i * 700); g.circle(a, b, 180 * s)
         elif r["id"] == "sr":
-            box(x0 + 1000, y0 + 1500, x0 + 3200, y0 + 2700, rx=0.8, fill="#f4efe8")
-            for xx in (1300, 2100, 2900):
-                for yy in (1150, 3050):
+            box(x0 + 900, y0 + 1150, x0 + 3100, y0 + 1850, rx=0.8, fill="#f4efe8")
+            for xx in (1300, 2000, 2700):
+                for yy in (700, 2300):
                     a, b = P(x0 + xx, y0 + yy); g.circle(a, b, 220 * s)
-            box(x0 + 100, y1 - 700, x0 + 2700, y1 - 100, fill="#ecebe8")
-            g.text(*P(x0 + 1400, y1 - 450), "ミニキッチン", 1.5, fill=C["sub"])
-            box(x1 - 700, y1 - 700, x1 - 150, y1 - 100, fill="#ecebe8")
+            box(x0 + 100, y1 - 650, x0 + 2700, y1 - 50, fill="#ecebe8")
+            g.text(*P(x0 + 1400, y1 - 400), "ミニキッチン", 1.5, fill=C["sub"])
+            box(x1 - 700, y1 - 650, x1 - 150, y1 - 50, fill="#ecebe8")
         elif r["id"] in ("cs",):
             box(x0 + 600, y0 + 1300, x0 + 2100, y0 + 2100, rx=0.6, fill="#f4efe8")
             for yy in (1000, 2400):

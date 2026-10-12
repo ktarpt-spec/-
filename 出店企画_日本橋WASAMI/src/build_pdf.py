@@ -128,10 +128,11 @@ ext = f"""{img("ext.png", 0, 0, 236, 148)}{img("ext_entry.png", 242, 0, 146, 91)
 pages.append(page("外装イメージ", "EXTERIOR IMAGE", ext, "P.8"))
 
 # ---------------------------------------------------------------- 9 1F
-p1 = f"""{img("v1_lobby.png", 0, 0, 236, 148)}{img("v1_mri.png", 242, 0, 146, 91)}{img("v1_op.png", 242, 128, 146, 91)}
+p1 = f"""{img("v1_lobby.png", 0, 0, 236, 148)}{img("v1_mri.png", 242, 0, 146, 91)}{img("v1_exam.png", 242, 128, 146, 91)}
 {cap(0, 152, 236, "1F 受付・待合", "専用アプローチから入ると正面に円形受付。銀座院と同じ木の天井リングとロゴ壁。待合は少人数でゆったりと。道路側ガラスの内側は600mm後退した木調ルーバーで外からの視線をやわらげます。", "1F")}
-{cap(242, 94, 146, "MRI検査室（平面図A-01と同形状・約31.5㎡）", "富士フイルム製1.5T MRIを想定。電磁シールド工事を行う独立区画。機械室は廊下から出入り可能。", "1F")}
-{cap(242, 222, 146, "MRI操作室から観察窓越しに", "操作室とMRI検査室の間に壁を設け、観察窓（W2,000）から検査中の様子を確認できます。", "1F")}
+{img("v1_treat.png", 0, 176, 116, 72)}{img("ax1.png", 120, 176, 116, 72)}
+{cap(242, 94, 146, "MRI検査室（平面図A-01と同形状・約31.5㎡）", "富士フイルム製1.5T MRIを想定。電磁シールド工事を行う独立区画。操作室から観察窓で確認。", "1F")}
+{cap(242, 222, 146, "診察室（約6.4㎡）", "医師の診察デスクとモニター、診察ベッド、手洗い。検査画像をその場で説明できます。", "1F")}
 """
 pages.append(page("内装イメージ　1階（受付待合・診察・処置・MRI）", "INTERIOR IMAGE 1F", p1, "P.9"))
 
@@ -161,21 +162,31 @@ facts = [("ブランド", "整痛院ふっか（痛み・しびれ専門）"), (
          ("料金", "初回 12,000円（税込）／初回約120分・2回目以降約30分")]
 frows = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in facts)
 ginza = f"""
-{absimg("ginza_ref.jpg", 0, 0, 236, 150, d="images")}
-{cap(0, 153, 236, "整痛院ふっか 銀座院（内観）", "日本橋院は、この銀座院の内装・トーン＆マナーをそのまま踏襲し、規模を拡大して計画しています。", "銀座院")}
-<div class="kpi" style="position:absolute;left:0;top:176mm;width:236mm">
+{absimg("ginza_lobby.jpg", 0, 0, 150, 100, d="images")}
+{absimg("ginza_reception.jpg", 154, 0, 82, 49, d="images")}{absimg("ginza_room.jpg", 154, 51, 82, 49, d="images")}
+{absimg("ginza_counsel.jpg", 0, 104, 74, 50, d="images")}{absimg("ginza_treat.jpg", 77, 104, 74, 50, d="images")}{absimg("ginza_seminar.jpg", 154, 104, 82, 50, d="images")}
+<div style="position:absolute;left:2mm;top:92mm;background:rgba(40,34,30,.62);color:#fff;font-size:2.8mm;padding:1mm 2.5mm;border-radius:0.8mm">銀座院 待合・受付（実写）</div>
+<div style="position:absolute;left:156mm;top:42mm;background:rgba(40,34,30,.62);color:#fff;font-size:2.6mm;padding:0.8mm 2mm;border-radius:0.8mm">受付カウンター</div>
+<div style="position:absolute;left:156mm;top:93mm;background:rgba(40,34,30,.62);color:#fff;font-size:2.6mm;padding:0.8mm 2mm;border-radius:0.8mm">個室（施術・カウンセリング）</div>
+<div style="position:absolute;left:2mm;top:147mm;background:rgba(40,34,30,.62);color:#fff;font-size:2.6mm;padding:0.8mm 2mm;border-radius:0.8mm">カウンセリング</div>
+<div style="position:absolute;left:79mm;top:147mm;background:rgba(40,34,30,.62);color:#fff;font-size:2.6mm;padding:0.8mm 2mm;border-radius:0.8mm">施術・説明</div>
+<div style="position:absolute;left:156mm;top:147mm;background:rgba(40,34,30,.62);color:#fff;font-size:2.6mm;padding:0.8mm 2mm;border-radius:0.8mm">講演・セミナー活動</div>
+<div class="kpi" style="position:absolute;left:0;top:160mm;width:236mm">
  <div><b>3万<small style="font-size:3.5mm">件超</small></b><span>グループ累計施術件数</span></div>
  <div><b>9<small style="font-size:3.5mm">院</small></b><span>全国展開（福岡・東京ほか）</span></div>
  <div><b>2016<small style="font-size:3.5mm">年</small></b><span>開業（2023年 法人化）</span></div>
  <div><b>2025<small style="font-size:3.5mm">年</small></b><span>銀座 新モデル大型院を開院</span></div></div>
-<div style="position:absolute;left:0;top:206mm;width:236mm;font-size:3.05mm;line-height:1.75">
+<div style="position:absolute;left:0;top:190mm;width:236mm;font-size:3.05mm;line-height:1.75">
  腰痛・坐骨神経痛など慢性的な痛み・しびれに特化した「整痛院」。2025年には大阪・関西万博のステージで「整痛」の取り組みを講演。
- 日本橋院では、銀座院の施術モデルに<b>1.5T MRIを備えた医療フロア</b>を加え、検査から施術まで一貫して提供します。</div>
+ 日本橋院では、銀座院の施術モデルに<b>1.5T MRIを備えた医療フロア</b>を加え、検査から施術まで一貫して提供します。
+ 日本橋院の内装は、写真の銀座院（白い塗り壁・木目・ベージュのカーペット・円形受付）をそのまま踏襲します。</div>
 <div style="position:absolute;left:244mm;top:0;width:144mm">
  <h3 style="font-size:4.4mm;margin:0 0 3mm">会社・銀座院の概要（公開情報）</h3>
  <table style="font-size:2.9mm">{frows}</table>
- <div class="ph" style="position:relative;margin-top:5mm;height:52mm">銀座院 外観・施術室の実写写真<br>（Googleマップ掲載写真等は著作権の関係上<br>貴社ご提供の写真に差し替えてください）</div>
- <p class="note" style="margin-top:3mm">出典：整痛院ふっか公式サイト（fukka.jp）、PR TIMES（株式会社ふっか プレスリリース 2025年5月・7月）ほか公開情報。数値は公表時点のもので、最新値は貴社にてご確認ください。</p>
+ <h3 style="font-size:4.2mm;margin:6mm 0 2mm">日本橋院のイメージ（参考）</h3>
+ <div style="position:relative;height:56mm;border-radius:1.2mm;overflow:hidden"><img src="images/ginza_ref.jpg" style="width:100%;height:100%;object-fit:cover"></div>
+ <p class="note" style="margin-top:1.5mm">銀座院の内装パース。日本橋院も同じトーン＆マナーで計画。</p>
+ <p class="note" style="margin-top:3mm">写真・情報出典：整痛院ふっか公式サイト（fukka.jp）、整痛院ふっか銀座院ページ、PR TIMES（株式会社ふっか プレスリリース）。数値は公表時点のもの。</p>
 </div>"""
 pages.append(page("銀座院のご紹介（整痛院ふっか）", "GINZA CLINIC", ginza, "P.12"))
 

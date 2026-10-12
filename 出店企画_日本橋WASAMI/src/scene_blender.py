@@ -608,10 +608,12 @@ def build_upper(key, cut=None):
         box("column", 0.8, 0.45, hh(CH * 1000) / 1000, m(c), m(D - 175), 0, "plaster")
     wall(W + 150, D + 250, W + 150, -100, hh(ch_mm), 300, "plaster")
     sd, td = f["stair_door"], f["toilet_door"]
-    wall(-300, -50, e0, -50, hh(ch_mm), 100, "plaster", [(sd[0] + 300, sd[1] + 300, 0, min(2100, hh(ch_mm)))])
+    st_ = f.get("store_door", (500, 1300))
+    wall(-300, -50, e0, -50, hh(ch_mm), 100, "plaster", [(st_[0] + 300, st_[1] + 300, 0, min(2100, hh(ch_mm))), (sd[0] + 300, sd[1] + 300, 0, min(2100, hh(ch_mm)))])
     wall(e1, -50, W + 300, -50, hh(ch_mm), 100, "plaster", [(td[0] - e1, td[1] - e1, 0, min(2100, hh(ch_mm)))])
     if not cut:
         swing_door("S", dict(y0=-50, x0=0, x1=0, y1=0), dict(at=(sd[0] + sd[1]) / 2, w=sd[1] - sd[0]), mat="steel")
+        swing_door("S", dict(y0=-50, x0=0, x1=0, y1=0), dict(at=(st_[0] + st_[1]) / 2, w=st_[1] - st_[0]), mat="door")
         swing_door("S", dict(y0=-50, x0=0, x1=0, y1=0), dict(at=(td[0] + td[1]) / 2, w=td[1] - td[0]), mat="steel")
         box("sign_wc", 0.2, 0.01, 0.2, m((td[0] + td[1]) / 2), -0.0, 2.25, "white")
     # EVホール
@@ -671,46 +673,53 @@ def build_upper(key, cut=None):
 
 def treat_furnish(r, cut):
     x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
-    if (y1 - y0) > (x1 - x0) - 100:
-        bed((x0 + x1) / 2 - 250, (y0 + y1) / 2 + 150)
-        stool(x1 - 380, y0 + 700)
-        box("basket", 0.42, 0.34, 0.24, m(x1 - 300), m(y1 - 300), 0, "oak", bevel=0.01)
-    else:
-        bed(x0 + 1275, y1 - 650, along_x=True)
-        stool(x1 - 420, y1 - 1500)
-        box("wagon", 0.42, 0.42, 0.75, m(x0 + 360), m(y0 + 360), 0, "oak", bevel=0.008)
-        box("wagontop", 0.44, 0.44, 0.02, m(x0 + 360), m(y0 + 360), 0.75, "top")
-        box("basket", 0.42, 0.34, 0.24, m(x1 - 300), m(y0 + 300), 0, "oak", bevel=0.01)
+    if (y1 - y0) > (x1 - x0) - 100:     # 縦長：ベッドを南側の壁沿いに横向き
+        bed(x0 + 1150, y0 + 600, along_x=True)
+        stool(x1 - 450, y1 - 500)
+        box("basket", 0.42, 0.34, 0.24, m(x0 + 350), m(y1 - 350), 0, "oak", bevel=0.01)
+        hx, hy = (x0 + x1) / 2, y0 + 110
+    else:                               # 横長：北側の柱型から500mm離す
+        bed(x0 + 1275, y1 - 900, along_x=True)
+        stool(x0 + 450, y1 - 1650)
+        box("wagon", 0.42, 0.42, 0.75, m(x1 - 360), m(y0 + 360), 0, "oak", bevel=0.008)
+        box("wagontop", 0.44, 0.44, 0.02, m(x1 - 360), m(y0 + 360), 0.75, "top")
+        box("basket", 0.42, 0.34, 0.24, m(x1 - 900), m(y0 + 300), 0, "oak", bevel=0.01)
+        hx, hy = x0 + 110, (y0 + y1) / 2
     if not cut:
-        box("hookshelf", 0.6, 0.2, 0.025, m((x0 + x1) / 2 + 400), m(y1 - 110), 1.6, "oak")
-        for k in range(3):
-            cyl("hook", 0.01, 0.05, m((x0 + x1) / 2 + 200 + k * 200), m(y1 - 25), 1.5, "steel", rot=(math.pi / 2, 0, 0))
+        if hy == y0 + 110:
+            box("hookshelf", 0.6, 0.2, 0.025, m(hx), m(hy), 1.6, "oak")
+        else:
+            box("hookshelf", 0.2, 0.6, 0.025, m(hx), m(hy), 1.6, "oak")
 
 
 def lockers(r):
     x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
-    if (x1 - x0) < (y1 - y0) or r["id"] in ("slm", "slw"):
-        n = int((y1 - y0 - 600) / 450)
+    if r["id"] == "lw":   # 女性：ロッカーは東の壁沿い、パウダーは北の壁沿い（扉と干渉しない）
+        n = int((y1 - y0 - 400) / 450)
         for i in range(n):
-            box("locker", 0.45, 0.43, 1.8, m(x0 + 280), m(y0 + 450 + i * 450), 0, "oak", bevel=0.004)
-    else:
-        n = int((x1 - x0 - 300) / 450)
-        for i in range(n):
-            box("locker", 0.43, 0.45, 1.8, m(x0 + 350 + i * 450), m(y1 - 280), 0, "oak", bevel=0.004)
-        box("vanity", 1.6, 0.5, 0.75, m(x1 - 900), m(y0 + 300), 0, "white", bevel=0.005)
-        box("mirror", 1.5, 0.01, 0.8, m(x1 - 900), m(y0 + 60), 1.1, "metal")
-    box("bench", 1.0, 0.38, 0.42, m((x0 + x1) / 2 + 200), m((y0 + y1) / 2), 0, "fabric", rot=math.pi / 2 if (x1 - x0) < (y1 - y0) else 0, bevel=0.02)
+            box("locker", 0.43, 0.45, 1.8, m(x1 - 280), m(y0 + 425 + i * 450), 0, "oak", bevel=0.004)
+        box("vanity", 1.85, 0.5, 0.75, m(x0 + 1075), m(y1 - 300), 0, "white", bevel=0.005)
+        box("mirror", 1.75, 0.01, 0.8, m(x0 + 1075), m(y1 - 60), 1.1, "metal")
+        for i in range(3):
+            stool(x0 + 450 + i * 600, y1 - 850)
+        box("bench", 1.0, 0.4, 0.42, m(x0 + 1400), m(y0 + 1100), 0, "fabric", bevel=0.02)
+        return
+    n = int((y1 - y0 - 600) / 450)
+    for i in range(n):
+        box("locker", 0.45, 0.43, 1.8, m(x0 + 280), m(y0 + 450 + i * 450), 0, "oak", bevel=0.004)
+    if x1 - x0 > 1300:
+        box("bench", 0.4, 1.0, 0.42, m(x1 - 350), m(y0 + 1000), 0, "fabric", bevel=0.02)
 
 
 def staff_room(r):
     x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
-    box("table", 2.0, 0.9, 0.72, m((x0 + x1) / 2), m((y0 + y1) / 2 - 200), 0, "oakH", bevel=0.006)
-    for dx in (-0.6, 0.0, 0.6):
-        for dy, face in ((-0.75, 90), (0.35, 270)):
-            chair((x0 + x1) / 2 + dx * 1000, (y0 + y1) / 2 - 200 + dy * 1000 + 200, face)
-    box("kitchen", m(x1 - x0 - 600), 0.6, 0.86, m((x0 + x1) / 2), m(y1 - 320), 0, "white", bevel=0.005)
-    box("kitchentop", m(x1 - x0 - 600), 0.62, 0.03, m((x0 + x1) / 2), m(y1 - 320), 0.86, "top")
-    box("fridge", 0.6, 0.62, 1.7, m(x0 + 350), m(y1 - 320), 0, "white", bevel=0.01)
+    box("table", 2.2, 0.7, 0.72, m(x0 + 2000), m(y0 + 1500), 0, "oakH", bevel=0.006)
+    for dx in (-700, 0, 700):
+        chair(x0 + 2000 + dx, y0 + 700, 90)
+        chair(x0 + 2000 + dx, y0 + 2300, 270)
+    box("kitchen", 2.6, 0.6, 0.86, m(x0 + 1400), m(y1 - 350), 0, "white", bevel=0.005)
+    box("kitchentop", 2.6, 0.62, 0.03, m(x0 + 1400), m(y1 - 350), 0.86, "top")
+    box("fridge", 0.55, 0.6, 1.7, m(x1 - 425), m(y1 - 350), 0, "white", bevel=0.01)
 
 
 def lounge(L):
@@ -798,9 +807,16 @@ def build_1F(cut=None):
             box("faucet", 0.04, 0.04, 0.25, m(sx_), m(sy_) + (0.12 if sy_ > 3000 else -0.12), 0.82, "metal")
     # 診察室・処置室
     ex = next(r for r in f["rooms"] if r["id"] == "ex")
-    box("desk", 1.4, 0.6, 0.72, m(ex["x0"] + 900), m(ex["y0"] + 600), 0, "oakH", bevel=0.005)
+    box("desk", 1.4, 0.6, 0.72, m(ex["x0"] + 900), m(ex["y1"] - 450), 0, "oakH", bevel=0.005)
+    box("monitor_ex", 0.5, 0.03, 0.32, m(ex["x0"] + 900), m(ex["y1"] - 250), 0.8, "screen", bevel=0.004)
+    chair(ex["x0"] + 900, ex["y1"] - 1100, 90)
+    stool(ex["x0"] + 1100, ex["y0"] + 1300)
     bed(ex["x1"] - 550, ex["y1"] - 1150)
-    bed(tr["x0"] + 1400, tr["y0"] + 1250, along_x=True)
+    box("viewer", 0.03, 0.9, 0.6, m(ex["x0"] + 70), m(ex["y0"] + 1600), 1.2, "white", bevel=0.004)
+    bed(tr["x0"] + 1300, tr["y0"] + 1500)
+    box("cabinet_tr", 0.45, 1.5, 0.85, m(tr["x0"] + 325), m(tr["y0"] + 1650), 0, "white", bevel=0.005)
+    box("cabinet_trtop", 0.47, 1.52, 0.03, m(tr["x0"] + 325), m(tr["y0"] + 1650), 0.85, "top")
+    box("wagon_tr", 0.45, 0.45, 0.8, m(tr["x1"] - 400), m(tr["y0"] + 2300), 0, "steel", bevel=0.008)
     if not cut:
         linear_light(600, 1600, 3600, 1600, CH, 55); linear_light(600, 3300, 3600, 3300, CH, 55)
         linear_light(4500, 3400, 8500, 3400, CH, 45)
@@ -984,6 +1000,8 @@ VIEWS = {
     "v5_staff": dict(build=lambda: build_upper("5F"), cam=(V(4700, 1650, 1500), V(800, 4300, 1000)), lens=17, exposure=-0.8),
     "v1_lobby": dict(build=build_1F, cam=(V(350, 350, 1500), V(4300, 4800, 1250)), lens=18, exposure=-0.8),
     "v1_mri": dict(build=build_1F, cam=(V(12800, 300, 1600), V(10200, 4300, 1000)), lens=15, exposure=-0.8),
+    "v1_exam": dict(build=build_1F, cam=(V(4450, 4250, 1550), V(6500, 6300, 950)), lens=15, exposure=-0.35),
+    "v1_treat": dict(build=build_1F, cam=(V(6150, 2650, 1600), V(4600, 300, 800)), lens=15, exposure=-0.35),
     "v1_op": dict(build=build_1F, cam=(V(7550, 2500, 1500), V(11000, 1700, 1050)), lens=17, exposure=-0.8),
     "ax1": dict(build=lambda: build_1F(cut=1500), cam=(V(9500, -7500, 12000), V(6900, 3300, 0)), lens=32, exposure=-0.5, axo=True),
     "ax4": dict(build=lambda: build_upper("4F", cut=1500), cam=(V(13500, -11000, 19000), V(10500, 3300, 0)), lens=30, exposure=-0.5, axo=True),

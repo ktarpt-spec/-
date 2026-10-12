@@ -31,9 +31,8 @@
 <rect x="179.25" y="64.00" width="26.25" height="25.00" fill="#efe4d2" stroke="none" stroke-width="0.2" />
 <rect x="205.50" y="64.00" width="26.25" height="25.00" fill="#efe4d2" stroke="none" stroke-width="0.2" />
 <rect x="231.75" y="64.00" width="26.25" height="25.00" fill="#efe4d2" stroke="none" stroke-width="0.2" />
-<rect x="68.50" y="137.00" width="55.50" height="13.00" fill="#f3ebdd" stroke="none" stroke-width="0.2" />
+<rect x="48.00" y="137.00" width="76.00" height="13.00" fill="#f3ebdd" stroke="none" stroke-width="0.2" />
 <rect x="200.00" y="105.00" width="12.00" height="45.00" fill="#f3ebdd" stroke="none" stroke-width="0.2" />
-<rect x="48.00" y="137.00" width="20.50" height="13.00" fill="#ecebe8" stroke="none" stroke-width="0.2" />
 <rect x="48.00" y="105.00" width="50.00" height="32.00" fill="#f8f4ee" stroke="none" stroke-width="0.2" />
 <rect x="98.00" y="105.00" width="13.00" height="32.00" fill="#f8f4ee" stroke="none" stroke-width="0.2" />
 <rect x="111.00" y="105.00" width="13.00" height="32.00" fill="#f8f4ee" stroke="none" stroke-width="0.2" />
@@ -54,50 +53,48 @@
 <rect x="183.22" y="61.50" width="8.00" height="6.50" fill="#8c8580" stroke="none" stroke-width="0.2" />
 <rect x="210.22" y="61.50" width="8.00" height="6.50" fill="#8c8580" stroke="none" stroke-width="0.2" />
 <rect x="237.22" y="61.50" width="8.00" height="6.50" fill="#8c8580" stroke="none" stroke-width="0.2" />
-<rect x="51.00" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="68.00" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="70.05" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="68.25" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="77.25" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="94.25" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="96.30" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="94.50" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="103.50" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="120.50" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="122.55" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="120.75" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="129.75" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="146.75" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="148.80" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="147.00" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="156.00" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="173.00" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="175.05" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="173.25" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="182.25" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="199.25" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="201.30" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="199.50" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="208.50" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="225.50" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="227.55" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="225.75" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="234.75" y="66.50" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="251.75" y="67.20" width="2.30" height="6.60" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
-<circle cx="253.80" cy="79.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="252.00" y="83.50" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="49.20" y="138.20" width="4.80" height="10.60" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="62.50" y="138.20" width="4.80" height="10.60" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="58.00" y="110.00" width="22.00" height="12.00" fill="#f4efe8" stroke="#9c8f84" stroke-width="0.15" rx="0.8"/>
-<circle cx="61.00" cy="125.50" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
-<circle cx="61.00" cy="106.50" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
-<circle cx="69.00" cy="125.50" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
-<circle cx="69.00" cy="106.50" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
-<circle cx="77.00" cy="125.50" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
-<circle cx="77.00" cy="106.50" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="49.00" y="106.00" width="26.00" height="6.00" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<text x="62.00" y="109.50" font-size="1.5" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >ミニキッチン</text>
-<rect x="91.00" y="106.00" width="5.50" height="6.00" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="51.00" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="68.00" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="52.50" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="68.25" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="77.25" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="94.25" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="78.75" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="94.50" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="103.50" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="120.50" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="105.00" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="120.75" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="129.75" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="146.75" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="131.25" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="147.00" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="156.00" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="173.00" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="157.50" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="173.25" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="182.25" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="199.25" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="183.75" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="199.50" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="208.50" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="225.50" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="210.00" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="225.75" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="234.75" y="69.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="251.75" y="69.80" width="2.30" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="236.25" cy="80.50" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="252.00" y="84.00" width="4.00" height="3.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="57.00" y="118.50" width="22.00" height="7.00" fill="#f4efe8" stroke="#9c8f84" stroke-width="0.15" rx="0.8"/>
+<circle cx="61.00" cy="130.00" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
+<circle cx="61.00" cy="114.00" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
+<circle cx="68.00" cy="130.00" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
+<circle cx="68.00" cy="114.00" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
+<circle cx="75.00" cy="130.00" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
+<circle cx="75.00" cy="114.00" r="2.20" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="49.00" y="105.50" width="26.00" height="6.00" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<text x="62.00" y="109.00" font-size="1.5" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >ミニキッチン</text>
+<rect x="91.00" y="105.50" width="5.50" height="6.00" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="99.00" y="131.50" width="4.50" height="4.00" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="99.00" y="127.50" width="4.50" height="4.00" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="99.00" y="123.50" width="4.50" height="4.00" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
@@ -114,16 +111,14 @@
 <rect x="112.00" y="107.50" width="4.50" height="4.00" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="213.20" y="132.20" width="4.80" height="16.60" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="252.00" y="132.20" width="4.80" height="16.60" fill="#ecebe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="214.50" y="107.00" width="8.00" height="19.50" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="215.70" y="107.80" width="5.60" height="3.20" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.4"/>
-<rect x="228.50" y="107.00" width="4.50" height="4.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<circle cx="229.80" cy="120.00" r="2.00" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="228.50" y="125.00" width="4.00" height="3.50" fill="#f4efe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<rect x="237.50" y="107.00" width="8.00" height="19.50" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
-<rect x="238.70" y="107.80" width="5.60" height="3.20" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.4"/>
-<rect x="251.50" y="107.00" width="4.50" height="4.50" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
-<circle cx="252.80" cy="120.00" r="2.00" fill="none" stroke="#000" stroke-width="0.2"/>
-<rect x="251.50" y="125.00" width="4.00" height="3.50" fill="#f4efe8" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="213.75" y="121.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="230.00" y="121.80" width="2.50" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="230.50" cy="110.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="213.50" y="106.50" width="4.00" height="4.00" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
+<rect x="236.75" y="121.00" width="19.50" height="8.00" fill="#fff" stroke="#9c8f84" stroke-width="0.15" rx="0.6"/>
+<rect x="253.00" y="121.80" width="2.50" height="6.40" fill="#f2ede6" stroke="#9c8f84" stroke-width="0.15" rx="0.3"/>
+<circle cx="253.50" cy="110.00" r="1.90" fill="none" stroke="#000" stroke-width="0.2"/>
+<rect x="236.50" y="106.50" width="4.00" height="4.00" fill="#e8dccb" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="128.00" y="108.00" width="6.00" height="27.00" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <rect x="128.00" y="108.00" width="38.00" height="6.00" fill="#ece3d6" stroke="#9c8f84" stroke-width="0.15" rx="0"/>
 <circle cx="146.00" cy="118.00" r="4.50" fill="#f4efe8" stroke="#9c8f84" stroke-width="0.15"/>
@@ -158,8 +153,6 @@
 <line x1="231.75" y1="89.00" x2="231.75" y2="64.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
 <line x1="231.75" y1="89.00" x2="258.00" y2="89.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
 <line x1="231.75" y1="89.00" x2="231.75" y2="64.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
-<line x1="48.00" y1="137.00" x2="68.50" y2="137.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
-<line x1="68.50" y1="150.00" x2="68.50" y2="137.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
 <line x1="48.00" y1="137.00" x2="98.00" y2="137.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
 <line x1="48.00" y1="105.00" x2="98.00" y2="105.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
 <line x1="98.00" y1="137.00" x2="98.00" y2="105.00" stroke="#2b2522" stroke-width="1.0" stroke-linecap="square"/>
@@ -196,8 +189,6 @@
 <line x1="214.12" y1="89.55" x2="224.47" y2="89.55" stroke="#2b2522" stroke-width="0.35" />
 <line x1="240.38" y1="89.00" x2="249.38" y2="89.00" stroke="white" stroke-width="1.8" />
 <line x1="240.38" y1="89.55" x2="250.72" y2="89.55" stroke="#2b2522" stroke-width="0.35" />
-<line x1="68.50" y1="147.00" x2="68.50" y2="140.00" stroke="white" stroke-width="1.8" />
-<line x1="67.95" y1="147.00" x2="67.95" y2="138.95" stroke="#2b2522" stroke-width="0.35" />
 <line x1="86.50" y1="137.00" x2="95.50" y2="137.00" stroke="white" stroke-width="1.8" />
 <line x1="86.50" y1="137.55" x2="96.85" y2="137.55" stroke="#2b2522" stroke-width="0.35" />
 <line x1="101.00" y1="137.00" x2="108.00" y2="137.00" stroke="white" stroke-width="1.8" />
@@ -216,33 +207,34 @@
 <line x1="202.00" y1="150.00" x2="210.00" y2="150.00" stroke="white" stroke-width="1.6" />
 <path d="M202.0,150.0 L202.0,158.0 A8.0,8.0 0 0 0 210.0,150.0" fill="none" stroke="#2b2522" stroke-width="0.18" />
 <text x="206.00" y="161.00" font-size="1.7" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >共用トイレへ</text>
+<line x1="53.00" y1="150.00" x2="61.00" y2="150.00" stroke="white" stroke-width="1.6" />
+<path d="M53.0,150.0 L53.0,158.0 A8.0,8.0 0 0 0 61.0,150.0" fill="none" stroke="#2b2522" stroke-width="0.18" />
+<text x="57.00" y="161.00" font-size="1.7" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >倉庫へ</text>
 <circle cx="127.00" cy="109.00" r="2.80" fill="#cfdcc4" stroke="#8aa07a" stroke-width="0.15"/>
 <circle cx="197.00" cy="109.00" r="2.80" fill="#cfdcc4" stroke="#8aa07a" stroke-width="0.15"/>
 <line x1="148.75" y1="186.00" x2="148.75" y2="137.00" stroke="#b5523b" stroke-width="0.45" marker-end="url(#arr)"/>
 <text x="150.25" y="189.00" font-size="2.1" fill="#b5523b" text-anchor="start" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >患者動線（EVより）</text>
-<text x="61.12" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 501</text>
-<text x="61.12" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="87.38" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 502</text>
-<text x="87.38" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="113.62" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 503</text>
-<text x="113.62" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="139.88" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 504</text>
-<text x="139.88" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="166.12" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 505</text>
-<text x="166.12" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="192.38" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 506</text>
-<text x="192.38" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="218.62" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 507</text>
-<text x="218.62" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
-<text x="244.88" y="80.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 508</text>
-<text x="244.88" y="82.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="61.12" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 501</text>
+<text x="61.12" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="87.38" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 502</text>
+<text x="87.38" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="113.62" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 503</text>
+<text x="113.62" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="139.88" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 504</text>
+<text x="139.88" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="166.12" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 505</text>
+<text x="166.12" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="192.38" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 506</text>
+<text x="192.38" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="218.62" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 507</text>
+<text x="218.62" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
+<text x="244.88" y="82.90" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 508</text>
+<text x="244.88" y="85.40" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.6㎡（約4.1畳）</text>
 <text x="104.00" y="144.40" font-size="2.0" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >廊下</text>
 <text x="206.00" y="131.70" font-size="2.0" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >通路</text>
 <text x="206.00" y="134.10" font-size="2.0" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >（トイレへ）</text>
-<text x="58.25" y="142.50" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >収納</text>
-<text x="58.25" y="145.52" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >2.7㎡</text>
-<text x="73.00" y="113.00" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ休憩室</text>
-<text x="73.00" y="116.02" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >16.0㎡</text>
+<text x="89.50" y="122.00" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ休憩室</text>
+<text x="89.50" y="125.02" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >16.0㎡</text>
 <text x="104.50" y="108.62" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ</text>
 <text x="104.50" y="111.38" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >更衣（男）</text>
 <text x="104.50" y="115.55" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >4.2㎡</text>
@@ -253,10 +245,10 @@
 <text x="225.00" y="138.12" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >物品・リネン庫</text>
 <text x="225.00" y="140.88" font-size="2.3" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >（既設キッチン含む）</text>
 <text x="225.00" y="145.05" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >8.7㎡</text>
-<text x="228.00" y="126.10" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 509</text>
-<text x="228.00" y="128.60" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.0㎡（約3.7畳）</text>
-<text x="251.00" y="126.10" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 510</text>
-<text x="251.00" y="128.60" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.0㎡（約3.7畳）</text>
+<text x="223.50" y="114.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 509</text>
+<text x="223.50" y="116.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.0㎡（約3.7畳）</text>
+<text x="246.50" y="114.20" font-size="1.9" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 510</text>
+<text x="246.50" y="116.70" font-size="1.6" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >6.0㎡（約3.7畳）</text>
 <text x="206.00" y="95.90" font-size="2.0" fill="#9a7b55" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >通路</text>
 <polygon points="48.00,198.00 68.00,198.00 68.00,150.00 139.50,150.00 139.50,191.00 158.00,191.00 158.00,150.00 258.00,150.00 258.00,64.00 48.00,64.00" fill="none" stroke="#b5523b" stroke-width="0.45"/>
 <line x1="48.00" y1="45.00" x2="258.00" y2="45.00" stroke="#555" stroke-width="0.12" />
@@ -395,17 +387,15 @@
 <text x="330.00" y="108.00" font-size="2.4" fill="#2b2522" text-anchor="start" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >諸室面積表（内法・概算）</text>
 <text x="330.00" y="111.60" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >施術室 × 10室</text>
 <text x="382.00" y="111.60" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >各6.0～6.6㎡</text>
-<text x="330.00" y="114.70" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >収納</text>
-<text x="382.00" y="114.70" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >2.7㎡</text>
-<text x="330.00" y="117.80" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ休憩室</text>
-<text x="382.00" y="117.80" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >16.0㎡</text>
-<text x="330.00" y="120.90" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ更衣（男）</text>
+<text x="330.00" y="114.70" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ休憩室</text>
+<text x="382.00" y="114.70" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >16.0㎡</text>
+<text x="330.00" y="117.80" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ更衣（男）</text>
+<text x="382.00" y="117.80" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >4.2㎡</text>
+<text x="330.00" y="120.90" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ更衣（女）</text>
 <text x="382.00" y="120.90" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >4.2㎡</text>
-<text x="330.00" y="124.00" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >スタッフ更衣（女）</text>
-<text x="382.00" y="124.00" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >4.2㎡</text>
-<text x="330.00" y="127.10" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >物品・リネン庫（既設キッチン含む）</text>
-<text x="382.00" y="127.10" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >8.7㎡</text>
-<line x1="330.00" y1="128.40" x2="382.00" y2="128.40" stroke="#bbb" stroke-width="0.15" />
+<text x="330.00" y="124.00" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >物品・リネン庫（既設キッチン含む）</text>
+<text x="382.00" y="124.00" font-size="2.0" fill="#2b2522" text-anchor="end" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >8.7㎡</text>
+<line x1="330.00" y1="125.30" x2="382.00" y2="125.30" stroke="#bbb" stroke-width="0.15" />
 <text x="14.00" y="20.00" font-size="2.6" fill="#b5523b" text-anchor="start" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >← 正面道路（Y1通り）</text>
 <rect x="379.00" y="32.00" width="32.00" height="15.00" fill="white" stroke="#999" stroke-width="0.2" />
 <text x="395.00" y="36.40" font-size="2.0" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >図の向き</text>
