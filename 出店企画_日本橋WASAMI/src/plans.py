@@ -66,9 +66,11 @@ def title_block(g, title, scale, sheet, note_lines=()):
 
 
 def north_marker(g, x, y):
-    g.circle(x, y, 4.5, st="#333", sw=0.25)
-    g.path(f"M{x},{y-4.5} L{x+1.6},{y+2} L{x},{y+0.8} L{x-1.6},{y+2} Z", fill="#333", st="#333")
-    g.text(x, y + 8.5, "X1通り側", 2.0, fill=C["sub"])
+    """方位：真北は未確認のため、図の向き（通り）のみを示す"""
+    g.rect(x - 16, y - 6, 32, 15, fill="white", st="#999", sw=0.2)
+    g.text(x, y - 1.6, "図の向き", 2.0, weight="bold")
+    g.text(x, y + 2.0, "左：正面道路（Y1側）", 1.7, fill=C["sub"])
+    g.text(x, y + 5.0, "上：X1通り側　※真北は要確認", 1.7, fill=C["sub"])
 
 
 def draw_floor(f, ox, oy, s, scan=None):
@@ -158,6 +160,8 @@ def draw_floor(f, ox, oy, s, scan=None):
             if f["floor"] != "1F":
                 edges["W"] = ((x0, y0), (x0, y1)); edges["E"] = ((x1, y0), (x1, y1))
         for k, ((a, b), (c, d)) in edges.items():
+            if k in r.get("nowall", []):
+                continue
             # 外壁・コア境界上の辺は描かない（既設）
             if k == "S" and y0 <= 0 and f["floor"] != "1F":
                 continue
@@ -237,8 +241,11 @@ def draw_floor(f, ox, oy, s, scan=None):
             continue
         cx, cy = P(*(r.get("lp") or ((r["x0"] + r["x1"]) / 2, (r["y0"] + r["y1"]) / 2)))
         a = area(r)
+        if r["id"] == "mri":
+            a += sum(area(o) for o in f["rooms"] if o["id"] == "mri2")
         if r["kind"] == "treat":
-            cx, cy = P((r["x0"] + r["x1"]) / 2, r["y0"] + 650)
+            portrait = (r["y1"] - r["y0"]) > (r["x1"] - r["x0"]) - 100
+            cx, cy = P((r["x0"] + r["x1"]) / 2 + (450 if portrait else 0), r["y0"] + (260 if portrait else 650))
             g.text(cx, cy - 2.3, r["name"].replace("\n", " "), 1.9, weight="bold")
             g.text(cx, cy + 0.2, f"{a:.1f}㎡（約{a/1.62:.1f}畳）", 1.6, fill=C["sub"])
         elif r["kind"] in ("corridor", "hall"):
@@ -323,13 +330,15 @@ def furniture(g, f, P, s):
                 box(x0 + 2000, y1 - 980, x0 + 2230, y1 - 320, fill="#f2ede6", rx=0.3)
                 a, b = P(x1 - 420, y1 - 1500); g.circle(a, b, 190 * s)
                 box(x1 - 600, y0 + 200, x1 - 200, y0 + 550, fill="#e8dccb")
-        elif r["kind"] == "mri":
-            my = (y0 + y1) / 2
-            gx = x1 - 1500
-            box(gx - 1000, my - 1100, gx + 1000, my + 1100, fill="#dfe6ec", st=C["blue"], sw=0.25, rx=1.5)
-            a, b = P(gx, my); g.circle(a, b, 330 * s, fill="white", st=C["blue"], sw=0.2)
-            box(x0 + 450, my - 300, gx - 1000, my + 300, fill="white", st=C["blue"], sw=0.2, rx=0.5)
-            g.text(a, b + 13.5, "MRI装置（機種により要調整）", 1.6, fill=C["blue"])
+        elif r["kind"] == "mri" and r.get("mri_axis") == "y":
+            # 1.5T 超電導MRI（ボア軸＝Y方向）。ガントリーを北側、寝台を南側（操作室の観察窓側）に配置
+            gx, gy = x0 + 2100, 4350
+            box(gx - 1100, gy - 1000, gx + 1100, gy + 1000, fill="#dfe6ec", st=C["blue"], sw=0.25, rx=1.5)
+            a, b = P(gx, gy); g.circle(a, b, 330 * s, fill="white", st=C["blue"], sw=0.2)
+            box(gx - 300, 500, gx + 300, gy - 1000, fill="white", st=C["blue"], sw=0.2, rx=0.5)
+            g.text(a, b - 14, "1.5T MRI（富士フイルム）", 1.7, fill=C["blue"], anchor="middle")
+            # 5ガウスライン目安（破線）
+            g.add(f'<ellipse cx="{a:.2f}" cy="{b:.2f}" rx="{2000*s:.2f}" ry="{2500*s:.2f}" fill="none" stroke="{C["blue"]}" stroke-width="0.15" stroke-dasharray="1,0.8"/>')
         elif r["id"] == "ex":
             box(x0 + 200, y0 + 300, x0 + 1600, y0 + 900)
             a, b = P(x0 + 900, y0 + 1350); g.circle(a, b, 230 * s)
@@ -384,6 +393,11 @@ def furniture(g, f, P, s):
             box(x0 + 120, y0 + 120, x0 + 600, y1 - 120, fill="#ecebe8")
             if x1 - x0 > 1800:
                 box(x1 - 600, y0 + 120, x1 - 120, y1 - 120, fill="#ecebe8")
+    # 手洗い
+    for r in f["rooms"]:
+        for (sx_, sy_) in r.get("sinks", []):
+            box(sx_ - 250, sy_ - 200, sx_ + 250, sy_ + 200, fill="white", st=fw, sw=0.15, rx=0.4)
+            a, b = P(sx_, sy_); g.circle(a, b, 110 * s, st=fw, sw=0.12)
     # 待合椅子
     for (x, y, rot) in f.get("chairs", []):
         cx, cy = P(x, y)
@@ -460,10 +474,10 @@ def dims(g, f, P, s):
     yb = D + 2600 / (s * 100) * 0 + 1200
     if f["floor"] == "1F":
         hdim(0, W, D + 1900, f"{W:,}")
-        for a, b in [(0, 5000), (5000, 8000), (8000, 9800), (9800, W)]:
+        for a, b in [(0, 4200), (4200, 6300), (6300, 7400), (7400, 8800), (8800, W)]:
             hdim(a, b, D + 1150, f"{b-a:,}")
         vdim(0, D, -1300, f"{D:,}")
-        for a, b in [(0, 2900), (2900, 4100), (4100, D)]:
+        for a, b in [(0, 2800), (2800, 4000), (4000, D)]:
             vdim(a, b, W + 700, f"{b-a:,}")
     else:
         hdim(0, W, D + 1900, f"{W:,}（想定）")
@@ -471,7 +485,7 @@ def dims(g, f, P, s):
         for a, b in zip(xs, xs[1:]):
             hdim(a, b, D + 1100, f"{b-a:,}")
         vdim(0, D, -1350, f"{D:,}（想定）")
-        for a, b in [(0, 1400), (1400, 4900), (4900, 6100), (6100, D)]:
+        for a, b in [(0, 1300), (1300, 4500), (4500, 6100), (6100, D)]:
             vdim(a, b, W + 750, f"{b-a:,}")
 
 
@@ -482,7 +496,8 @@ def legend(g, x, y, items):
 
 
 def summary_table(g, x, y, f):
-    rows = [(r["name"].replace("\n", ""), area(r)) for r in f["rooms"]
+    extra = {r["id"]: area(r) for r in f["rooms"] if r["id"] == "mri2"}
+    rows = [(r["name"].replace("\n", ""), area(r) + (extra.get("mri2", 0) if r["id"] == "mri" else 0)) for r in f["rooms"]
             if r["kind"] in ("treat", "room", "mri", "service") and r["name"]]
     g.text(x, y, "諸室面積表（内法・概算）", 2.4, anchor="start", weight="bold")
     yy = y + 3.6
@@ -515,13 +530,14 @@ def make_plan(floor):
     m2, tsubo = AREA[floor]
     notes = {
         "1F": ["・下図（グレー）は貸主提供の募集図面（1階 店舗区画）。赤線＝貸室区画（98.36㎡）、着色部・室配置が当社計画（C工事）。",
-               "・MRIは床荷重5,000N/㎡（1～3F設定）の1階に配置。機種決定後に重量・磁場・シールド・搬入経路をビル側と協議。",
+               "・MRI：富士フイルム製1.5T（ゼロヘリウム型想定・クエンチ配管不要）。検査室約31.5㎡・機械室約5.4㎡・操作室約3.9㎡。破線は5ガウスライン目安。機種仕様書で要確認。",
+               "・床荷重5,000N/㎡の1Fに配置。荷重分散架台・搬入経路（マシンハッチ1,830×2,500）・振動・騒音・電源容量をビル側と協議。",
                "・道路側ガラス面から600mm以内には造作・サインを設けない（内装マニュアル7-(7)）。",
                "・トイレは館内共用トイレを利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
         "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。各室 約6.5㎡（約4畳）。間仕切は上部開放の欄間式（欄間h=500）。",
                "・受付はEVホール正面・フロア中央に大きく配置（銀座院と同じ円形カウンター＋木の天井リング）。ロビーは柱・壁のない開放的な空間。",
                "・特別避難階段・共用トイレへは廊下・通路で直接つながる計画（EVホール～階段附室を廊下状に確保：内装マニュアル6-(7)）。",
-               "・X1側（施術室側）は窓なし。平面形状は募集図面（4・5階 G229.86㎡）をもとに作図、実施設計時にビル側白図で寸法を確定。"],
+               "・X1側（施術室側）は窓なし。通路は両側居室部分を有効1,600mm（令119条）。平面は募集図面をもとに作図、実施設計時に白図で確定。"],
         "5F": [f"・施術室 {tc['5F']}室（各 約6.5㎡・約4畳）、フリースペース、スタッフ休憩室・スタッフ更衣室（男女）・物品庫を5階に集約。",
                "・フリースペースは施術前後の待合・カウンセリング・セミナー兼用のラウンジ。",
                "・特別避難階段・共用トイレへは廊下・通路で直接つながる計画（4Fと同一）。",

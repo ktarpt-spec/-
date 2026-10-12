@@ -103,7 +103,7 @@ for i, (fl, ph, ax, ttl, txt) in enumerate([
 overview = f"""
 <div style="position:absolute;left:0;top:0;width:126mm">
  <div class="kpi"><div><b>168.8<small style="font-size:3.5mm">坪</small></b><span>1F {t1}坪＋4F・5F 各{t4}坪</span></div><div><b>{N}</b><span>施術室（各 約4畳）</span></div></div>
- <div class="kpi" style="margin-top:3mm"><div><b>MRI</b><span>1F（床荷重5,000N/㎡）</span></div><div><b>1<small style="font-size:3.5mm">分</small></b><span>JR東京駅（22番出口）徒歩</span></div></div>
+ <div class="kpi" style="margin-top:3mm"><div><b>1.5T</b><span>MRI（富士フイルム）1F</span></div><div><b>1<small style="font-size:3.5mm">分</small></b><span>JR東京駅（22番出口）徒歩</span></div></div>
  <h3 style="font-size:4.2mm;margin:6mm 0 2mm">コンセプト</h3>
  <p style="font-size:3.1mm;line-height:1.75;margin:0">銀座院の空間（白い塗り壁、木目、ベージュのカーペット、中央の円形受付と木の天井リング）をそのまま拡大し、施術室を増やした「銀座院の大型版」。外観はビルの意匠を活かし、看板を目立たせない落ち着いた表現とします。</p>
  <h3 style="font-size:4.2mm;margin:6mm 0 2mm">フロア構成</h3>
@@ -115,33 +115,9 @@ overview = f"""
 """
 pages.append(page("計画概要", "PLAN OVERVIEW", overview, "P.2"))
 
-# ---------------------------------------------------------------- 3. 銀座院のご紹介（新規）
-ginza = f"""
-{absimg("ginza_ref.jpg", 0, 0, 236, 150, d="images")}
-{cap(0, 153, 236, "fukka 銀座院（既存）", "日本橋院は、この銀座院の内装・トーン＆マナーをそのまま踏襲して計画しています。", "銀座院")}
-<div class="ph" style="left:0;top:172mm;width:116mm;height:72mm">銀座院 外観写真<br>（ご提供いただき差し替え）</div>
-<div class="ph" style="left:120mm;top:172mm;width:116mm;height:72mm">銀座院 施術室写真<br>（ご提供いただき差し替え）</div>
-<div style="position:absolute;left:244mm;top:0;width:144mm">
- <h3 style="font-size:4.4mm;margin:0 0 3mm">銀座院の運営実績</h3>
-</div>
-""" + "".join(f'<div class="card" style="left:{244 + (i % 2) * 73}mm;top:{10 + (i // 2) * 30}mm;width:71mm;height:27mm"><span>{k}</span><b class="todo">【要記入】</b><span>{u}</span></div>'
-              for i, (k, u) in enumerate([("開院", "年　月"), ("施術室数", "室"), ("月間来院者数", "名／月"), ("会員数・リピート率", "名／％"),
-                                          ("月間売上（直近）", "万円"), ("口コミ評価", "Google ★")])) + f"""
-<div style="position:absolute;left:244mm;top:104mm;width:144mm">
- <h3 style="font-size:4.2mm;margin:0 0 2mm">銀座院の特長</h3>
- <ul style="font-size:3.1mm;line-height:1.8;margin:0;padding-left:5mm;color:#2b2522">
-  <li>【要記入】（例：完全個室の施術室と、白と木目を基調とした落ち着いた空間）</li>
-  <li>【要記入】（例：予約制による待ち時間の少ない運営）</li>
-  <li>【要記入】（例：医師・有資格スタッフによる施術・検査体制）</li></ul>
- <h3 style="font-size:4.2mm;margin:6mm 0 2mm">日本橋院で目指すこと</h3>
- <p style="font-size:3.1mm;line-height:1.75;margin:0">銀座院で培った運営をもとに、施術室を{N}室に拡大し、1階にMRIを備えた医療フロアを新設。東京駅・日本橋エリアのオフィスワーカーや近隣の方に、同じ品質のサービスを提供します。</p>
- <p class="note" style="margin-top:4mm">※【要記入】欄・写真枠は、数値・写真をご提供いただければ差し替えます。</p>
-</div>"""
-pages.append(page("銀座院のご紹介", "GINZA CLINIC", ginza, "P.3"))
-
 # ---------------------------------------------------------------- 4-7 図面
-for i, name in enumerate(["plan_1F.svg", "plan_4F.svg", "plan_5F.svg", "elevation_front.svg"]):
-    pages.append(f'<div class="pg">{D(name)}<div class="ft" style="bottom:3mm"><span></span><span>P.{4+i}</span></div></div>')
+for i, name in enumerate(["plan_1F.svg", "plan_4F.svg", "plan_5F.svg", "elevation_front.svg", "entry_detail.svg"]):
+    pages.append(f'<div class="pg">{D(name)}<div class="ft" style="bottom:3mm"><span></span><span>P.{3+i}</span></div></div>')
 
 # ---------------------------------------------------------------- 8 外装
 ext = f"""{img("ext.png", 0, 0, 236, 148)}{img("ext_entry.png", 242, 0, 146, 91)}{img("ext_front.png", 242, 128, 146, 91)}
@@ -154,8 +130,8 @@ pages.append(page("外装イメージ", "EXTERIOR IMAGE", ext, "P.8"))
 # ---------------------------------------------------------------- 9 1F
 p1 = f"""{img("v1_lobby.png", 0, 0, 236, 148)}{img("v1_mri.png", 242, 0, 146, 91)}{img("v1_op.png", 242, 128, 146, 91)}
 {cap(0, 152, 236, "1F 受付・待合", "専用アプローチから入ると正面に円形受付。銀座院と同じ木の天井リングとロゴ壁。待合は少人数でゆったりと。道路側ガラスの内側は600mm後退した木調ルーバーで外からの視線をやわらげます。", "1F")}
-{cap(242, 94, 146, "MRI室（平面図A-01と同形状）", "約4.1m×4.4mの独立区画。電磁シールド工事を行い、装置は東側に配置。", "1F")}
-{cap(242, 222, 146, "MRI操作室から観察窓越しに", "操作室とMRI室の間に壁を設け、観察窓から検査中の様子を確認できます。", "1F")}
+{cap(242, 94, 146, "MRI検査室（平面図A-01と同形状・約31.5㎡）", "富士フイルム製1.5T MRIを想定。電磁シールド工事を行う独立区画。機械室は廊下から出入り可能。", "1F")}
+{cap(242, 222, 146, "MRI操作室から観察窓越しに", "操作室とMRI検査室の間に壁を設け、観察窓（W2,000）から検査中の様子を確認できます。", "1F")}
 """
 pages.append(page("内装イメージ　1階（受付待合・診察・処置・MRI）", "INTERIOR IMAGE 1F", p1, "P.9"))
 
@@ -164,7 +140,7 @@ p4 = f"""{img("v4_lobby.png", 0, 0, 236, 148)}{img("v4_front.png", 242, 0, 146, 
 {cap(0, 152, 236, "4F 受付ロビー", "EVホールから続く柱・壁のない開放的なロビー。中央に大きな円形受付、木の天井リング、棚とロゴ壁で銀座院の雰囲気を再現。待合いすはゆとりをもって配置。", "4F")}
 {img("v4_aisle.png", 0, 176, 116, 72)}{img("ax4.png", 120, 176, 116, 72)}
 {cap(242, 94, 146, "EVホール側から見た受付", "エレベーターを降りて正面に受付が見える配置です。", "4F")}
-{cap(242, 222, 146, f"施術室（約6.5㎡・約4畳）", "ベッド・スツール・荷物かご・フック。木目の引戸で統一（窓なし）。", "4F")}
+{cap(242, 222, 146, f"施術室（約6.6㎡・約4畳）", "ベッド・スツール・荷物かご・フック。木目の引戸で統一（窓なし）。", "4F")}
 """
 pages.append(page("内装イメージ　4階（受付ロビー・更衣室・施術室）", "INTERIOR IMAGE 4F", p4, "P.10"))
 
@@ -176,7 +152,34 @@ p5 = f"""{img("v5_free.png", 0, 0, 236, 148)}{img("v5_staff.png", 242, 0, 146, 9
 """
 pages.append(page("内装イメージ　5階（施術室・フリースペース・スタッフエリア）", "INTERIOR IMAGE 5F", p5, "P.11"))
 
-# ---------------------------------------------------------------- 12 仕上表・ビル規定
+
+# ---------------------------------------------------------------- 12. 銀座院のご紹介（公開情報より）
+facts = [("ブランド", "整痛院ふっか（痛み・しびれ専門）"), ("運営", "株式会社ふっか（代表取締役 松田 圭太・理学療法士）"),
+         ("沿革", "2016年8月 開業（福岡）／2023年6月 法人化"), ("店舗", "全国9院（2025年5月時点）"),
+         ("銀座院", "2025年6月6日開院　東京都中央区銀座3-13-19 3F（東銀座駅 徒歩約2分）"),
+         ("営業", "9:00～21:00（不定休）・完全予約制"), ("施術", "独自のMSMメソッド（手技・運動療法・認知行動療法の考え方）"),
+         ("料金", "初回 12,000円（税込）／初回約120分・2回目以降約30分")]
+frows = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in facts)
+ginza = f"""
+{absimg("ginza_ref.jpg", 0, 0, 236, 150, d="images")}
+{cap(0, 153, 236, "整痛院ふっか 銀座院（内観）", "日本橋院は、この銀座院の内装・トーン＆マナーをそのまま踏襲し、規模を拡大して計画しています。", "銀座院")}
+<div class="kpi" style="position:absolute;left:0;top:176mm;width:236mm">
+ <div><b>3万<small style="font-size:3.5mm">件超</small></b><span>グループ累計施術件数</span></div>
+ <div><b>9<small style="font-size:3.5mm">院</small></b><span>全国展開（福岡・東京ほか）</span></div>
+ <div><b>2016<small style="font-size:3.5mm">年</small></b><span>開業（2023年 法人化）</span></div>
+ <div><b>2025<small style="font-size:3.5mm">年</small></b><span>銀座 新モデル大型院を開院</span></div></div>
+<div style="position:absolute;left:0;top:206mm;width:236mm;font-size:3.05mm;line-height:1.75">
+ 腰痛・坐骨神経痛など慢性的な痛み・しびれに特化した「整痛院」。2025年には大阪・関西万博のステージで「整痛」の取り組みを講演。
+ 日本橋院では、銀座院の施術モデルに<b>1.5T MRIを備えた医療フロア</b>を加え、検査から施術まで一貫して提供します。</div>
+<div style="position:absolute;left:244mm;top:0;width:144mm">
+ <h3 style="font-size:4.4mm;margin:0 0 3mm">会社・銀座院の概要（公開情報）</h3>
+ <table style="font-size:2.9mm">{frows}</table>
+ <div class="ph" style="position:relative;margin-top:5mm;height:52mm">銀座院 外観・施術室の実写写真<br>（Googleマップ掲載写真等は著作権の関係上<br>貴社ご提供の写真に差し替えてください）</div>
+ <p class="note" style="margin-top:3mm">出典：整痛院ふっか公式サイト（fukka.jp）、PR TIMES（株式会社ふっか プレスリリース 2025年5月・7月）ほか公開情報。数値は公表時点のもので、最新値は貴社にてご確認ください。</p>
+</div>"""
+pages.append(page("銀座院のご紹介（整痛院ふっか）", "GINZA CLINIC", ginza, "P.12"))
+
+# ---------------------------------------------------------------- 13 仕上表・ビル規定
 fin = [
     ("床", "タイルカーペット（防炎品・防炎表示付、ベージュ系・銀座院同等柄）／MRI室・処置室：ビニル床シート", "4・5F：既設OAフロア（h=100）上に施工"),
     ("巾木", "ソフト巾木 H60（ベージュ）", ""),
@@ -186,12 +189,13 @@ fin = [
     ("家具", "受付カウンター（木目＋白天板）、待合いす（ベージュ張地・木脚）、施術ベッド", "防災設備の機能を妨げない配置"),
     ("照明", "LEDライン照明・ダウンライト（電球色～温白色 3,000～3,500K、調光）", "4・5F電気容量：1Φ約100VA/㎡、3Φ約200VA/㎡（募集資料）"),
     ("カーテン等", "4・5F道路側窓：防炎ロールスクリーン（アイボリー）", "防炎物品（防炎ラベル縫付）"),
-    ("MRI室", "電磁（RF）シールド工事・必要に応じ磁気シールド（専門業者）、専用空調・チラー", "重量・振動・騒音・電源容量はビル側と事前協議"),
+    ("MRI室", "1.5T MRI（富士フイルム）：電磁（RF）シールド工事・必要に応じ磁気シールド（専門業者）、専用空調・チラー、荷重分散架台", "ゼロヘリウム型はクエンチ配管不要。重量・振動・騒音・電源容量はビル側と事前協議"),
 ]
 fr = "".join(f"<tr><th>{a}</th><td>{b}</td><td class='note'>{c}</td></tr>" for a, b, c in fin)
 rules = [
     ("床荷重", "1～3F 5,000N/㎡、4・5F 3,000N/㎡（室内全体の荷重制限は別途）。重量物のMRIは1Fに配置し、重量・脚部・配置を事前相談"),
     ("間仕切", "不燃材を使用。上部開放の欄間式（欄間 h≥500）とし、防災設備の追加が必要な場合はB工事で対応"),
+    ("廊下幅", "両側に居室が面する通路は有効1,600mm、その他の廊下は1,200mm以上を確保（建築基準法施行令119条）"),
     ("避難経路", "2～5F：EVホールから避難階段附室まで廊下状に整備。当計画は廊下・通路で特別避難階段・共用トイレに直結。EVホール入口の防火扉の開閉を妨げる造作・什器なし"),
     ("ファサード・サイン", "既設サッシ・ガラスは無加工、ガラス面から600mm程度離隔。サインはビル指定位置（S1・S2）のみ、店名・ロゴに限定。点滅・映像・赤色光・露出ネオン不使用、表示面積10㎡以下"),
     ("電気・空調", "設定容量内で計画（設定容量を超える電源増設・保安電源の増設は不可）。空調吹出口・吸込口の機能を妨げない"),
@@ -207,7 +211,7 @@ p12 = f"""<div style="position:absolute;left:0;top:0;width:200mm"><h3 style="fon
 <div style="position:absolute;left:208mm;top:0;width:180mm"><h3 style="font-size:4.2mm;margin:0 0 3mm">内装マニュアル（ビル規定）への対応</h3>
 <table style="font-size:2.85mm">{rr}</table>
 <p class="note" style="margin-top:3mm">※出典：内装マニュアル（2026年8月7日発行）、募集資料。本資料は出店審査用の基本計画です。図面寸法は募集図面・1F CADからの読取り値で、実施設計時にビル側の白図・設備図に基づき確定します。パースはイメージで、実際の仕上・家具とは異なる場合があります。</p></div>"""
-pages.append(page("仕上表・ビル規定への対応", "FINISH SCHEDULE / COMPLIANCE", p12, "P.12"))
+pages.append(page("仕上表・ビル規定への対応", "FINISH SCHEDULE / COMPLIANCE", p12, "P.13"))
 
 html = f'<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head><body>{"".join(pages)}</body></html>'
 open(os.path.join(out, "添付資料.html"), "w").write(html)

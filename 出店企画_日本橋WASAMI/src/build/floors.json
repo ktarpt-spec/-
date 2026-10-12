@@ -27,171 +27,17 @@
      865,
      4900
     ],
-    "windows": []
-   },
-   {
-    "id": "ex",
-    "name": "診察室",
-    "x0": 5000,
-    "y0": 4100,
-    "x1": 8000,
-    "y1": 6550,
-    "kind": "room",
-    "doors": [
-     {
-      "side": "S",
-      "at": 6500,
-      "w": 900,
-      "type": "slide"
-     }
-    ],
-    "label": true,
-    "lp": [
-     6300,
-     6050
-    ],
-    "windows": []
-   },
-   {
-    "id": "tr",
-    "name": "処置室",
-    "x0": 5000,
-    "y0": 0,
-    "x1": 8000,
-    "y1": 2900,
-    "kind": "room",
-    "doors": [
-     {
-      "side": "N",
-      "at": 6500,
-      "w": 1000,
-      "type": "slide"
-     }
-    ],
-    "label": true,
-    "lp": [
-     6500,
-     2350
-    ],
-    "windows": []
-   },
-   {
-    "id": "op",
-    "name": "MRI操作室",
-    "x0": 8000,
-    "y0": 0,
-    "x1": 9800,
-    "y1": 2900,
-    "kind": "room",
-    "doors": [
-     {
-      "side": "N",
-      "at": 8900,
-      "w": 800,
-      "type": "slide"
-     }
-    ],
-    "label": true,
-    "lp": [
-     8900,
-     900
-    ],
-    "windows": [
-     {
-      "side": "E",
-      "a": 700,
-      "b": 2200
-     }
-    ]
-   },
-   {
-    "id": "mch",
-    "name": "MRI更衣室",
-    "x0": 8000,
-    "y0": 4100,
-    "x1": 9800,
-    "y1": 6550,
-    "kind": "room",
-    "doors": [
-     {
-      "side": "S",
-      "at": 8900,
-      "w": 800,
-      "type": "slide"
-     }
-    ],
-    "label": true,
-    "lp": [
-     8900,
-     5600
-    ],
-    "windows": []
-   },
-   {
-    "id": "mri",
-    "name": "MRI室（磁気シールド）",
-    "x0": 9800,
-    "y0": 0,
-    "x1": 13900,
-    "y1": 4360,
-    "kind": "mri",
-    "doors": [
-     {
-      "side": "W",
-      "at": 3500,
-      "w": 1100,
-      "type": "swing"
-     }
-    ],
-    "label": true,
-    "lp": [
-     11300,
-     3850
-    ],
-    "windows": []
-   },
-   {
-    "id": "mech",
-    "name": "MRI機械室",
-    "x0": 9800,
-    "y0": 4360,
-    "x1": 13030,
-    "y1": 6550,
-    "kind": "service",
-    "doors": [
-     {
-      "side": "W",
-      "at": 5450,
-      "w": 800,
-      "type": "swing"
-     }
-    ],
-    "label": true,
-    "lp": [
-     11400,
-     5450
-    ],
-    "windows": []
-   },
-   {
-    "id": "corr",
-    "name": "廊下",
-    "x0": 5000,
-    "y0": 2900,
-    "x1": 9800,
-    "y1": 4100,
-    "kind": "corridor",
-    "doors": [],
-    "label": true,
-    "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "wait",
     "name": "待合",
     "x0": 0,
     "y0": 0,
-    "x1": 3900,
+    "x1": 4200,
     "y1": 4260,
     "kind": "open",
     "doors": [],
@@ -200,46 +46,261 @@
      1500,
      3800
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "corr",
+    "name": "廊下",
+    "x0": 4200,
+    "y0": 2800,
+    "x1": 8800,
+    "y1": 4000,
+    "kind": "hall",
+    "doors": [],
+    "label": true,
+    "lp": [
+     6300,
+     3400
+    ],
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "ex",
+    "name": "診察室",
+    "x0": 4200,
+    "y0": 4000,
+    "x1": 6700,
+    "y1": 6550,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "S",
+      "at": 5450,
+      "w": 900,
+      "type": "slide"
+     }
+    ],
+    "label": true,
+    "lp": [
+     5200,
+     6050
+    ],
+    "windows": [],
+    "sinks": [
+     [
+      6400,
+      6200
+     ]
+    ],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "mech",
+    "name": "MRI機械室",
+    "x0": 6700,
+    "y0": 4000,
+    "x1": 8800,
+    "y1": 6550,
+    "kind": "service",
+    "doors": [
+     {
+      "side": "S",
+      "at": 7750,
+      "w": 900,
+      "type": "swing"
+     }
+    ],
+    "label": true,
+    "lp": [
+     7750,
+     5900
+    ],
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "tr",
+    "name": "処置室",
+    "x0": 4200,
+    "y0": 0,
+    "x1": 6300,
+    "y1": 2800,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 5250,
+      "w": 1000,
+      "type": "slide"
+     }
+    ],
+    "label": true,
+    "lp": [
+     5250,
+     2300
+    ],
+    "windows": [],
+    "sinks": [
+     [
+      4500,
+      300
+     ]
+    ],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "mch",
+    "name": "MRI更衣\n（1名）",
+    "x0": 6300,
+    "y0": 0,
+    "x1": 7400,
+    "y1": 2800,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 6850,
+      "w": 700,
+      "type": "slide"
+     }
+    ],
+    "label": true,
+    "lp": [
+     6850,
+     1700
+    ],
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "op",
+    "name": "MRI操作室",
+    "x0": 7400,
+    "y0": 0,
+    "x1": 8800,
+    "y1": 2800,
+    "kind": "room",
+    "doors": [
+     {
+      "side": "N",
+      "at": 8100,
+      "w": 700,
+      "type": "slide"
+     }
+    ],
+    "label": true,
+    "lp": [
+     8100,
+     2200
+    ],
+    "windows": [
+     {
+      "side": "E",
+      "a": 400,
+      "b": 2400
+     }
+    ],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
+   },
+   {
+    "id": "mri",
+    "name": "MRI検査室（電磁シールド）",
+    "x0": 8800,
+    "y0": 0,
+    "x1": 13900,
+    "y1": 4360,
+    "kind": "mri",
+    "doors": [
+     {
+      "side": "W",
+      "at": 3400,
+      "w": 1200,
+      "type": "swing"
+     }
+    ],
+    "label": true,
+    "lp": [
+     11300,
+     650
+    ],
+    "windows": [],
+    "sinks": [],
+    "nowall": [
+     "N"
+    ],
+    "mri_axis": "y"
+   },
+   {
+    "id": "mri2",
+    "name": "",
+    "x0": 8800,
+    "y0": 4360,
+    "x1": 13030,
+    "y1": 6550,
+    "kind": "mri",
+    "doors": [],
+    "label": false,
+    "lp": null,
+    "windows": [],
+    "sinks": [],
+    "nowall": [
+     "S",
+     "E"
+    ],
+    "mri_axis": null
    }
   ],
   "reception": {
-   "cx": 4500,
+   "cx": 3750,
    "cy": 5350,
-   "r": 1200,
+   "r": 1100,
    "a0": 100,
    "a1": 260,
    "back": [
-    4600,
+    3850,
     4250,
-    4950,
+    4200,
     6450
    ]
   },
   "chairs": [
    [
+    700,
     900,
-    1100,
     270
    ],
    [
+    1600,
+    900,
+    270
+   ],
+   [
+    2500,
+    900,
+    270
+   ],
+   [
+    1150,
     1900,
-    1100,
     270
    ],
    [
-    2900,
-    1100,
-    270
-   ],
-   [
-    1400,
-    2200,
-    270
-   ],
-   [
-    2400,
-    2200,
+    2050,
+    1900,
     270
    ]
   ],
@@ -338,7 +399,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "402",
@@ -358,7 +422,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "403",
@@ -378,7 +445,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "404",
@@ -398,7 +468,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "405",
@@ -418,7 +491,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "406",
@@ -438,7 +514,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "407",
@@ -458,7 +537,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "408",
@@ -478,7 +560,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "hw",
@@ -494,7 +579,10 @@
      4300,
      650
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "he",
@@ -502,7 +590,7 @@
     "x0": 15200,
     "y0": 0,
     "x1": 16400,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "hall",
     "doors": [],
     "label": true,
@@ -510,7 +598,10 @@
      15800,
      1800
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "lm",
@@ -518,7 +609,7 @@
     "x0": 0,
     "y0": 0,
     "x1": 2050,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "room",
     "doors": [
      {
@@ -533,7 +624,10 @@
      1025,
      2900
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "lw",
@@ -541,7 +635,7 @@
     "x0": 2050,
     "y0": 1300,
     "x1": 5600,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "room",
     "doors": [
      {
@@ -554,9 +648,12 @@
     "label": true,
     "lp": [
      3800,
-     3300
+     2700
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "lb",
@@ -564,7 +661,7 @@
     "x0": 5600,
     "y0": 0,
     "x1": 15200,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "open",
     "doors": [],
     "label": true,
@@ -572,7 +669,10 @@
      10100,
      600
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "dk",
@@ -580,15 +680,18 @@
     "x0": 16400,
     "y0": 0,
     "x1": 18900,
-    "y1": 2100,
+    "y1": 1900,
     "kind": "open",
     "doors": [],
     "label": true,
     "lp": [
      17500,
-     1300
+     1200
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "cs",
@@ -596,12 +699,12 @@
     "x0": 18900,
     "y0": 0,
     "x1": 21000,
-    "y1": 2100,
+    "y1": 1900,
     "kind": "room",
     "doors": [
      {
       "side": "W",
-      "at": 1050,
+      "at": 950,
       "w": 800,
       "type": "slide"
      }
@@ -609,17 +712,20 @@
     "label": true,
     "lp": [
      20000,
-     1500
+     1400
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "409",
     "name": "施術室\n409",
     "x0": 16400,
-    "y0": 2100,
+    "y0": 1900,
     "x1": 18700,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "treat",
     "doors": [
      {
@@ -631,15 +737,18 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "410",
     "name": "施術室\n410",
     "x0": 18700,
-    "y0": 2100,
+    "y0": 1900,
     "x1": 21000,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "treat",
     "doors": [
      {
@@ -651,13 +760,16 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ais",
     "name": "通路",
     "x0": 0,
-    "y0": 4900,
+    "y0": 4500,
     "x1": 21000,
     "y1": 6100,
     "kind": "hall",
@@ -667,20 +779,23 @@
      15800,
      5500
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    }
   ],
   "reception": {
    "cx": 10100,
-   "cy": 3050,
-   "r": 1550,
+   "cy": 2850,
+   "r": 1500,
    "a0": 200,
    "a1": 340,
    "back": [
     8500,
-    4250,
+    3850,
     11700,
-    4700
+    4300
    ]
   },
   "chairs": [
@@ -737,7 +852,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "anx",
@@ -750,7 +868,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ps1",
@@ -763,7 +884,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "st",
@@ -776,7 +900,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ev1",
@@ -789,7 +916,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "evh",
@@ -802,7 +932,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ev2",
@@ -815,7 +948,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "wc",
@@ -828,7 +964,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "eq",
@@ -841,7 +980,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    }
   ],
   "evh": [
@@ -920,11 +1062,11 @@
   "plants": [
    [
     5900,
-    4500
+    4100
    ],
    [
     14900,
-    4500
+    4100
    ],
    [
     8300,
@@ -962,7 +1104,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "502",
@@ -982,7 +1127,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "503",
@@ -1002,7 +1150,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "504",
@@ -1022,7 +1173,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "505",
@@ -1042,7 +1196,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "506",
@@ -1062,7 +1219,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "507",
@@ -1082,7 +1242,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "508",
@@ -1102,7 +1265,10 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "hw",
@@ -1118,7 +1284,10 @@
      5600,
      650
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "he",
@@ -1126,7 +1295,7 @@
     "x0": 15200,
     "y0": 0,
     "x1": 16400,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "hall",
     "doors": [],
     "label": true,
@@ -1134,7 +1303,10 @@
      15800,
      1800
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ss",
@@ -1157,7 +1329,10 @@
      1025,
      650
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "sr",
@@ -1165,7 +1340,7 @@
     "x0": 0,
     "y0": 1300,
     "x1": 5000,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "room",
     "doors": [
      {
@@ -1180,7 +1355,10 @@
      2500,
      3600
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "slm",
@@ -1188,7 +1366,7 @@
     "x0": 5000,
     "y0": 1300,
     "x1": 6300,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "room",
     "doors": [
      {
@@ -1203,7 +1381,10 @@
      5650,
      3900
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "slw",
@@ -1211,7 +1392,7 @@
     "x0": 6300,
     "y0": 1300,
     "x1": 7600,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "room",
     "doors": [
      {
@@ -1226,7 +1407,10 @@
      6950,
      3900
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "fs",
@@ -1234,7 +1418,7 @@
     "x0": 7600,
     "y0": 0,
     "x1": 15200,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "open",
     "doors": [],
     "label": true,
@@ -1242,7 +1426,10 @@
      11400,
      4500
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "sp5",
@@ -1250,12 +1437,12 @@
     "x0": 16400,
     "y0": 0,
     "x1": 21000,
-    "y1": 2100,
+    "y1": 1900,
     "kind": "service",
     "doors": [
      {
       "side": "W",
-      "at": 1050,
+      "at": 950,
       "w": 800,
       "type": "slide"
      }
@@ -1263,17 +1450,20 @@
     "label": true,
     "lp": [
      17700,
-     1050
+     950
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "509",
     "name": "施術室\n509",
     "x0": 16400,
-    "y0": 2100,
+    "y0": 1900,
     "x1": 18700,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "treat",
     "doors": [
      {
@@ -1285,15 +1475,18 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "510",
     "name": "施術室\n510",
     "x0": 18700,
-    "y0": 2100,
+    "y0": 1900,
     "x1": 21000,
-    "y1": 4900,
+    "y1": 4500,
     "kind": "treat",
     "doors": [
      {
@@ -1305,13 +1498,16 @@
     ],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ais",
     "name": "通路",
     "x0": 0,
-    "y0": 4900,
+    "y0": 4500,
     "x1": 21000,
     "y1": 6100,
     "kind": "hall",
@@ -1321,7 +1517,10 @@
      15800,
      5500
     ],
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    }
   ],
   "reception": null,
@@ -1338,7 +1537,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "anx",
@@ -1351,7 +1553,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ps1",
@@ -1364,7 +1569,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "st",
@@ -1377,7 +1585,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ev1",
@@ -1390,7 +1601,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "evh",
@@ -1403,7 +1617,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "ev2",
@@ -1416,7 +1633,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "wc",
@@ -1429,7 +1649,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    },
    {
     "id": "eq",
@@ -1442,7 +1665,10 @@
     "doors": [],
     "label": true,
     "lp": null,
-    "windows": []
+    "windows": [],
+    "sinks": [],
+    "nowall": [],
+    "mri_axis": null
    }
   ],
   "evh": [
@@ -1520,18 +1746,18 @@
   ],
   "lounge": {
    "x0": 8000,
-   "y0": 1700,
+   "y0": 1500,
    "x1": 14600,
-   "y1": 4500
+   "y1": 4200
   },
   "plants": [
    [
     7900,
-    4500
+    4100
    ],
    [
     14900,
-    4500
+    4100
    ]
   ]
  }

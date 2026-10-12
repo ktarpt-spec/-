@@ -457,6 +457,8 @@ def room_walls(f, H, cut=None, ch=None):
         x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
         h = (ch or 2800) if r["kind"] == "mri" else H
         for k, key, a, b in (("S", ("H", y0), x0, x1), ("N", ("H", y1), x0, x1), ("W", ("V", x0), y0, y1), ("E", ("V", x1), y0, y1)):
+            if k in r.get("nowall", []):
+                continue
             if (k == "S" and y0 <= 0) or (k == "N" and y1 >= f["D"]) or (k == "W" and x0 <= 0) or (k == "E" and x1 >= f["W"]):
                 continue
             lines.setdefault(key, []).append([a, b, h])
@@ -749,7 +751,8 @@ def build_1F(cut=None):
     n0, n1 = f["notch"][0], f["notch"][1]
     wall(W + 150, -100, W + 150, n1 + 150, hh(CHmm), 300, "plaster")
     wall(W + 300, n1 + 150, n0 + 150, n1 + 150, hh(CHmm), 300, "plaster")
-    wall(n0 + 150, n1, n0 + 150, D + 300, hh(CHmm), 300, "plaster")
+    wall(n0 + 150, n1 + 10, n0 + 150, D + 300, hh(CHmm), 300, "plaster")
+    box("notch_corner", 0.32, 0.32, hh(CHmm) / 1000, m(n0 + 150), m(n1 + 150), 0, "plaster")
     for c, _ in f["columns"]:
         if c < n0 - 400:
             box("column", 0.8, 0.4, hh(CHmm) / 1000, m(c), m(D - 200), 0, "plaster")
@@ -767,20 +770,32 @@ def build_1F(cut=None):
         chair(x, y, {270: 90, 90: 270, 0: 180, 180: 0}[rot])
     for px, py in f.get("plants", []):
         plant(px, py, 1.2)
-    # MRI装置（平面図と同じ：ボア軸X方向、ガントリーは東側）
-    my = m((mri["y0"] + mri["y1"]) / 2)
-    gx = m(mri["x1"] - 1500)
-    box("gantry", 1.9, 2.2, 2.0, gx, my, 0, "mri", bevel=0.25)
-    cyl("bore", 0.33, 1.95, gx - 0.975, my, 1.0, "dark", rot=(0, math.pi / 2, 0))
-    cyl("bore_ring", 0.43, 0.03, gx - 0.965, my, 1.0, "mriblue", rot=(0, math.pi / 2, 0), bevel=0.01)
-    tl = m(mri["x1"] - 2450 - mri["x0"] - 450)
-    box("mritable", tl, 0.6, 0.72, m(mri["x0"] + 450) + tl / 2, my, 0, "mri", bevel=0.05)
-    box("mripad", tl + 0.3, 0.55, 0.06, m(mri["x0"] + 450) + tl / 2 + 0.15, my, 0.72, "bedcover", bevel=0.025)
+    # MRI装置（平面図と同じ：1.5T、ボア軸Y方向、ガントリー北側・寝台は南側）
+    gx, gy = m(mri["x0"] + 2100), m(4350)
+    mri2 = next(r for r in f["rooms"] if r["id"] == "mri2")
+    plane("mrifloor2", m(mri2["x1"] - mri2["x0"]), m(mri2["y1"] - mri2["y0"]), m((mri2["x0"] + mri2["x1"]) / 2), m((mri2["y0"] + mri2["y1"]) / 2), 0.001, "vinyl")
+    box("gantry", 2.2, 2.0, 2.1, gx, gy, 0, "mri", bevel=0.3)
+    cyl("bore", 0.32, 2.08, gx, gy - 1.05, 1.0, "dark", rot=(-math.pi / 2, 0, 0))
+    cyl("bore_ring", 0.45, 0.02, gx, gy - 1.02, 1.0, "mriblue", rot=(-math.pi / 2, 0, 0), bevel=0.005)
+    tl = gy - 1.0 - m(500)
+    box("mritable", 0.6, tl, 0.72, gx, m(500) + tl / 2, 0, "mri", bevel=0.05)
+    box("mripad", 0.55, tl + 0.3, 0.06, gx, m(500) + tl / 2 + 0.15, 0.72, "bedcover", bevel=0.025)
+    box("mricab", 0.5, 1.2, 0.9, m(mri["x1"] - 300), m(1200), 0, "white", bevel=0.01)
     # 操作室：操作卓・モニター
     op = next(r for r in f["rooms"] if r["id"] == "op")
-    box("console", 0.6, 1.6, 0.72, m(op["x1"] - 400), m(1450), 0, "white", bevel=0.005)
-    for k in (-0.35, 0.35):
-        box("opmon", 0.03, 0.5, 0.32, m(op["x1"] - 500), m(1450) + k, 0.8, "screen")
+    box("console", 0.6, 2.0, 0.72, m(op["x1"] - 350), m(1400), 0, "white", bevel=0.005)
+    for k in (-0.4, 0.4):
+        box("opmon", 0.03, 0.5, 0.32, m(op["x1"] - 450), m(1400) + k, 0.8, "screen")
+    mech = next(r for r in f["rooms"] if r["id"] == "mech")
+    for i in range(3):
+        box("cabinet", 0.6, 0.8, 1.9, m(mech["x0"] + 350 + i * 650), m(mech["y1"] - 450), 0, "white", bevel=0.005)
+    mch = next(r for r in f["rooms"] if r["id"] == "mch")
+    box("mlocker", 0.45, 0.45, 1.8, m(mch["x0"] + 300), m(400), 0, "oak", bevel=0.004)
+    box("mbench", 0.4, 1.0, 0.42, m(mch["x1"] - 300), m(1300), 0, "fabric", bevel=0.02)
+    for r in f["rooms"]:
+        for sx_, sy_ in r.get("sinks", []):
+            box("sink", 0.5, 0.4, 0.82, m(sx_), m(sy_), 0, "white", bevel=0.02)
+            box("faucet", 0.04, 0.04, 0.25, m(sx_), m(sy_) + (0.12 if sy_ > 3000 else -0.12), 0.82, "metal")
     # 診察室・処置室
     ex = next(r for r in f["rooms"] if r["id"] == "ex")
     box("desk", 1.4, 0.6, 0.72, m(ex["x0"] + 900), m(ex["y0"] + 600), 0, "oakH", bevel=0.005)
@@ -788,10 +803,10 @@ def build_1F(cut=None):
     bed(tr["x0"] + 1400, tr["y0"] + 1250, along_x=True)
     if not cut:
         linear_light(600, 1600, 3600, 1600, CH, 55); linear_light(600, 3300, 3600, 3300, CH, 55)
-        linear_light(5300, 3500, 9500, 3500, CH, 45)
-        linear_light(5400, 5300, 7700, 5300, CH, 45); linear_light(5400, 1450, 7700, 1450, CH, 45)
-        linear_light(8300, 1450, 9500, 1450, CH, 40); linear_light(8300, 5300, 9500, 5300, CH, 40)
-        linear_light(10400, 1100, 13300, 1100, CH, 55); linear_light(10400, 3200, 13300, 3200, CH, 55)
+        linear_light(4500, 3400, 8500, 3400, CH, 45)
+        linear_light(4600, 5300, 6300, 5300, CH, 45); linear_light(4500, 1400, 6000, 1400, CH, 45)
+        linear_light(7000, 5300, 8500, 5300, CH, 40); linear_light(7700, 1400, 8500, 1400, CH, 40); linear_light(6600, 1400, 7100, 1400, CH, 30)
+        linear_light(9400, 1200, 12600, 1200, CH, 55); linear_light(9400, 5600, 12600, 5600, CH, 55); linear_light(12900, 2600, 12900, 400, CH, 40)
         sun_world(strength=0.6)
 
 
@@ -858,17 +873,21 @@ def build_exterior():
             box("entryL", 0.12, dep, h1, a + 0.06, dep / 2 + 0.1, 0, "oak")
             box("entryR", 0.12, dep, h1, b - 0.06, dep / 2 + 0.1, 0, "oak")
             box("entryCeil", w_, dep, 0.12, cx, dep / 2 + 0.1, h1 - 0.12, "ceiling")
-            box("transom", w_, 0.06, h1 - 2.5, cx, dep + 0.1, 2.5, "oak")
+            box("transom", w_, 0.06, h1 - 2.4, cx, dep + 0.1, 2.4, "oak")
             for i in range(1, 12):
-                box("slat", 0.012, 0.05, h1 - 2.5, a + i * w_ / 12, dep + 0.07, 2.5, "walnut")
-            plane("entry_logo", 0.9, 0.3, cx, dep + 0.065, 2.95, "logo_wood", rot=(math.pi / 2, 0, 0))
-            box("innerframe", w_ - 0.2, 0.06, 0.05, cx, dep + 0.1, 2.45, "steel")
-            box("innerglass", w_ - 0.24, 0.012, 2.45, cx, dep + 0.1, 0, "glass")
-            box("innermull", 0.03, 0.05, 2.45, cx, dep + 0.1, 0, "steel")
-            box("outerglass", w_ - 0.2, 0.012, 2.6, cx, 0.12, 0, "glass")
+                box("slat", 0.012, 0.05, h1 - 2.4, a + i * w_ / 12, dep + 0.07, 2.4, "walnut")
+            plane("entry_logo", 1.05, 0.35, cx, dep + 0.065, 3.05, "logo_wood", rot=(math.pi / 2, 0, 0))
+            box("innerframe", w_ * 0.5, 0.06, 0.05, cx, dep + 0.1, 2.35, "steel")
+            box("innerglass", w_ * 0.5, 0.012, 2.35, cx, dep + 0.1, 0, "glass")
+            box("innermull", 0.03, 0.05, 2.35, cx, dep + 0.1, 0, "steel")
+            for xx in (cx - w_ * 0.25, cx + w_ * 0.25):
+                box("innerjamb", 0.04, 0.06, 2.4, xx, dep + 0.1, 0, "steel")
+            # 道路側の既設ガラス両開き扉（H2,400）＋上部FIXガラス
+            box("outerglass", w_ - 0.2, 0.012, 2.4, cx, 0.12, 0, "glass")
+            box("outerfix", w_ - 0.2, 0.012, h1 - 2.5, cx, 0.12, 2.45, "glass")
             for xx in (a + 0.1, cx, b - 0.1):
-                box("outerframe", 0.05, 0.08, 2.6, xx, 0.12, 0, "steel")
-            box("outertop", w_ - 0.2, 0.08, 0.06, cx, 0.12, 2.6, "steel")
+                box("outerframe", 0.05, 0.08, h1, xx, 0.12, 0, "steel")
+            box("outertop", w_ - 0.2, 0.08, 0.06, cx, 0.12, 2.4, "steel")
             for xx in (cx - 0.08, cx + 0.08):
                 box("pull", 0.025, 0.06, 0.9, xx, 0.05, 0.7, "steel")
             plane("entry_floor", w_, dep, cx, dep / 2 + 0.1, 0.001, "stone")
@@ -964,8 +983,8 @@ VIEWS = {
     "v5_free": dict(build=lambda: build_upper("5F"), cam=(V(14700, 600, 1450), V(8200, 4000, 1100)), lens=18, exposure=-0.8),
     "v5_staff": dict(build=lambda: build_upper("5F"), cam=(V(4700, 1650, 1500), V(800, 4300, 1000)), lens=17, exposure=-0.8),
     "v1_lobby": dict(build=build_1F, cam=(V(350, 350, 1500), V(4300, 4800, 1250)), lens=18, exposure=-0.8),
-    "v1_mri": dict(build=build_1F, cam=(V(13650, 250, 1650), V(9900, 2600, 1100)), lens=16, exposure=-0.8),
-    "v1_op": dict(build=build_1F, cam=(V(8250, 2500, 1500), V(12400, 1500, 1050)), lens=18, exposure=-0.8),
+    "v1_mri": dict(build=build_1F, cam=(V(12800, 300, 1600), V(10200, 4300, 1000)), lens=15, exposure=-0.8),
+    "v1_op": dict(build=build_1F, cam=(V(7550, 2500, 1500), V(11000, 1700, 1050)), lens=17, exposure=-0.8),
     "ax1": dict(build=lambda: build_1F(cut=1500), cam=(V(9500, -7500, 12000), V(6900, 3300, 0)), lens=32, exposure=-0.5, axo=True),
     "ax4": dict(build=lambda: build_upper("4F", cut=1500), cam=(V(13500, -11000, 19000), V(10500, 3300, 0)), lens=30, exposure=-0.5, axo=True),
     "ax5": dict(build=lambda: build_upper("5F", cut=1500), cam=(V(13500, -11000, 19000), V(10500, 3300, 0)), lens=30, exposure=-0.5, axo=True),
