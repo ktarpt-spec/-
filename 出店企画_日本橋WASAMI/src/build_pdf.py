@@ -5,7 +5,7 @@ from geometry import FLOORS, AREA, area, treat_count
 out = sys.argv[1]
 D = lambda p: open(os.path.join(out, "drawings", p)).read()
 tc = treat_count(); N = tc["4F"] + tc["5F"]
-FOOT = "fukka 日本橋院（仮称） 出店企画書 添付資料 ／ 日本橋WASAMIビル 1F・4F・5F"
+FOOT = "整形外科ふっか／整痛院ふっか 東京駅院 出店企画書 添付資料 ／ 日本橋WASAMIビル 1F・4F・5F"
 
 css = """
 @page { size: 420mm 297mm; margin: 0 }
@@ -73,7 +73,7 @@ pages.append(f"""<div class="pg" style="background:#f4efe6">
  <div style="font-family:Inter,sans-serif;color:#9a7b55;letter-spacing:1mm;font-size:3.6mm">STORE OPENING PROPOSAL</div>
  <div style="font-size:11mm;font-weight:bold;margin-top:5mm;line-height:1.3">出店企画書<br>添付資料</div>
  <div style="font-family:Inter,sans-serif;font-size:15mm;color:#24418f;margin-top:12mm;font-weight:500">fukka</div>
- <div style="font-size:5mm;margin-top:1mm">日本橋院（仮称）</div>
+ <div style="font-size:4.4mm;margin-top:1mm;line-height:1.6">1F 整形外科ふっか 東京駅院<br>4・5F 整痛院ふっか 東京駅院</div>
  <div style="margin-top:10mm;font-size:3.3mm;line-height:1.95;border-top:0.4mm solid #9a7b55;padding-top:4mm">
   物件：日本橋WASAMIビル<br>　　　東京都中央区日本橋三丁目（JR東京駅 徒歩1分）<br>
   1階：店舗区画 {m1}㎡（約{t1}坪）<br>4階・5階：各 G{m4}㎡（約{t4}坪）<br>合計：約168.8坪／施術室 {N}室・MRI室</div>
@@ -178,14 +178,14 @@ ginza = f"""
  <div><b>2025<small style="font-size:3.5mm">年</small></b><span>銀座 新モデル大型院を開院</span></div></div>
 <div style="position:absolute;left:0;top:190mm;width:236mm;font-size:3.05mm;line-height:1.75">
  腰痛・坐骨神経痛など慢性的な痛み・しびれに特化した「整痛院」。2025年には大阪・関西万博のステージで「整痛」の取り組みを講演。
- 日本橋院では、銀座院の施術モデルに<b>1.5T MRIを備えた医療フロア</b>を加え、検査から施術まで一貫して提供します。
- 日本橋院の内装は、写真の銀座院（白い塗り壁・木目・ベージュのカーペット・円形受付）をそのまま踏襲します。</div>
+ 東京駅院では、銀座院の施術モデルに<b>1.5T MRIを備えた医療フロア</b>を加え、検査から施術まで一貫して提供します。
+ 東京駅院の内装は、写真の銀座院（白い塗り壁・木目・ベージュのカーペット・円形受付）をそのまま踏襲します。</div>
 <div style="position:absolute;left:244mm;top:0;width:144mm">
  <h3 style="font-size:4.4mm;margin:0 0 3mm">会社・銀座院の概要（公開情報）</h3>
  <table style="font-size:2.9mm">{frows}</table>
- <h3 style="font-size:4.2mm;margin:6mm 0 2mm">日本橋院のイメージ（参考）</h3>
+ <h3 style="font-size:4.2mm;margin:6mm 0 2mm">東京駅院のイメージ（参考）</h3>
  <div style="position:relative;height:56mm;border-radius:1.2mm;overflow:hidden"><img src="images/ginza_ref.jpg" style="width:100%;height:100%;object-fit:cover"></div>
- <p class="note" style="margin-top:1.5mm">銀座院の内装パース。日本橋院も同じトーン＆マナーで計画。</p>
+ <p class="note" style="margin-top:1.5mm">銀座院の内装パース。東京駅院も同じトーン＆マナーで計画。</p>
  <p class="note" style="margin-top:3mm">写真・情報出典：整痛院ふっか公式サイト（fukka.jp）、整痛院ふっか銀座院ページ、PR TIMES（株式会社ふっか プレスリリース）。数値は公表時点のもの。</p>
 </div>"""
 pages.append(page("銀座院のご紹介（整痛院ふっか）", "GINZA CLINIC", ginza, "P.12"))

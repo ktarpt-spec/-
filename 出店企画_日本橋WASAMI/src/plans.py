@@ -55,7 +55,7 @@ def title_block(g, title, scale, sheet, note_lines=()):
     g.rect(PAGE_W - 128, y, 120, 22, fill="white", st="#333", sw=0.3)
     g.line(PAGE_W - 128, y + 8, PAGE_W - 8, y + 8, st="#333", w=0.2)
     g.line(PAGE_W - 48, y + 8, PAGE_W - 48, y + 22, st="#333", w=0.2)
-    g.text(PAGE_W - 124, y + 5.4, "fukka 日本橋院（仮称） 出店計画 ／ 日本橋WASAMIビル", 2.6, anchor="start", weight="bold")
+    g.text(PAGE_W - 124, y + 5.4, "整形外科ふっか／整痛院ふっか 東京駅院 出店計画 ／ 日本橋WASAMIビル", 2.6, anchor="start", weight="bold")
     g.text(PAGE_W - 124, y + 13.5, title, 3.0, anchor="start", weight="bold")
     g.text(PAGE_W - 124, y + 19.3, "基本計画（出店企画書添付資料）　2026.10", 2.2, anchor="start", fill=C["sub"])
     g.text(PAGE_W - 28, y + 13.5, f"S={scale}", 2.8, weight="bold")
