@@ -45,7 +45,8 @@ def page(title, en, inner, no):
             f'<div class="body">{inner}</div><div class="ft"><span>{FOOT}</span><span>{no}</span></div></div>')
 
 
-def img(src, x, y, w, h, d="images_bl"):
+def img(src, x, y, w, h, d="images_jpg"):
+    if d == "images_jpg": src = src.replace(".png", ".jpg")
     return f'<div class="img" style="left:{x}mm;top:{y}mm;width:{w}mm;height:{h}mm"><img src="{d}/{src}"></div>'
 
 
@@ -54,7 +55,8 @@ def cap(x, y, w, t, s, tag=""):
     return f'<div class="cap" style="left:{x}mm;top:{y}mm;width:{w}mm">{tg}{t}<small>{s}</small></div>'
 
 
-def absimg(src, x, y, w, h, d="images_bl", r=0):
+def absimg(src, x, y, w, h, d="images_jpg", r=0):
+    if d == "images_jpg": src = src.replace(".png", ".jpg")
     return f'<div class="img" style="left:{x}mm;top:{y}mm;width:{w}mm;height:{h}mm;border-radius:{r}mm"><img src="{d}/{src}"></div>'
 
 
@@ -76,7 +78,7 @@ pages.append(f"""<div class="pg" style="background:#f4efe6">
   物件：日本橋WASAMIビル<br>　　　東京都中央区日本橋三丁目（JR東京駅 徒歩1分）<br>
   1階：店舗区画 {m1}㎡（約{t1}坪）<br>4階・5階：各 G{m4}㎡（約{t4}坪）<br>合計：約168.8坪／施術室 {N}室・MRI室</div>
 
- <div style="position:relative;margin-top:8mm;height:58mm;border-radius:1.2mm;overflow:hidden"><img src="images_bl/v5_free.png" style="width:100%;height:100%;object-fit:cover"></div>
+ <div style="position:relative;margin-top:8mm;height:58mm;border-radius:1.2mm;overflow:hidden"><img src="images_jpg/v5_free.jpg" style="width:100%;height:100%;object-fit:cover"></div>
  <div style="font-size:2.8mm;color:#6b625b;margin-top:1.5mm">5F フリースペース</div>
  <div style="font-size:3mm;margin-top:6mm;color:#6b625b">2026年10月　基本計画</div>
 </div></div>""")
