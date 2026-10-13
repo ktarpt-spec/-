@@ -9,7 +9,7 @@
 <text x="392.00" y="286.30" font-size="2.2" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >No.A-04　A3</text>
 <text x="14.00" y="267.00" font-size="2.15" fill="#7a726b" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・1F階高4,950は貸主CAD（展開図 1FL→2FL）より。基準階階高3,900、2F以上の外装は完成予想CGからの模式表現。</text>
 <text x="14.00" y="270.40" font-size="2.15" fill="#7a726b" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・サイン位置・形状はビル側指定（内装マニュアル7-(6)）に準拠。最終仕様は運営管理者と協議のうえ承認を得る。</text>
-<text x="14.00" y="273.80" font-size="2.15" fill="#7a726b" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・正面の当社区画は既設アプローチ・SSW-2ガラス面を含む約6.8m（1階 98.36㎡区画）。ガラス面への熱割れ計算が必要なフィルム等は使用しない。</text>
+<text x="14.00" y="273.80" font-size="2.15" fill="#7a726b" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・正面の当社区画は玄関ポーチ（道路側開放）と既設ガラス面 約4.5mを含む約6.8m（1階 98.36㎡区画・CADより）。ガラス面・サッシは無加工、フィルム等は貼らない。</text>
 <text x="210.00" y="18.00" font-size="4.2" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >外観立面図・サイン計画図（正面 Y1通り）</text>
 <rect x="30.00" y="70.50" width="47.67" height="177.50" fill="#e9ecef" stroke="#555" stroke-width="0.25" />
 <line x1="30.00" y1="218.50" x2="77.67" y2="218.50" stroke="#9aa3ab" stroke-width="0.15" />
@@ -193,10 +193,10 @@
 <line x1="69.43" y1="77.83" x2="69.43" y2="86.50" stroke="#8d969e" stroke-width="0.25" />
 <line x1="72.55" y1="77.83" x2="72.55" y2="86.50" stroke="#8d969e" stroke-width="0.25" />
 <rect x="30.00" y="205.50" width="47.67" height="42.50" fill="none" stroke="#555" stroke-width="0.25" />
-<rect x="30.00" y="234.50" width="7.67" height="13.50" fill="#5d554e" stroke="#666" stroke-width="0.12" />
-<rect x="37.67" y="234.50" width="3.33" height="13.50" fill="#d6d3cf" stroke="#666" stroke-width="0.12" />
-<rect x="41.00" y="234.50" width="5.67" height="13.50" fill="#cfdae3" stroke="#666" stroke-width="0.12" />
-<rect x="46.67" y="234.50" width="6.00" height="13.50" fill="#d6d3cf" stroke="#666" stroke-width="0.12" />
+<rect x="30.00" y="234.50" width="1.50" height="13.50" fill="#d6d3cf" stroke="#666" stroke-width="0.12" />
+<rect x="31.50" y="234.50" width="5.67" height="13.50" fill="#5d554e" stroke="#666" stroke-width="0.12" />
+<rect x="37.17" y="234.50" width="0.50" height="13.50" fill="#d6d3cf" stroke="#666" stroke-width="0.12" />
+<rect x="37.67" y="234.50" width="15.00" height="13.50" fill="#cfdae3" stroke="#666" stroke-width="0.12" />
 <rect x="52.67" y="234.50" width="11.67" height="13.50" fill="#d6d3cf" stroke="#666" stroke-width="0.12" />
 <rect x="64.33" y="234.50" width="13.33" height="13.50" fill="#b7c4cf" stroke="#666" stroke-width="0.12" />
 <rect x="28.00" y="192.50" width="51.67" height="13.00" fill="none" stroke="#b5523b" stroke-width="0.35" stroke-dasharray="1.2,0.6"/>
@@ -237,51 +237,66 @@
 <line x1="92.00" y1="134.29" x2="296.29" y2="134.29" stroke="#555" stroke-width="0.35" />
 <text x="298.29" y="135.09" font-size="2.0" fill="#555" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >▽2FL</text>
 <rect x="92.00" y="134.29" width="204.29" height="12.86" fill="#cfcac4" stroke="#666" stroke-width="0.15" />
-<rect x="92.00" y="147.14" width="32.86" height="57.86" fill="#cdd8df" stroke="#555" stroke-width="0.3" />
-<rect x="92.80" y="150.00" width="31.26" height="55.00" fill="#b8946a" stroke="none" stroke-width="0.2" />
-<line x1="95.93" y1="150.00" x2="95.93" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="99.05" y1="150.00" x2="99.05" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="102.18" y1="150.00" x2="102.18" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="105.30" y1="150.00" x2="105.30" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="108.43" y1="150.00" x2="108.43" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="111.55" y1="150.00" x2="111.55" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="114.68" y1="150.00" x2="114.68" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="117.81" y1="150.00" x2="117.81" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<line x1="120.93" y1="150.00" x2="120.93" y2="169.29" stroke="#a07c54" stroke-width="0.15" />
-<rect x="100.21" y="171.43" width="16.43" height="33.57" fill="#efe6d6" stroke="#8b7355" stroke-width="0.2" />
-<text x="108.43" y="162.43" font-size="4.107142857142857" fill="#f3ead9" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-weight="500" letter-spacing="0.08">fukka</text>
-<rect x="92.80" y="150.00" width="31.26" height="0.80" fill="#fff3d6" stroke="none" stroke-width="0.2" />
-<rect x="92.40" y="170.71" width="32.06" height="34.29" fill="none" stroke="#555" stroke-width="0.35" />
-<line x1="108.43" y1="170.71" x2="108.43" y2="205.00" stroke="#555" stroke-width="0.3" />
-<line x1="92.40" y1="170.71" x2="124.46" y2="170.71" stroke="#555" stroke-width="0.35" />
-<text x="108.43" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >当社専用アプローチ（既設）</text>
-<rect x="124.86" y="147.14" width="14.29" height="57.86" fill="#d9d6d2" stroke="#777" stroke-width="0.15" />
-<line x1="124.86" y1="190.54" x2="139.14" y2="190.54" stroke="#bdb8b2" stroke-width="0.12" />
-<line x1="124.86" y1="176.07" x2="139.14" y2="176.07" stroke="#bdb8b2" stroke-width="0.12" />
-<line x1="124.86" y1="161.61" x2="139.14" y2="161.61" stroke="#bdb8b2" stroke-width="0.12" />
-<text x="132.00" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >パネルA</text>
-<rect x="139.14" y="147.14" width="24.29" height="57.86" fill="#c9d6df" stroke="#555" stroke-width="0.3" />
-<rect x="139.74" y="147.74" width="23.09" height="56.66" fill="none" stroke="#888" stroke-width="0.15" />
-<line x1="140.54" y1="200.71" x2="140.54" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="142.50" y1="200.71" x2="142.50" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="144.45" y1="200.71" x2="144.45" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="146.40" y1="200.71" x2="146.40" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="148.36" y1="200.71" x2="148.36" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="150.31" y1="200.71" x2="150.31" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="152.26" y1="200.71" x2="152.26" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="154.22" y1="200.71" x2="154.22" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="156.17" y1="200.71" x2="156.17" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="158.12" y1="200.71" x2="158.12" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="160.08" y1="200.71" x2="160.08" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<line x1="162.03" y1="200.71" x2="162.03" y2="166.43" stroke="#a98458" stroke-width="0.9" />
-<rect x="147.00" y="180.00" width="8.57" height="3.14" fill="#f4efe6" stroke="none" stroke-width="0.2" />
-<text x="151.29" y="182.50" font-size="2.5" fill="#24418f" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-weight="500" letter-spacing="0.05">fukka</text>
-<text x="151.29" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >SSW-2（既設ガラス）</text>
-<rect x="163.43" y="147.14" width="25.71" height="57.86" fill="#d9d6d2" stroke="#777" stroke-width="0.15" />
-<line x1="163.43" y1="190.54" x2="189.14" y2="190.54" stroke="#bdb8b2" stroke-width="0.12" />
-<line x1="163.43" y1="176.07" x2="189.14" y2="176.07" stroke="#bdb8b2" stroke-width="0.12" />
-<line x1="163.43" y1="161.61" x2="189.14" y2="161.61" stroke="#bdb8b2" stroke-width="0.12" />
-<text x="176.29" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >パネルA</text>
+<rect x="92.00" y="147.14" width="6.43" height="57.86" fill="#d9d6d2" stroke="#777" stroke-width="0.15" />
+<line x1="92.00" y1="190.54" x2="98.43" y2="190.54" stroke="#bdb8b2" stroke-width="0.12" />
+<line x1="92.00" y1="176.07" x2="98.43" y2="176.07" stroke="#bdb8b2" stroke-width="0.12" />
+<line x1="92.00" y1="161.61" x2="98.43" y2="161.61" stroke="#bdb8b2" stroke-width="0.12" />
+<text x="95.21" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >パネルA</text>
+<rect x="98.43" y="147.14" width="24.29" height="6.07" fill="#d6d3cf" stroke="#777" stroke-width="0.15" />
+<rect x="98.43" y="153.21" width="24.29" height="51.79" fill="#6d665f" stroke="#555" stroke-width="0.3" />
+<rect x="98.93" y="153.21" width="23.29" height="0.60" fill="#f3dfb8" stroke="none" stroke-width="0.2" />
+<rect x="99.71" y="170.71" width="21.71" height="34.29" fill="#b48c5e" stroke="#8f969c" stroke-width="0.45" />
+<text x="110.57" y="181.43" font-size="2.6785714285714284" fill="#f3ead9" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-weight="500" letter-spacing="0.05">fukka</text>
+<line x1="110.93" y1="170.71" x2="110.93" y2="205.00" stroke="#8f969c" stroke-width="0.4" />
+<line x1="99.96" y1="170.71" x2="99.96" y2="205.00" stroke="#8f969c" stroke-width="0.5" />
+<line x1="121.18" y1="170.71" x2="121.18" y2="205.00" stroke="#8f969c" stroke-width="0.5" />
+<rect x="99.71" y="153.79" width="21.71" height="16.93" fill="#837b73" stroke="#8f969c" stroke-width="0.2" />
+<line x1="108.86" y1="186.43" x2="108.86" y2="193.57" stroke="#c9cdd1" stroke-width="0.35" />
+<line x1="113.00" y1="186.43" x2="113.00" y2="193.57" stroke="#c9cdd1" stroke-width="0.35" />
+<text x="110.57" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >玄関ポーチ（道路側開放）</text>
+<rect x="122.71" y="147.14" width="2.14" height="57.86" fill="#d9d6d2" stroke="#777" stroke-width="0.15" />
+<line x1="122.71" y1="190.54" x2="124.86" y2="190.54" stroke="#bdb8b2" stroke-width="0.12" />
+<line x1="122.71" y1="176.07" x2="124.86" y2="176.07" stroke="#bdb8b2" stroke-width="0.12" />
+<line x1="122.71" y1="161.61" x2="124.86" y2="161.61" stroke="#bdb8b2" stroke-width="0.12" />
+<rect x="124.86" y="147.14" width="64.29" height="57.86" fill="#c9d6df" stroke="#555" stroke-width="0.3" />
+<rect x="124.86" y="147.14" width="64.29" height="6.94" fill="#b7c6d1" stroke="none" stroke-width="0.2" />
+<line x1="127.00" y1="202.86" x2="127.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="129.00" y1="202.86" x2="129.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="131.00" y1="202.86" x2="131.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="133.00" y1="202.86" x2="133.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="135.00" y1="202.86" x2="135.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="137.00" y1="202.86" x2="137.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="139.00" y1="202.86" x2="139.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="141.00" y1="202.86" x2="141.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="143.00" y1="202.86" x2="143.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="145.00" y1="202.86" x2="145.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="147.00" y1="202.86" x2="147.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="149.00" y1="202.86" x2="149.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="151.00" y1="202.86" x2="151.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="153.00" y1="202.86" x2="153.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="155.00" y1="202.86" x2="155.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="157.00" y1="202.86" x2="157.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="159.00" y1="202.86" x2="159.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="161.00" y1="202.86" x2="161.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="163.00" y1="202.86" x2="163.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="165.00" y1="202.86" x2="165.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="167.00" y1="202.86" x2="167.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="169.00" y1="202.86" x2="169.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="171.00" y1="202.86" x2="171.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="173.00" y1="202.86" x2="173.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="175.00" y1="202.86" x2="175.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="177.00" y1="202.86" x2="177.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="179.00" y1="202.86" x2="179.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="181.00" y1="202.86" x2="181.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="183.00" y1="202.86" x2="183.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="185.00" y1="202.86" x2="185.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<line x1="187.00" y1="202.86" x2="187.00" y2="162.86" stroke="#a98458" stroke-width="0.75" />
+<rect x="125.06" y="162.14" width="63.89" height="0.50" fill="#fff1d2" stroke="none" stroke-width="0.2" />
+<line x1="159.14" y1="147.14" x2="159.14" y2="205.00" stroke="#555" stroke-width="0.45" />
+<rect x="125.46" y="147.74" width="63.09" height="56.66" fill="none" stroke="#777" stroke-width="0.15" />
+<rect x="137.71" y="180.00" width="8.57" height="3.14" fill="#f4efe6" stroke="none" stroke-width="0.2" />
+<text x="142.00" y="182.50" font-size="2.5" fill="#24418f" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-weight="500" letter-spacing="0.05">fukka</text>
+<text x="157.00" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >既設ガラス面（A工事）</text>
 <rect x="189.14" y="147.14" width="50.00" height="57.86" fill="#cbc7c2" stroke="#777" stroke-width="0.15" />
 <line x1="189.14" y1="197.77" x2="239.14" y2="197.77" stroke="#b3aea8" stroke-width="0.1" />
 <line x1="189.14" y1="190.54" x2="239.14" y2="190.54" stroke="#b3aea8" stroke-width="0.1" />
@@ -303,22 +318,22 @@
 <text x="267.71" y="208.60" font-size="1.8" fill="#555" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >ビルエントランス</text>
 <line x1="84.00" y1="205.00" x2="304.29" y2="205.00" stroke="#333" stroke-width="0.45" />
 <text x="298.29" y="205.80" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >▽GL</text>
-<line x1="92.00" y1="214.00" x2="124.86" y2="214.00" stroke="#555" stroke-width="0.12" />
+<line x1="92.00" y1="214.00" x2="98.43" y2="214.00" stroke="#555" stroke-width="0.12" />
 <line x1="91.40" y1="214.60" x2="92.60" y2="213.40" stroke="#555" stroke-width="0.25" />
+<line x1="97.83" y1="214.60" x2="99.03" y2="213.40" stroke="#555" stroke-width="0.25" />
+<text x="95.21" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >450</text>
+<line x1="98.43" y1="214.00" x2="122.71" y2="214.00" stroke="#555" stroke-width="0.12" />
+<line x1="97.83" y1="214.60" x2="99.03" y2="213.40" stroke="#555" stroke-width="0.25" />
+<line x1="122.11" y1="214.60" x2="123.31" y2="213.40" stroke="#555" stroke-width="0.25" />
+<text x="110.57" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >1,700</text>
+<line x1="122.71" y1="214.00" x2="124.86" y2="214.00" stroke="#555" stroke-width="0.12" />
+<line x1="122.11" y1="214.60" x2="123.31" y2="213.40" stroke="#555" stroke-width="0.25" />
 <line x1="124.26" y1="214.60" x2="125.46" y2="213.40" stroke="#555" stroke-width="0.25" />
-<text x="108.43" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >2,300</text>
-<line x1="124.86" y1="214.00" x2="139.14" y2="214.00" stroke="#555" stroke-width="0.12" />
+<text x="123.79" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" ></text>
+<line x1="124.86" y1="214.00" x2="189.14" y2="214.00" stroke="#555" stroke-width="0.12" />
 <line x1="124.26" y1="214.60" x2="125.46" y2="213.40" stroke="#555" stroke-width="0.25" />
-<line x1="138.54" y1="214.60" x2="139.74" y2="213.40" stroke="#555" stroke-width="0.25" />
-<text x="132.00" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >1,000</text>
-<line x1="139.14" y1="214.00" x2="163.43" y2="214.00" stroke="#555" stroke-width="0.12" />
-<line x1="138.54" y1="214.60" x2="139.74" y2="213.40" stroke="#555" stroke-width="0.25" />
-<line x1="162.83" y1="214.60" x2="164.03" y2="213.40" stroke="#555" stroke-width="0.25" />
-<text x="151.29" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >1,700</text>
-<line x1="163.43" y1="214.00" x2="189.14" y2="214.00" stroke="#555" stroke-width="0.12" />
-<line x1="162.83" y1="214.60" x2="164.03" y2="213.40" stroke="#555" stroke-width="0.25" />
 <line x1="188.54" y1="214.60" x2="189.74" y2="213.40" stroke="#555" stroke-width="0.25" />
-<text x="176.29" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >1,800</text>
+<text x="157.00" y="213.30" font-size="1.8" fill="#444" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >4,500</text>
 <line x1="189.14" y1="214.00" x2="239.14" y2="214.00" stroke="#555" stroke-width="0.12" />
 <line x1="188.54" y1="214.60" x2="189.74" y2="213.40" stroke="#555" stroke-width="0.25" />
 <line x1="238.54" y1="214.60" x2="239.74" y2="213.40" stroke="#555" stroke-width="0.25" />
@@ -335,12 +350,12 @@
 <text x="85.2" y="169.64285714285714" font-size="1.8" fill="#444" text-anchor="middle" font-family="'IPAGothic','IPAPGothic',sans-serif" transform="rotate(-90 85.2 169.64285714285714)">1F階高 4,950</text>
 <rect x="91.50" y="134.29" width="98.14" height="70.71" fill="none" stroke="#b5523b" stroke-width="0.35" stroke-dasharray="1.5,0.8"/>
 <text x="93.00" y="132.79" font-size="2.2" fill="#b5523b" text-anchor="start" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >当社区画（1F・正面）</text>
-<line x1="148.14" y1="182.50" x2="132.00" y2="98.57" stroke="#333" stroke-width="0.15" />
-<circle cx="148.14" cy="182.50" r="0.45" fill="#333" stroke="#333" stroke-width="0.2"/>
-<text x="132.80" y="99.27" font-size="2.1" fill="#333" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >①木調縦ルーバー（不燃・ガラス面より600mm以上後退）＋小型ロゴ　非照明・背面から電球色の間接光のみ</text>
-<line x1="99.00" y1="162.86" x2="96.00" y2="92.57" stroke="#333" stroke-width="0.15" />
-<circle cx="99.00" cy="162.86" r="0.45" fill="#333" stroke="#333" stroke-width="0.2"/>
-<text x="96.80" y="93.27" font-size="2.1" fill="#333" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >②アプローチ（既設ガラス扉の奥）：木調壁・欄間に店名ロゴ（H≒160・アイボリー）　リースライン内・グレアのない間接照明</text>
+<line x1="151.00" y1="182.50" x2="132.00" y2="98.57" stroke="#333" stroke-width="0.15" />
+<circle cx="151.00" cy="182.50" r="0.45" fill="#333" stroke="#333" stroke-width="0.2"/>
+<text x="132.80" y="99.27" font-size="2.1" fill="#333" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >①既設ガラス面（約4.5m・無加工）の室内側：木調縦ルーバー（不燃・ガラス面より600mm後退）＋小型ロゴ　背面から電球色の間接光のみ</text>
+<line x1="110.57" y1="181.43" x2="96.00" y2="92.57" stroke="#333" stroke-width="0.15" />
+<circle cx="110.57" cy="181.43" r="0.45" fill="#333" stroke="#333" stroke-width="0.2"/>
+<text x="96.80" y="93.27" font-size="2.1" fill="#333" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >②玄関ポーチ（既設・道路側開放・造作なし）：奥の既設SUS両開き扉越しに受付の木調ロゴ壁が見える</text>
 <line x1="249.43" y1="183.14" x2="242.00" y2="104.57" stroke="#333" stroke-width="0.15" />
 <circle cx="249.43" cy="183.14" r="0.45" fill="#333" stroke="#333" stroke-width="0.2"/>
 <text x="242.80" y="105.27" font-size="2.1" fill="#333" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >③S1：ビル共用案内板に店名・ロゴ（ビル標準仕様／乳半アクリル・LED内照）</text>
@@ -371,5 +386,6 @@
 <text x="318.00" y="136.00" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・店名・ロゴのみ（価格・施術内容の広告なし）</text>
 <text x="318.00" y="139.60" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・電球色2700～3000Kの間接光、調光・タイマー</text>
 <text x="318.00" y="143.20" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・ガラス面から600mm以上離隔、既設サッシ無加工</text>
-<text x="318.00" y="146.80" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・表示面積 合計約0.35㎡（上限10㎡）</text>
-<text x="318.00" y="150.40" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・4・5F窓：防炎ロールスクリーンのみ</text></svg>
+<text x="318.00" y="146.80" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・玄関ポーチは既設のまま（造作・看板なし）</text>
+<text x="318.00" y="150.40" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・表示面積 合計約0.35㎡（上限10㎡）</text>
+<text x="318.00" y="154.00" font-size="2.0" fill="#2b2522" text-anchor="start" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >・4・5F窓：防炎ロールスクリーンのみ</text></svg>

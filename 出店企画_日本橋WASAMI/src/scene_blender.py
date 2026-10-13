@@ -519,8 +519,9 @@ def reception(f, rc, ch, ring=True):
     cx, cy, r = m(rc["cx"]), m(rc["cy"]), m(rc["r"])
     a0, a1 = rc["a0"], rc["a1"]
     arc_ring("counter", cx, cy, r, r - 0.05, a0, a1, 0.0, 1.0, "oakH")
-    arc_ring("counter_in", cx, cy, r - 0.05, r - 0.45, a0, a1, 0.0, 0.72, "white")
-    arc_ring("countertop", cx, cy, r + 0.03, r - 0.6, a0 - 1, a1 + 1, 1.0, 0.035, "top")
+    dp = m(rc.get("depth", 600))
+    arc_ring("counter_in", cx, cy, r - 0.05, r - min(0.45, dp - 0.05), a0, a1, 0.0, 0.72, "white")
+    arc_ring("countertop", cx, cy, r + 0.03, r - dp, a0 - 1, a1 + 1, 1.0, 0.035, "top")
     arc_ring("counter_kick", cx, cy, r - 0.02, r - 0.07, a0, a1, 0.0, 0.08, "walnut")
     mid = math.radians((a0 + a1) / 2)
     for k in (-0.62, 0.62):
@@ -739,6 +740,8 @@ def lounge(L):
 
 def build_1F(cut=None):
     f = DATA["1F"]
+    if "stone" not in MATS:
+        principled("stone", (0.48, 0.46, 0.43), rough=0.6)
     W, D = f["W"], f["D"]
     CHmm = 3000
     CH = m(CHmm)
@@ -753,8 +756,12 @@ def build_1F(cut=None):
         plane("ceiling", m(W + 400), m(D + 400), m(W / 2), m(D / 2), CH, "ceiling", rot=(math.pi, 0, 0))
     vs = next(r for r in f["rooms"] if r["id"] == "vest")
     # 外周
-    wall(-150, -100, -150, vs["y0"], hh(CHmm), 300, "plaster", [(1650, 3350, 150, min(2900, hh(CHmm)))])
-    box("ssw_glass", 0.012, m(1700), m(2750), -0.25, m(2400), 0.15, "glass")
+    # 道路側：既設ガラス面（約4.5m・A工事）
+    lv = f["louver"]; pd = f["porch_door"]
+    box("glass_sill", 0.3, m(vs["y0"]), 0.15, -0.15, m(vs["y0"] / 2), 0, "plaster")
+    box("ssw_glass", 0.012, m(vs["y0"]), hh(CHmm) / 1000, -0.1, m(vs["y0"] / 2), 0.0, "glass")
+    for yy in (0, 2075, vs["y0"] - 60):
+        box("mullion", 0.12, 0.08, hh(CHmm) / 1000, -0.1, m(yy), 0, "steel")
     wall(-300, -150, W + 300, -150, hh(CHmm), 300, "plaster", [(2900, 3700, 0, min(2100, hh(CHmm)))])
     wall(-300, D + 150, f["notch"][0] + 300, D + 150, hh(CHmm), 300, "plaster")
     n0, n1 = f["notch"][0], f["notch"][1]
@@ -765,14 +772,34 @@ def build_1F(cut=None):
     for c, _ in f["columns"]:
         if c < n0 - 400:
             box("column", 0.8, 0.4, hh(CHmm) / 1000, m(c), m(D - 200), 0, "plaster")
-    # 道路側：600mm後退の木調縦ルーバー＋小型ロゴ
-    for i in range(13):
-        box("louver", 0.05, 0.035, 2.5, 0.65, m(1620 + i * 140), 0.1, "oak", bevel=0.004)
-    plane("louver_logo", 0.42, 0.14, 0.62, m(2400), 1.7, "logo_small", rot=(math.pi / 2, 0, -math.pi / 2))
-    box("louver_logo_back", 0.01, 0.46, 0.18, 0.632, m(2400), 1.61, "oak")
-    # エントランス（既設アプローチ）とのガラス間仕切
-    wall(vs["x1"], vs["y0"], vs["x1"], D, hh(CHmm), 30, "glass", [(400, 1600, 0, min(2400, hh(CHmm)))])
-    wall(0, vs["y0"], vs["x1"], vs["y0"], hh(CHmm), 100, "plaster")
+    # 室内側：ガラス面から600mm後退の木調縦ルーバー（全幅）＋小型ロゴ
+    nl = int((lv["y1"] - lv["y0"]) // lv["pitch"])
+    for i in range(nl + 1):
+        box("louver", 0.05, 0.035, min(2.85, hh(CHmm) / 1000 - 0.1), m(lv["x"]), m(lv["y0"] + i * (lv["y1"] - lv["y0"]) / nl), 0.1, "oak", bevel=0.004)
+    if not cut:
+        box("louver_rail", 0.08, m(lv["y1"] - lv["y0"]) + 0.1, 0.05, m(lv["x"]), m((lv["y0"] + lv["y1"]) / 2), CH - 0.05, "oak")
+        area_light("louver_glow", m(lv["x"] + 200), m((lv["y0"] + lv["y1"]) / 2), CH - 0.08, 0.15, m(lv["y1"] - lv["y0"]), 25, color=(1, 0.82, 0.6))
+    plane("louver_logo", 0.42, 0.14, m(lv["x"]) - 0.03, m(3300), 1.7, "logo_small", rot=(math.pi / 2, 0, -math.pi / 2))
+    box("louver_logo_back", 0.01, 0.46, 0.18, m(lv["x"]) - 0.018, m(3300), 1.61, "oak")
+    # 玄関ポーチ（既設・道路側開放）：床・軒天は既設、奥に既設SUS製両開き扉（店内側へ）
+    plane("porch_floor", m(pd["x"]), m(D - vs["y0"]), m(pd["x"] / 2), m((vs["y0"] + D) / 2), 0.002, "stone")
+    if not cut:
+        box("porch_soffit", m(pd["x"]) + 0.15, m(D - vs["y0"]), 0.05, m(pd["x"] / 2) - 0.075, m((vs["y0"] + D) / 2), 3.625, "ceiling")
+    wall(0, vs["y0"], pd["x"] + 50, vs["y0"], hh(3625), 150, "plaster")
+    dx = m(pd["x"] + 50)
+    box("porch_jambS", 0.1, m(pd["y0"] - vs["y0"]), hh(CHmm) / 1000, dx, m((vs["y0"] + pd["y0"]) / 2), 0, "plaster")
+    box("porch_jambN", 0.1, m(D - pd["y1"]) + 0.15, hh(CHmm) / 1000, dx, m((pd["y1"] + D) / 2) + 0.075, 0, "plaster")
+    if hh(CHmm) > 2400:
+        box("porch_head", 0.1, m(pd["y1"] - pd["y0"]), hh(CHmm) / 1000 - 2.4, dx, m((pd["y0"] + pd["y1"]) / 2), 2.4, "plaster")
+    yy0, yy1 = m(pd["y0"]), m(pd["y1"])
+    ym = yy0 + m(pd["leaves"][1])
+    for a_, b_ in ((yy0, ym), (ym, yy1)):
+        box("sus_glass", 0.012, b_ - a_ - 0.1, 2.25, dx, (a_ + b_) / 2, 0.08, "glass")
+        for yv in (a_ + 0.03, b_ - 0.03):
+            box("sus_stile", 0.05, 0.06, 2.4, dx, yv, 0, "steel")
+        for zv in (0.0, 2.33):
+            box("sus_rail", 0.05, b_ - a_, 0.07 if zv else 0.08, dx, (a_ + b_) / 2, zv, "steel")
+        box("sus_pull", 0.03, 0.025, 0.9, dx - 0.06, b_ - 0.12 if b_ < yy1 - 0.01 else a_ + 0.12, 0.7, "steel")
     room_walls(f, H, cut=cut, ch=CHmm)
     reception(f, f["reception"], CH, ring=not cut)
     for x, y, rot in f["chairs"]:
@@ -848,7 +875,7 @@ def sun_world(strength=1.0, elev=35, rot=-50):
 
 def build_exterior():
     sys.path.insert(0, HERE)
-    from elevations import F1_PARTS, H1, HT, FLOORS as NF, BW
+    from elevations import F1_PARTS, H1, HT, FLOORS as NF, BW, GLASS_MULLION
     H1m, HTm, BWm = H1 / 1000, HT / 1000, BW / 1000
     ecp = principled("ecp", (0.62, 0.60, 0.56), rough=0.8)
     pnl = principled("panelA", (0.58, 0.57, 0.55), rough=0.35, metal=0.4)
@@ -872,46 +899,55 @@ def build_exterior():
             for j in range(1, 8):
                 box("ecpj", w_, 0.01, 0.006, cx, -0.002, h1 * j / 8, "dark")
         elif k == "window":
+            # 既設ガラス面（約4.5m・A工事）＋室内側600mm後退の木調縦ルーバー＋小型ロゴ＋電球色の間接光
             box("frameT", w_, 0.12, 0.08, cx, 0.06, h1 - 0.08, "alu"); box("frameB", w_, 0.12, 0.1, cx, 0.06, 0, "alu")
             box("frameL", 0.06, 0.12, h1, a + 0.03, 0.06, 0, "alu"); box("frameR", 0.06, 0.12, h1, b - 0.03, 0.06, 0, "alu")
+            box("frameM", 0.07, 0.12, h1, GLASS_MULLION / 1000, 0.06, 0, "alu")
             box("glassW", w_ - 0.1, 0.012, h1 - 0.18, cx, 0.1, 0.1, "glass")
-            # 室内：600mm後退の木調ルーバー＋小型ロゴ＋電球色の間接光
-            box("inside_back", w_ + 0.6, 0.02, h1, cx, 1.6, 0, "plaster")
-            plane("inside_floor", w_ + 0.6, 1.6, cx, 0.9, 0.0, "carpet")
-            for i in range(12):
-                box("louver", 0.05, 0.035, 2.6, a + 0.12 + i * (w_ - 0.24) / 11, 0.75, 0.1, "oak", bevel=0.004)
-            plane("louver_logo", 0.42, 0.14, cx, 0.72, 1.7, "logo_small", rot=(math.pi / 2, 0, 0))
-            area_light("win_glow", cx, 1.2, h1 - 0.1, w_, 0.4, 60, color=(1, 0.8, 0.6))
-        elif k == "entry":
-            # 既設アプローチ（風除室・奥行1.73m）：道路側に既設ガラス両開き扉、
-            # 奥は店内へのガラス扉＋木調の欄間・袖壁に店名ロゴ（リースライン内）
-            dep = 1.73
-            box("entryL", 0.12, dep, h1, a + 0.06, dep / 2 + 0.1, 0, "oak")
-            box("entryR", 0.12, dep, h1, b - 0.06, dep / 2 + 0.1, 0, "oak")
-            box("entryCeil", w_, dep, 0.12, cx, dep / 2 + 0.1, h1 - 0.12, "ceiling")
-            box("transom", w_, 0.06, h1 - 2.4, cx, dep + 0.1, 2.4, "oak")
-            for i in range(1, 12):
-                box("slat", 0.012, 0.05, h1 - 2.4, a + i * w_ / 12, dep + 0.07, 2.4, "walnut")
-            plane("entry_logo", 1.05, 0.35, cx, dep + 0.065, 3.05, "logo_wood", rot=(math.pi / 2, 0, 0))
-            box("innerframe", w_ * 0.5, 0.06, 0.05, cx, dep + 0.1, 2.35, "steel")
-            box("innerglass", w_ * 0.5, 0.012, 2.35, cx, dep + 0.1, 0, "glass")
-            box("innermull", 0.03, 0.05, 2.35, cx, dep + 0.1, 0, "steel")
-            for xx in (cx - w_ * 0.25, cx + w_ * 0.25):
-                box("innerjamb", 0.04, 0.06, 2.4, xx, dep + 0.1, 0, "steel")
-            # 道路側の既設ガラス両開き扉（H2,400）＋上部FIXガラス
-            box("outerglass", w_ - 0.2, 0.012, 2.4, cx, 0.12, 0, "glass")
-            box("outerfix", w_ - 0.2, 0.012, h1 - 2.5, cx, 0.12, 2.45, "glass")
-            for xx in (a + 0.1, cx, b - 0.1):
-                box("outerframe", 0.05, 0.08, h1, xx, 0.12, 0, "steel")
-            box("outertop", w_ - 0.2, 0.08, 0.06, cx, 0.12, 2.4, "steel")
-            for xx in (cx - 0.08, cx + 0.08):
-                box("pull", 0.025, 0.06, 0.9, xx, 0.05, 0.7, "steel")
-            plane("entry_floor", w_, dep, cx, dep / 2 + 0.1, 0.001, "stone")
-            area_light("entry_cove", cx, dep / 2 + 0.1, h1 - 0.14, w_ - 0.4, dep - 0.3, 35, color=(1, 0.82, 0.6))
-            # 扉の奥：店内（受付）の暖かい光
-            box("shop_inside", w_ + 1.0, 0.05, h1, cx, dep + 3.0, 0, "oakH")
-            plane("shop_floor", w_ + 1.0, 3.0, cx, dep + 1.6, 0.0, "carpet")
-            area_light("shop_glow", cx, dep + 1.5, h1 - 0.2, 2.0, 2.0, 120, color=(1, 0.85, 0.65))
+            box("inside_back", w_ + 0.6, 0.02, h1, cx, 2.6, 0, "plaster")
+            plane("inside_floor", w_ + 0.6, 2.6, cx, 1.4, 0.0, "carpet")
+            box("inside_ceil", w_ + 0.6, 2.6, 0.02, cx, 1.4, 3.0, "ceiling")
+            box("inside_soffit", w_, 0.05, h1 - 3.0, cx, 0.2, 3.0, "dark")
+            nl = int((w_ - 0.3) / 0.14)
+            for i in range(nl + 1):
+                box("louver", 0.05, 0.035, 2.85, a + 0.15 + i * (w_ - 0.3) / nl, 0.7, 0.1, "oak", bevel=0.004)
+            lx = 3.5
+            plane("louver_logo", 0.42, 0.14, lx, 0.67, 1.7, "logo_small", rot=(math.pi / 2, 0, 0))
+            box("louver_logo_back", 0.46, 0.01, 0.18, lx, 0.682, 1.61, "oak")
+            area_light("win_glow", cx, 0.95, 2.95, w_, 0.3, 70, color=(1, 0.8, 0.6))
+            for k_ in range(2):
+                chair_x = a + 1.6 + k_ * 0.9
+                box("seat", 0.55, 0.55, 0.42, chair_x, 1.9, 0, "fabric", bevel=0.03)
+        elif k == "porch":
+            # 玄関ポーチ（既設・道路側開放・造作なし）：奥に既設SUS製両開き扉、扉越しに受付の木調ロゴ壁
+            dep = 1.78; PCH = 3.625
+            plane("porch_floor", w_, dep, cx, dep / 2 + 0.05, 0.002, "stone")
+            box("porchL", 0.1, dep, h1, a + 0.05, dep / 2, 0, "panelA")
+            box("porchR", 0.1, dep, h1, b - 0.05, dep / 2, 0, "panelA")
+            box("porch_soffit", w_, dep, 0.05, cx, dep / 2, PCH, "ceiling")
+            box("porch_beam", w_, 0.25, h1 - PCH, cx, 0.125, PCH, "panelA")
+            for yy in (0.6, 1.3):
+                cyl("porch_dl", 0.06, 0.01, cx, yy, PCH - 0.01, "led_soft", seg=24)
+            area_light("porch_light", cx, dep / 2, PCH - 0.05, 0.4, 0.4, 18, color=(1, 0.86, 0.68))
+            box("porch_back", w_, 0.12, PCH - 2.4, cx, dep + 0.06, 2.4, "panelA")
+            dw = w_ - 0.18; y_ = dep + 0.06
+            box("sus_glass", dw, 0.012, 2.25, cx, y_, 0.08, "glass")
+            for xx in (a + 0.09 + 0.03, cx + 0.04, b - 0.09 - 0.03):
+                box("sus_stile", 0.06, 0.06, 2.4, xx, y_, 0, "steel")
+            box("sus_head", dw, 0.06, 0.07, cx, y_, 2.33, "steel"); box("sus_bot", dw, 0.06, 0.08, cx, y_, 0, "steel")
+            for xx in (cx - 0.1, cx + 0.18):
+                box("sus_pull", 0.025, 0.05, 0.9, xx, y_ - 0.05, 0.7, "steel")
+            # 扉の奥：店内（受付の木調ロゴ壁・円形カウンター）
+            bk = dep + 2.15
+            plane("shop_floor", w_ + 1.6, 2.2, cx, dep + 1.15, 0.0, "carpet")
+            box("shop_ceil", w_ + 1.6, 2.2, 0.02, cx, dep + 1.15, 3.0, "ceiling")
+            box("logo_wall_e", w_ + 1.2, 0.25, 2.45, cx, bk, 0, "oakH")
+            plane("logo_e", 0.9, 0.3, cx, bk - 0.13, 1.65, "logo_wood", rot=(math.pi / 2, 0, 0))
+            box("logo_wall_top", w_ + 1.2, 0.25, 0.55, cx, bk, 2.45, "plaster")
+            arc_ring("counter_e", cx, bk - 0.1, 0.92, 0.87, 190, 350, 0.0, 1.0, "oakH")
+            arc_ring("countertop_e", cx, bk - 0.1, 0.95, 0.5, 189, 351, 1.0, 0.035, "top")
+            area_light("shop_glow", cx, dep + 1.2, 2.9, 1.6, 1.4, 90, color=(1, 0.85, 0.65))
+            spot("logo_wash", cx, bk - 0.8, 2.95, 35, 50, target=(cx, bk - 0.1, 1.6))
         elif k == "bldg_entry":
             box("bglass", w_, 0.012, h1, cx, 0.35, 0, "glass")
             for j in range(5):
@@ -998,7 +1034,8 @@ VIEWS = {
     "v4_room": dict(build=lambda: build_upper("4F"), cam=(V(12900, 6350, 1550), V(11400, 8600, 800)), lens=16, exposure=-0.8),
     "v5_free": dict(build=lambda: build_upper("5F"), cam=(V(14700, 600, 1450), V(8200, 4000, 1100)), lens=18, exposure=-0.8),
     "v5_staff": dict(build=lambda: build_upper("5F"), cam=(V(4700, 1650, 1500), V(800, 4300, 1000)), lens=17, exposure=-0.8),
-    "v1_lobby": dict(build=build_1F, cam=(V(350, 350, 1500), V(4300, 4800, 1250)), lens=18, exposure=-0.8),
+    # 待合から玄関（既設SUS両開き扉）・受付・道路側ガラス面の木調ルーバーを望む
+    "v1_lobby": dict(build=build_1F, cam=(V(3600, 1500, 1500), V(500, 5600, 1350)), lens=17, exposure=-0.8),
     "v1_mri": dict(build=build_1F, cam=(V(12800, 300, 1600), V(10200, 4300, 1000)), lens=15, exposure=-0.8),
     "v1_exam": dict(build=build_1F, cam=(V(4450, 4250, 1550), V(6500, 6300, 950)), lens=15, exposure=-0.35),
     "v1_treat": dict(build=build_1F, cam=(V(6150, 2650, 1600), V(4600, 300, 800)), lens=15, exposure=-0.35),

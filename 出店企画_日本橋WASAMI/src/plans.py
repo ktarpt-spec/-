@@ -195,6 +195,60 @@ def draw_floor(f, ox, oy, s, scan=None):
     for (px_, py_) in f.get("plants", []):
         a, b = P(px_, py_); g.circle(a, b, 280 * s, fill="#cfdcc4", st="#8aa07a", sw=0.15)
 
+    # --- 1F：道路側の既設ガラス面・室内側の木調ルーバー・玄関ポーチの既設両開き扉
+    PORCH_WALL = (f["openings"][0]["b"] if f.get("openings") else 0,)
+    def _bx(x0, y0, x1, y1, fill="white", st="none", sw=0.1):
+        a_, b_ = P(x0, y1); g.rect(a_, b_, (x1 - x0) * s, (y1 - y0) * s, fill=fill, st=st, sw=sw)
+    if f["floor"] == "1F":
+        for o in f.get("openings", []):
+            if o["side"] == "W":
+                p1, p2 = P(-60, o["a"]), P(-60, o["b"])
+                g.line(*p1, *p2, st="white", w=wt * 1.6)
+                for d_ in (-0.3, 0.3):
+                    g.line(p1[0] + d_, p1[1], p2[0] + d_, p2[1], st="#4f7fa3", w=0.22)
+                lx, ly = P(-450, (o["a"] + o["b"]) / 2)
+                g.add(f'<text x="{lx:.2f}" y="{ly:.2f}" font-size="1.7" fill="#4f7fa3" text-anchor="middle" font-family="{FONT}" '
+                      f'transform="rotate(-90 {lx:.2f} {ly:.2f})">既設ガラス面 約4.5m（A工事・変更不可）</text>')
+        lv = f.get("louver")
+        if lv:
+            n = int((lv["y1"] - lv["y0"]) // lv["pitch"])
+            for i in range(n + 1):
+                yy = lv["y0"] + i * (lv["y1"] - lv["y0"]) / n
+                _bx(lv["x"] - 25, yy - 18, lv["x"] + 25, yy + 18, fill="#b8946a", st="#7d6347", sw=0.06)
+            lx, ly = P(lv["x"] + 260, (lv["y0"] + lv["y1"]) / 2)
+            g.add(f'<text x="{lx:.2f}" y="{ly:.2f}" font-size="1.55" fill="#7d6347" text-anchor="middle" font-family="{FONT}" '
+                  f'transform="rotate(-90 {lx:.2f} {ly:.2f})">木調縦ルーバー（ガラス面より600mm後退）</text>')
+        pd = f.get("porch_door")
+        if pd:
+            x = pd["x"]
+            p1, p2 = P(x, pd["y0"]), P(x, pd["y1"])
+            g.line(*p1, *p2, st="white", w=wt * 1.8)
+            # 親子の両開き（店内側へ開く）
+            for hy, L_, sg in ((pd["y1"], pd["leaves"][0], -1), (pd["y0"], pd["leaves"][1], 1)):
+                h_ = P(x, hy); e_ = P(x, hy + sg * L_); o_ = P(x + L_, hy)
+                g.line(*h_, *o_, st="#555", w=0.3)
+                g.path(f"M{o_[0]:.2f},{o_[1]:.2f} A{L_*s:.2f},{L_*s:.2f} 0 0 {1 if sg < 0 else 0} {e_[0]:.2f},{e_[1]:.2f}", st="#777", sw=0.15)
+            for yy in (pd["y0"] - 60, pd["y1"] + 60):
+                _bx(x - 50, yy - 60, x + 50, yy + 60, fill="#9aa3ab")
+            tx, ty = P(x / 2 - 60, pd["y0"] + 330)
+            g.text(tx, ty, "奥：" + pd["note"].replace("（A工事）", ""), 1.35, fill="#555")
+            g.text(tx, ty + 2.0, "ポーチ内は既設のまま（造作なし）", 1.35, fill="#555")
+            # ポーチとガラス面の間の既設壁
+            w1, w2 = P(-120, PORCH_WALL[0]), P(x + 50, PORCH_WALL[0])
+            g.line(*w1, *w2, st=C["wall"], w=wt * 1.2)
+            # 道路側は開放（扉なし）
+            q1, q2 = P(-60, pd["y0"] - 100), P(-60, f["D"] - 150)
+            g.line(*q1, *q2, st="#999", w=0.2, dash="1,0.7")
+            # 扉～受付カウンター の離隔
+            rc = f.get("reception")
+            if rc:
+                fx = rc["cx"] - rc["r"]
+                a1, b1 = P(x, rc["cy"] - 650); a2, b2 = P(fx, rc["cy"] - 650)
+                g.line(a1, b1, a2, b2, st="#555", w=0.12)
+                for p_ in (a1, a2):
+                    g.line(p_ - 0.5, b1 + 0.5, p_ + 0.5, b1 - 0.5, st="#555", w=0.22)
+                g.text((a1 + a2) / 2, b1 - 0.6, f"{fx - x:,.0f}", 1.6, fill="#444")
+
     # --- エントランス
     for e in f.get("entrances", []):
         if e["side"] == "EVH":
@@ -407,7 +461,7 @@ def furniture(g, f, P, s):
     rc = f.get("reception")
     if rc:
         cx, cy = P(rc["cx"], rc["cy"])
-        R1, R2 = rc["r"] * s, (rc["r"] - 550) * s
+        R1, R2 = rc["r"] * s, (rc["r"] - rc.get("depth", 550)) * s
         def arc(R, a0, a1):
             return (cx + R * math.cos(math.radians(a0)), cy - R * math.sin(math.radians(a0)),
                     cx + R * math.cos(math.radians(a1)), cy - R * math.sin(math.radians(a1)))
@@ -531,7 +585,7 @@ def make_plan(floor):
         "1F": ["・下図（グレー）は貸主提供の募集図面（1階 店舗区画）。赤線＝貸室区画（98.36㎡）、着色部・室配置が当社計画（C工事）。",
                "・MRI：富士フイルム製1.5T（ゼロヘリウム型想定・クエンチ配管不要）。検査室約31.5㎡・機械室約5.4㎡・操作室約3.9㎡。破線は5ガウスライン目安。機種仕様書で要確認。",
                "・床荷重5,000N/㎡の1Fに配置。荷重分散架台・搬入経路（マシンハッチ1,830×2,500）・振動・騒音・電源容量をビル側と協議。",
-               "・道路側ガラス面から600mm以内には造作・サインを設けない（内装マニュアル7-(7)）。",
+               "・玄関ポーチ（道路側開放）・奥の既設SUS両開き扉・道路側ガラス面（約4.5m）は既設（A工事）のまま。ガラス面から600mm内側に木調縦ルーバー、600mm以内に造作・サインなし（内装マニュアル7-(7)）。",
                "・トイレは館内共用トイレを利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
         "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。各室 約6.5㎡（約4畳）。間仕切は上部開放の欄間式（欄間h=500）。",
                "・受付はEVホール正面・フロア中央に大きく配置（銀座院と同じ円形カウンター＋木の天井リング）。ロビーは柱・壁のない開放的な空間。",
@@ -547,7 +601,7 @@ def make_plan(floor):
     if floor == "1F":
         legend(g, 330, 70, [(C["tint"], f"貸室 {m2}㎡（約{tsubo}坪）"), ("#f8f4ee", "診察・処置・操作・更衣"),
                             (C["mri"], "MRI室（シールド工事）"), (C["service"], "機械室"),
-                            ("#eeeeee", "既設アプローチ（区画内）")])
+                            ("#eeeeee", "玄関ポーチ（既設・区画内）")])
         summary_table(g, 330, 104, f)
         g.text(14, 20, "← 正面道路（Y1通り・歩道）", 2.6, anchor="start", fill=C["red"], weight="bold")
     else:

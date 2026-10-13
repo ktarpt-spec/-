@@ -29,14 +29,15 @@ def R(id, name, x0, y0, x1, y1, kind="room", doors=(), label=True, lp=None, wind
 
 # ---------------------------------------------------------------- 1F（98.36㎡）
 F1_W, F1_D = 13900, 6550
+PORCH_X, PORCH_Y0 = 1780, 4500   # 玄関ポーチ：奥の既設扉位置・コア側の壁（1F CAD より）
 F1 = dict(
     floor="1F", W=F1_W, D=F1_D, ch=3700, partition_h=2700,
     title="1階 平面計画図（受付待合・診察室・処置室・MRI室）",
     # 右上の切欠き（区画外の小室）
     notch=(13030, 4360, F1_W, F1_D),
     rooms=[
-        R("vest", "エントランス\n（既設アプローチ）", 0, 4260, 1730, F1_D, "existing", lp=(865, 4900)),
-        R("wait", "待合", 0, 0, 4200, 4260, "open", lp=(1500, 3800)),
+        R("vest", "玄関ポーチ\n（既設・道路側開放）", 0, PORCH_Y0, PORCH_X, F1_D, "existing", lp=(890, 5500)),
+        R("wait", "待合", 0, 0, 4200, PORCH_Y0, "open", lp=(2300, 3700)),
         R("corr", "廊下", 4200, 2800, 8800, 4000, "hall", lp=(6300, 3400)),
         R("ex", "診察室", 4200, 4000, 6700, F1_D, "room", doors=[("S", 5450, 900)], lp=(5200, 6050),
           sinks=[(4550, 4300)]),
@@ -50,12 +51,16 @@ F1 = dict(
           doors=[("W", 3400, 1200, "swing")], lp=(11300, 650), nowall=["N"], mri_axis="y"),
         R("mri2", "", 8800, 4360, 13030, F1_D, "mri", nowall=["S", "E"], label=False),
     ],
-    reception=dict(cx=3750, cy=5350, r=1100, a0=100, a1=260, back=(3850, 4250, 4200, 6450)),
-    chairs=[(700, 900, 270), (1600, 900, 270), (2500, 900, 270), (1150, 1900, 270), (2050, 1900, 270)],
-    plants=[(350, 3850), (3550, 350)],
-    openings=[dict(side="W", a=1550, b=3250, kind="window", note="道路側ガラス面（サイン規制範囲）")],
+    # 受付：既設扉の内側 1,220mm を空け、正面の木調ロゴ壁の前に配置
+    reception=dict(cx=3920, cy=5420, r=920, a0=100, a1=260, back=(3920, 4560, 4200, 6450), depth=430),
+    chairs=[(1300, 900, 270), (2200, 900, 270), (3100, 900, 270), (1750, 1900, 270), (2650, 1900, 270)],
+    plants=[(3550, 350), (1150, 4150)],
+    # 道路側：既設ガラス面（A工事・変更不可）。室内側はガラス面から600mm後退した木調縦ルーバー
+    openings=[dict(side="W", a=0, b=PORCH_Y0, kind="window", note="道路側ガラス面（既設・A工事）")],
+    louver=dict(x=600, y0=150, y1=PORCH_Y0 - 150, pitch=140),
+    porch_door=dict(x=PORCH_X, y0=4650, y1=6300, leaves=(850, 800), note="既設SUS製両開き扉（A工事）"),
     entrances=[dict(side="S", at=3000, w=800, note="館内側出入口（既設）"),
-               dict(side="X", at=(1730, 5400), w=1200, note="アプローチ扉")],
+               dict(side="X", at=(PORCH_X, 5475), w=1650, note="既設両開き扉")],
     columns=[(GRID_1F[k], F1_D) for k in ("Y1", "Y2", "Y3", "Y4", "Y5")],
     grid=GRID_1F,
 )
