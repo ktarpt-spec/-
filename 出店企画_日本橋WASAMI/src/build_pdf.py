@@ -154,7 +154,46 @@ p5 = f"""{img("v5_free.png", 0, 0, 236, 148)}{img("v5_staff.png", 242, 0, 146, 9
 pages.append(page("内装イメージ　5階（施術室・フリースペース・スタッフエリア）", "INTERIOR IMAGE 5F", p5, "P.11"))
 
 
-# ---------------------------------------------------------------- 12. 銀座院のご紹介（公開情報より）
+# ---------------------------------------------------------------- 12. 収支計画・賃料比率について
+import json as _json
+F = _json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "build", "finance.json")))
+fy, ff = F["years"], F["final"]
+fixed = ff["labor"] - round(ff["sales"] * 0.08) + ff["rent"] + ff["ad"] + ff["other"] - round(ff["sales"] * 0.02)
+bep = fixed / (1 - 0.06 - 0.08 - 0.02)
+def yrow(name, key, fmt=lambda v: f"{v/12:,.0f}", bold=False):
+    tds = "".join(f"<td style='text-align:right'>{fmt(y[key])}</td>" for y in fy)
+    last = ff[key] if key in ff else 0
+    w = "font-weight:bold;" if bold else ""
+    return f"<tr style='{w}'><th>{name}</th>{tds}<td style='text-align:right'>{last:,.0f}</td></tr>"
+tbl = ("<tr><th>万円／月（年平均）</th><th>1年目</th><th>2年目</th><th>3年目</th><th>最終月</th></tr>"
+       + yrow("売上高", "sales", bold=True) + yrow("売上原価", "cogs") + yrow("人件費", "labor") + yrow("賃料・共益費", "rent")
+       + yrow("広告宣伝費", "ad") + yrow("その他販管費", "other") + yrow("営業利益", "op", bold=True)
+       + "<tr><th>営業利益率／賃料比率</th>" + "".join(f"<td style='text-align:right'>{y['op']/y['sales']*100:.0f}%／{y['rent']/y['sales']*100:.0f}%</td>" for y in fy)
+       + f"<td style='text-align:right'>{ff['op']/ff['sales']*100:.0f}%／{ff['rent']/ff['sales']*100:.0f}%</td></tr>")
+finp = f"""
+<style>.chart svg{{width:100%;height:auto;display:block}} .sec h3{{font-size:3.9mm;margin:0 0 1.5mm}} .sec p{{font-size:2.85mm;line-height:1.7;margin:0}} table.fin th, table.fin td{{padding:0.9mm 2mm}}</style>
+<div style="position:absolute;left:0;top:0;width:150mm">
+ <div class="kpi"><div><b>5,600<small style="font-size:3.2mm">万円</small></b><span>最終月商（3年目）</span></div><div><b>約16<small style="font-size:3.2mm">%</small></b><span>賃料比率（最終月）</span></div></div>
+ <div class="kpi" style="margin-top:2.5mm"><div><b>94<small style="font-size:3.2mm">%</small></b><span>粗利率（自費100%）</span></div><div><b>約33<small style="font-size:3.2mm">%</small></b><span>営業利益率（最終月）</span></div></div>
+ <div class="sec" style="margin-top:5mm"><h3>① 超好立地による「広告費の代替」</h3>
+ <p>JR東京駅（22番出口）徒歩1分・日本橋駅徒歩4分。日本有数のターミナル駅の通勤・出張・来訪動線上にあり、「通いやすい場所にある」こと自体が最大の集客力になります。慢性痛のコース施術は通院の継続が前提のため、駅至近の立地は継続率・紹介にも直結します。看板を大きく出さずとも駅前の認知と紹介・リピートで集客でき、<b>広告宣伝費を売上比 約4%</b>に抑える計画です。賃料と広告費を合わせた「集客コスト」で比べると、一般的な自費クリニックより低い水準です。</p>
+ <div class="chart" style="margin-top:2mm">{D("fin_cac.svg")}</div></div>
+ <div class="sec" style="margin-top:4mm"><h3>② 自費診療・自費施術による高い粗利率</h3>
+ <p>1F整形外科（自費診療：診察3,000～9,000円・MRI 30,000～50,000円）と、4・5F整痛院のコース制施術（痛み消失コース6か月88万円・理想の体コース12か月132万円）はすべて自費のため、保険点数に左右されず<b>粗利率は約94%</b>。原価は消耗品・MRI保守・読影費程度で、売上増加分の大半が利益に残る構造です。</p></div>
+ <div class="sec" style="margin-top:4mm"><h3>③ 賃料負担に耐えられる収益構造</h3>
+ <p>固定費（人件費の固定分・賃料・広告・その他）に対する損益分岐売上は<b>月 約{bep:,.0f}万円</b>。最終月商5,600万円はその約{ff['sales']/bep*100:.0f}%で、売上が約{(1-bep/ff['sales'])*100:.0f}%下振れしても赤字にならない余裕があります。開業{F['breakeven']}か月目に単月黒字化、2年目以降は賃料比率が20%を切り、営業利益率25%以上で推移する計画です。</p></div>
+ <p class="note" style="margin-top:3mm">※賃料・共益費は約900万円/月（最終月商比 約16%）として試算。正式な賃料条件・人員計画にあわせて更新します。数値はすべて概算。業界平均は自費クリニックの一般的な目安値。</p>
+</div>
+<div style="position:absolute;left:158mm;top:0;width:230mm">
+ <h3 style="font-size:3.9mm;margin:0 0 1mm">月商・営業利益の推移（開業から36か月）</h3>
+ <div class="chart">{D("fin_trend.svg")}</div>
+ <h3 style="font-size:3.9mm;margin:3mm 0 1mm">年次の売上・費用・営業利益（月平均）</h3>
+ <div class="chart">{D("fin_years.svg")}</div>
+ <table class="fin" style="font-size:2.55mm;margin-top:1.5mm">{tbl}</table>
+</div>"""
+pages.append(page("収支計画と賃料比率について", "FINANCIAL PLAN", finp, "P.12"))
+
+# ---------------------------------------------------------------- 13. 銀座院のご紹介（公開情報より）
 facts = [("ブランド", "整痛院ふっか（痛み・しびれ専門）"), ("運営", "株式会社ふっか（代表取締役 松田 圭太・理学療法士）"),
          ("沿革", "2016年8月 開業（福岡）／2023年6月 法人化"), ("店舗", "全国9院（2025年5月時点）"),
          ("銀座院", "2025年6月6日開院　東京都中央区銀座3-13-19 3F（東銀座駅 徒歩約2分）"),
@@ -188,7 +227,7 @@ ginza = f"""
  <p class="note" style="margin-top:1.5mm">銀座院の内装パース。東京駅院も同じトーン＆マナーで計画。</p>
  <p class="note" style="margin-top:3mm">写真・情報出典：整痛院ふっか公式サイト（fukka.jp）、整痛院ふっか銀座院ページ、PR TIMES（株式会社ふっか プレスリリース）。数値は公表時点のもの。</p>
 </div>"""
-pages.append(page("銀座院のご紹介（整痛院ふっか）", "GINZA CLINIC", ginza, "P.12"))
+pages.append(page("銀座院のご紹介（整痛院ふっか）", "GINZA CLINIC", ginza, "P.13"))
 
 # ---------------------------------------------------------------- 13 仕上表・ビル規定
 fin = [
@@ -222,7 +261,7 @@ p12 = f"""<div style="position:absolute;left:0;top:0;width:200mm"><h3 style="fon
 <div style="position:absolute;left:208mm;top:0;width:180mm"><h3 style="font-size:4.2mm;margin:0 0 3mm">内装マニュアル（ビル規定）への対応</h3>
 <table style="font-size:2.85mm">{rr}</table>
 <p class="note" style="margin-top:3mm">※出典：内装マニュアル（2026年8月7日発行）、募集資料。本資料は出店審査用の基本計画です。図面寸法は募集図面・1F CADからの読取り値で、実施設計時にビル側の白図・設備図に基づき確定します。パースはイメージで、実際の仕上・家具とは異なる場合があります。</p></div>"""
-pages.append(page("仕上表・ビル規定への対応", "FINISH SCHEDULE / COMPLIANCE", p12, "P.13"))
+pages.append(page("仕上表・ビル規定への対応", "FINISH SCHEDULE / COMPLIANCE", p12, "P.14"))
 
 html = f'<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head><body>{"".join(pages)}</body></html>'
 open(os.path.join(out, "添付資料.html"), "w").write(html)
