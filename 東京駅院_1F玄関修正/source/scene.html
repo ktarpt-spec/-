@@ -1,0 +1,183 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#fff}canvas{display:block}</style></head>
+<body><script src="node_modules/three/build/three.min.js"></script><script>
+// 単位：m。X＝道路沿い（左→右）、Y＝上、Z＝道路側が＋（建物の外壁面 z=0）
+const P = new URLSearchParams(location.search);
+const VIEW = P.get('v') || 'main';
+const Wd = +(P.get('w') || 2400), Ht = +(P.get('h') || 1500);
+const renderer = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
+renderer.setSize(Wd, Ht); renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+
+// 空（グラデーション）
+function skyTex(top, bottom) {
+  const c = document.createElement('canvas'); c.width = 4; c.height = 256;
+  const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 256);
+  gr.addColorStop(0, top); gr.addColorStop(1, bottom); g.fillStyle = gr; g.fillRect(0, 0, 4, 256);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+scene.background = VIEW === 'interior' ? new THREE.Color('#e9e3da') : skyTex('#6f8fb3', '#e9dfd2');
+
+const M = (c, o = {}) => new THREE.MeshStandardMaterial(Object.assign({color: c, roughness: .8, metalness: 0}, o));
+const mats = {
+  panel: M('#c9c9c6', {roughness: .7}), panelD: M('#bdbdba'), stone: M('#cfcbc4'),
+  frame: M('#9ea3a8', {metalness: .6, roughness: .35}), sus: M('#b9bec2', {metalness: .8, roughness: .3}),
+  glass: M('#7f97ad', {metalness: .1, roughness: .05, transparent: true, opacity: .45}),
+  glassUp: M('#5d7590', {metalness: .3, roughness: .15}),
+  side: M('#d3d0cb'), soffit: M('#e4e1dc'), tile: M('#c9c8c4'), road: M('#4a4b4f', {roughness: .95}), curb: M('#b5b4b0'),
+  wood: M('#a77b52', {roughness: .6}), woodL: M('#c79d73', {roughness: .6}), ivory: M('#f3eee5'), white: M('#f7f7f5'),
+  carpet: M('#cbbfae', {roughness: 1}), seat: M('#efe6d6'), dark: M('#3b3d41'), leaf: M('#3f7a3f'), trunk: M('#6b4a2e'),
+  nb: M('#d9d9d6'), nbWin: M('#6f859c', {metalness: .2, roughness: .2}), warm: new THREE.MeshBasicMaterial({color: '#ffe2ad'}),
+};
+function box(w, h, d, m, x, y, z, cast = true) {
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+  b.position.set(x + w / 2, y + h / 2, z - d / 2); b.castShadow = cast; b.receiveShadow = true; scene.add(b); return b;
+}
+// ロゴ（文字）テクスチャ
+function textPlane(txt, w, h, color, bg, x, y, z, size = 0.6, rotY = 0, font = '600') {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = Math.round(1024 * h / w);
+  const g = c.getContext('2d');
+  if (bg) { g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height); }
+  g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = `${font} ${Math.round(c.height * size)}px "Noto Sans CJK JP", sans-serif`;
+  g.fillText(txt, c.width / 2, c.height / 2);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({map: t, transparent: !bg}));
+  m.position.set(x, y, z); m.rotation.y = rotY; scene.add(m); return m;
+}
+
+// ---------------- 街路
+const BW = 14.3, F1 = 4.95, FL = 3.9, NF = 13, OPEN = 4.05;
+box(80, .02, 4.2, mats.tile, -30, -.02, 4.2, false);                 // 歩道
+for (let i = -60; i < 90; i++) box(.01, .021, 4.2, M('#b4b3af'), i * .6 - 6, -.02, 4.2, false);
+for (let j = 0; j < 7; j++) box(80, .021, .01, M('#b4b3af'), -30, -.02, j * .6 + .1, false);
+box(80, .15, .25, mats.curb, -30, -.15, 4.45, false);
+box(80, .02, 12, mats.road, -30, -.17, 16.4, false);
+for (let i = -6; i < 12; i++) box(2.5, .005, .15, M('#e8e8e8'), i * 6, -.15, 10.5, false);
+
+// ---------------- 建物本体（上階）
+const H = F1 + (NF - 1) * FL;
+box(BW, H - F1, .3, mats.panel, 0, F1, .0);
+for (let f = 0; f < NF - 1; f++) {
+  const y0 = F1 + f * FL;
+  box(BW - 1.6, FL - 1.0, .05, mats.glassUp, .8, y0 + .5, .05, false);
+  for (let k = 0; k <= 14; k++) box(.07, FL - 1.0, .12, mats.frame, .8 + k * (BW - 1.6) / 14 - .035, y0 + .5, .12);
+  box(BW, .45, .25, mats.panel, 0, y0, .25);
+}
+// 端部のパネル（左右）
+box(.6, H, .4, mats.panelD, -.6, 0, .4); box(.6, H, .4, mats.panelD, BW, 0, .4);
+// 1F 上部の帯
+box(BW, F1 - OPEN, .35, mats.stone, 0, OPEN, .35);
+
+// ---------------- 1F ファサード（左から：アプローチ2.3｜パネルA1.0｜SSW-2 1.7｜パネルA1.8｜ECP3.5｜エントランス4.0）
+const xs = {ap0: 0, ap1: 2.3, pa1: 3.3, ssw: 5.0, pa2: 6.8, ecp: 10.3, ent: 14.3};
+// 玄関ポーチ（くぼみ、扉は奥 1.68m）
+const PD = 1.68;
+box(2.3, .02, PD, mats.tile, 0, -.019, 0, false);                                    // ポーチ床
+box(2.3, .12, PD + .3, mats.soffit, 0, OPEN - .12, 0);                              // 軒天
+box(.15, OPEN, PD, mats.side, 2.3 - .15, 0, 0);                                      // 右の脇壁（サインスペース）
+// 左：斜めの壁＋袖壁
+const diag = new THREE.Mesh(new THREE.BoxGeometry(.9, OPEN, .12), mats.side);
+diag.position.set(.32, OPEN / 2, -.32); diag.rotation.y = Math.PI / 4; diag.castShadow = true; diag.receiveShadow = true; scene.add(diag);
+box(.12, OPEN, PD - .62, mats.side, .6, 0, -.62);
+// 奥：既設SUS両開き扉
+const dz = -PD;
+box(1.7, OPEN, .1, mats.panelD, .6, 0, dz);                    // 奥の壁（扉の上は欄間パネル）
+scene.remove(scene.children[scene.children.length - 1]);
+box(1.7, OPEN - 2.4, .1, mats.side, .6, 2.4, dz);              // 上部パネル
+box(.06, 2.4, .1, mats.sus, .6, 0, dz); box(.06, 2.4, .1, mats.sus, 2.24, 0, dz);
+box(.04, 2.4, .08, mats.sus, 1.6, 0, dz + .01);
+box(1.58, 2.38, .02, mats.glass, .66, 0, dz + .0, false);
+box(.03, .5, .05, mats.sus, 1.52, .95, dz + .05); box(.03, .5, .05, mats.sus, 1.66, .95, dz + .05);
+// ポーチ照明（軒天のダウンライト）
+const pl = new THREE.PointLight('#ffd9a0', VIEW === 'interior' ? 0 : 3, 5, 2); pl.position.set(1.45, OPEN - .25, -.8); scene.add(pl);
+const dl = new THREE.Mesh(new THREE.CylinderGeometry(.08, .08, .02, 20), mats.warm); dl.position.set(1.45, OPEN - .13, -.8); scene.add(dl);
+// 店名サイン（右脇壁、ビル基準サインスペース）
+textPlane('fukka', .62, .3, '#ffffff', '#2f3134', 2.3 - .155, 2.0, -.55, .55, -Math.PI / 2);
+textPlane('整形外科・整痛院', .62, .1, '#cfcfcf', '#2f3134', 2.3 - .155, 1.79, -.55, .55, -Math.PI / 2, '500');
+
+// パネルA
+function panels(x0, x1, rows, m) {
+  box(x1 - x0, OPEN, .3, m, x0, 0, .3);
+  for (let r = 1; r < rows; r++) box(x1 - x0, .012, .31, M('#a9a9a6'), x0, r * OPEN / rows, .305);
+}
+panels(xs.ap1, xs.pa1, 4, mats.panel);
+// SSW-2：既設ガラス＋600後退の木調ルーバー
+box(1.7, .08, .3, mats.frame, xs.pa1, 0, .3); box(1.7, .08, .3, mats.frame, xs.pa1, OPEN - .08, .3);
+box(.06, OPEN, .3, mats.frame, xs.pa1, 0, .3); box(.06, OPEN, .3, mats.frame, xs.ssw - .06, 0, .3);
+box(1.58, OPEN - .16, .02, mats.glass, xs.pa1 + .06, .08, .1, false);
+if (VIEW !== 'interior') box(1.7, OPEN, .05, mats.ivory, xs.pa1, 0, -1.6);   // 店内の奥壁（外観用）
+for (let k = 0; k < 11; k++) box(.05, 2.5, .05, k % 2 ? mats.woodL : mats.wood, xs.pa1 + .12 + k * .14, .1, -.6);
+box(1.6, .03, .4, M('#f1efe9'), xs.pa1 + .05, 3.2, -.2);
+const sl = new THREE.PointLight('#ffd49a', 2.2, 4, 2); sl.position.set(xs.pa1 + .85, 2.9, -.9); scene.add(sl);
+textPlane('fukka', .3, .1, '#2f3c80', '#f7f4ee', xs.pa1 + .85, 1.6, -.56, .7);
+panels(xs.ssw, xs.pa2, 4, mats.panel);
+panels(xs.pa2, xs.ecp, 8, mats.panelD);
+// ビルエントランス
+box(4.0, OPEN, .05, mats.glass, xs.ecp, 0, .05, false);
+for (let k = 0; k <= 4; k++) box(.07, OPEN, .15, mats.frame, xs.ecp + k * 1.0 - (k == 4 ? .07 : 0), 0, .15);
+box(4.0, .08, .15, mats.frame, xs.ecp, 2.6, .15);
+box(4.0, OPEN, .05, M('#dcdad5'), xs.ecp, 0, -3.5);
+textPlane('fukka', .3, .14, '#2f3c80', '#f6f6f2', xs.ecp + .55, 1.45, .1, .6);
+
+// ---------------- 店内（扉の奥に見える部分）
+box(6.7, .02, 13.9, mats.carpet, .08, -.02, -PD, false);
+box(6.7, .05, 13.9, mats.white, .08, 3.0, -PD);                 // 天井 CH3.0
+box(2.55, 3.0, .12, mats.wood, .08, 0, -4.2);                   // 正面の木調壁（Y2）
+for (let k = 0; k < 17; k++) box(.03, 3.0, .03, mats.woodL, .12 + k * .15, 0, -4.07);
+textPlane('fukka', .9, .32, '#f3ead9', null, 1.35, 2.05, -4.06, .8);
+box(4.1, 3.0, .12, mats.ivory, 2.63, 0, -4.2);
+box(.6, 1.05, 1.25, mats.wood, .98, 0, -2.9);                   // 受付カウンター
+box(.64, .04, 1.29, M('#efe7da'), .96, 1.05, -2.88);
+box(6.7, 3.0, .1, mats.ivory, .08, 0, -.0);                     // （ファサード裏）
+scene.remove(scene.children[scene.children.length - 1]);
+box(.1, 3.0, 13.9, mats.ivory, .0, 0, -PD);                      // 隣地側の壁
+const il = new THREE.PointLight('#ffdcae', 6, 9, 1.6); il.position.set(1.6, 2.7, -3.0); scene.add(il);
+const il2 = new THREE.PointLight('#ffdcae', 4, 8, 1.6); il2.position.set(4.5, 2.7, -2.8); scene.add(il2);
+// 待合（ガラス越しの見え方用・室内ビュー用）
+if (VIEW !== 'interior') for (const [x, z] of [[3.9, -1.9], [4.45, -1.9], [5.0, -1.9], [3.9, -2.9], [4.45, -2.9], [5.0, -2.9]]) {
+  box(.46, .42, .46, mats.seat, x, 0, z); box(.46, .45, .08, mats.seat, x, .42, z - .38);
+}
+// 室内の木調スクリーン（SSW-2 以外のパネル裏も含む待合側）
+for (let k = 0; k < 28; k++) box(.05, 2.1, .05, k % 2 ? mats.woodL : mats.wood, 2.45 + k * .15, 0, -.6);
+box(.1, 3.0, 4.5, mats.ivory, 6.7, 0, -.2);
+
+// ---------------- 隣の建物と街路樹
+box(10, 22, 12, mats.nb, -10.7, 0, .1);
+for (let r = 0; r < 5; r++) for (let c = 0; c < 4; c++) box(1.3, 1.6, .05, mats.nbWin, -9.6 + c * 2.4, 6 + r * 3.4, .15, false);
+box(10, 4.2, .05, M('#aab4bd', {metalness: .3, roughness: .2}), -10.4, 0, .16, false);
+box(11, 26, 12, mats.nb, BW + .2, 0, .1);
+for (let r = 0; r < 6; r++) for (let c = 0; c < 4; c++) box(1.0, 1.4, .05, mats.nbWin, BW + 1.2 + c * 1.6, 6 + r * 3.2, .15, false);
+box(11, 4.2, .05, M('#aab4bd', {metalness: .3, roughness: .2}), BW + .2, 0, .16, false);
+function tree(x, z) {
+  const t = new THREE.Mesh(new THREE.CylinderGeometry(.07, .1, 3.2, 8), mats.trunk); t.position.set(x, 1.6, z); t.castShadow = true; scene.add(t);
+  for (let i = 0; i < 14; i++) {
+    const s = new THREE.Mesh(new THREE.SphereGeometry(.35 + Math.random() * .2, 10, 8), mats.leaf);
+    s.position.set(x + (Math.random() - .5) * 1.4, 3.3 + (Math.random() - .3) * .9, z + (Math.random() - .5) * 1.0); s.castShadow = true; scene.add(s);
+  }
+}
+tree(18.5, 3.6); tree(-6.5, 3.6);
+
+// ---------------- 光
+scene.add(new THREE.HemisphereLight('#dfe8f2', '#8d8a85', VIEW === 'interior' ? .9 : 1.1));
+const sun = new THREE.DirectionalLight('#fff4e6', VIEW === 'interior' ? .5 : 2.3);
+sun.position.set(-18, 30, 22); sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+const sc = sun.shadow.camera; sc.left = -25; sc.right = 25; sc.top = 25; sc.bottom = -10; sc.far = 90; scene.add(sun);
+
+// ---------------- カメラ
+let cam;
+if (VIEW === 'front') {
+  cam = new THREE.PerspectiveCamera(30, Wd / Ht, .1, 300); cam.position.set(7.2, 14, 62); cam.lookAt(7.2, 13, 0);
+} else if (VIEW === 'approach') {
+  cam = new THREE.PerspectiveCamera(42, Wd / Ht, .1, 200); cam.position.set(-1.6, 1.6, 6.2); cam.lookAt(3.2, 2.0, -.6);
+} else if (VIEW === 'interior') {
+  cam = new THREE.PerspectiveCamera(58, Wd / Ht, .05, 100); cam.position.set(5.2, 1.5, -1.1); cam.lookAt(1.2, 1.35, -3.2);
+} else {
+  cam = new THREE.PerspectiveCamera(50, Wd / Ht, .1, 300); cam.position.set(-3.2, 1.65, 10.5); cam.lookAt(6.8, 4.6, -1);
+}
+renderer.render(scene, cam);
+document.title = 'done';
+</script></body></html>
