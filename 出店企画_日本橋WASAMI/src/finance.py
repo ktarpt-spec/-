@@ -4,19 +4,24 @@ usage: finance.py <outdir> [<企画書.xlsx>]
   outdir/drawings/fin_trend.svg, fin_years.svg, fin_cac.svg と build/finance.json を出力。
   xlsx を渡すと「収支計画」シートを追加（数式入り）。
 前提（すべて概算・単位 万円/月）:
-  ・最終月商 5,600万円（36か月目）。立上げは指数カーブで逓増。
+  ・最終月商 8,480万円（36か月目・年商 約10億1,700万円）。立上げは指数カーブで逓増。
   ・自費診療・自費施術100%のため売上原価（消耗品・MRI保守・読影等）6%、粗利率94%。
-  ・賃料・共益費 約900万円/月（最終月商比 約16%）。
+  ・賃料・共益費 約900万円/月（最終月商比 約11%）。
+  ・人件費・その他販管費・広告費の固定分は月商規模（5,600万円基準）に比例して増やす。
 """
 import json, math, os, sys
 
-FINAL = 5600
+FINAL = 8480
 MONTHS = 36
 RENT = 900                 # 賃料・共益費（万円/月）
 COGS = 0.06                # 売上原価率
-AD = {1: 300, 2: 250, 3: 220}           # 広告宣伝費（万円/月）
-LABOR = lambda s: 1152 + 0.08 * s       # 人件費（固定＋歩合）
-OTHER = lambda s: 600 + 0.02 * s        # その他販管費（水光熱・システム・減価償却等）
+K = FINAL / 5600                        # 体制規模の係数（月商5,600万円を基準）
+AD = {y: int(round(v * K, -1)) for y, v in {1: 300, 2: 250, 3: 220}.items()}   # 広告宣伝費（万円/月）
+LABOR_FIX = int(round(1152 * K, -1))
+OTHER_FIX = int(round(600 * K, -1))
+LABOR = lambda s: LABOR_FIX + 0.08 * s  # 人件費（固定＋歩合）
+OTHER = lambda s: OTHER_FIX + 0.02 * s  # その他販管費（水光熱・システム・減価償却等）
+YMAX = math.ceil((FINAL + 600) / 1000) * 1000   # グラフ縦軸の上限
 INDUSTRY = dict(rent=9, ad=17)          # 一般的な自費クリニック（路面・空中階の平均的立地）の目安（％）
 
 
@@ -62,11 +67,11 @@ def trend_svg(rows):
     W, H = 180, 62
     L, R, T, B = 16, 30, 7, 9
     pw, ph = W - L - R, H - T - B
-    ymin, ymax = -500, 6000
+    ymin, ymax = -500, YMAX
     X = lambda m: L + (m - 1) / (MONTHS - 1) * pw
     Y = lambda v: T + (ymax - v) / (ymax - ymin) * ph
     o = []
-    for v in range(0, 6001, 1000):
+    for v in range(0, YMAX + 1, 1000):
         o.append(f'<line x1="{L}" x2="{L+pw}" y1="{Y(v):.2f}" y2="{Y(v):.2f}" stroke="{C["grid"] if v else C["base"]}" stroke-width="{0.15 if v else 0.3}"/>')
         o.append(t(L - 1.5, Y(v) + 0.8, f"{v:,}", 2.2, C["mut"], "end"))
     for m in (1, 12, 24, 36):
@@ -97,10 +102,10 @@ def years_svg(years):
     W, H = 180, 56
     L, R, T, B = 16, 4, 8, 9
     pw, ph = W - L - R, H - T - B
-    ymin, ymax = -500, 6000
+    ymin, ymax = -500, YMAX
     Y = lambda v: T + (ymax - v) / (ymax - ymin) * ph
     o = []
-    for v in range(0, 6001, 1000):
+    for v in range(0, YMAX + 1, 1000):
         o.append(f'<line x1="{L}" x2="{L+pw}" y1="{Y(v):.2f}" y2="{Y(v):.2f}" stroke="{C["grid"] if v else C["base"]}" stroke-width="{0.15 if v else 0.3}"/>')
         o.append(t(L - 1.5, Y(v) + 0.8, f"{v:,}", 2.2, C["mut"], "end"))
     gw = pw / 3
@@ -160,7 +165,8 @@ def add_sheet(xlsx, rows):
     ws = wb.create_sheet("収支計画")
     hd = PatternFill("solid", fgColor="F3EDE4"); thin = Side(style="thin", color="C9C0B5")
     ws["A1"] = "収支計画（概算）　整形外科ふっか／整痛院ふっか 東京駅院　単位：万円"; ws["A1"].font = Font(bold=True, size=12)
-    ws["A2"] = "前提：最終月商5,600万円（36か月目）／自費100％・売上原価率6％／賃料・共益費900万円/月（最終月商比 約16％）。人件費=1,152+売上×8％、その他販管費=600+売上×2％。"
+    ws["A2"] = (f"前提：最終月商{FINAL:,}万円（36か月目・年商 約{FINAL*12/10000:.2f}億円）／自費100％・売上原価率6％／賃料・共益費{RENT}万円/月（最終月商比 約{RENT/FINAL*100:.0f}％）。"
+                f"人件費={LABOR_FIX:,.0f}+売上×8％、その他販管費={OTHER_FIX:,.0f}+売上×2％。")
     ws["A2"].font = Font(size=9, color="52514E")
     # 年次サマリー（数式）
     ws["A4"] = "年次サマリー"; ws["A4"].font = Font(bold=True)
@@ -205,10 +211,10 @@ def add_sheet(xlsx, rows):
         ws.cell(row=r, column=2, value=rr["month"])
         ws.cell(row=r, column=3, value=rr["sales"])
         ws.cell(row=r, column=4, value=f"=ROUND(C{r}*0.06,0)")
-        ws.cell(row=r, column=5, value=f"=ROUND(1152+C{r}*0.08,0)")
+        ws.cell(row=r, column=5, value=f"=ROUND({LABOR_FIX:.0f}+C{r}*0.08,0)")
         ws.cell(row=r, column=6, value=RENT)
         ws.cell(row=r, column=7, value=rr["ad"])
-        ws.cell(row=r, column=8, value=f"=ROUND(600+C{r}*0.02,0)")
+        ws.cell(row=r, column=8, value=f"=ROUND({OTHER_FIX:.0f}+C{r}*0.02,0)")
         ws.cell(row=r, column=9, value=f"=SUM(E{r}:H{r})")
         ws.cell(row=r, column=10, value=f"=C{r}-D{r}-I{r}")
         ws.cell(row=r, column=11, value=f"=F{r}/C{r}"); ws.cell(row=r, column=11).number_format = "0.0%"

@@ -159,6 +159,8 @@ import json as _json
 F = _json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "build", "finance.json")))
 fy, ff = F["years"], F["final"]
 fixed = ff["labor"] - round(ff["sales"] * 0.08) + ff["rent"] + ff["ad"] + ff["other"] - round(ff["sales"] * 0.02)
+rent_p, op_p, ad_p = ff['rent'] / ff['sales'] * 100, ff['op'] / ff['sales'] * 100, ff['ad'] / ff['sales'] * 100
+y2 = fy[1]
 bep = fixed / (1 - 0.06 - 0.08 - 0.02)
 def yrow(name, key, fmt=lambda v: f"{v/12:,.0f}", bold=False):
     tds = "".join(f"<td style='text-align:right'>{fmt(y[key])}</td>" for y in fy)
@@ -173,16 +175,16 @@ tbl = ("<tr><th>万円／月（年平均）</th><th>1年目</th><th>2年目</th>
 finp = f"""
 <style>.chart svg{{width:100%;height:auto;display:block}} .sec h3{{font-size:3.9mm;margin:0 0 1.5mm}} .sec p{{font-size:2.85mm;line-height:1.7;margin:0}} table.fin th, table.fin td{{padding:0.9mm 2mm}}</style>
 <div style="position:absolute;left:0;top:0;width:150mm">
- <div class="kpi"><div><b>5,600<small style="font-size:3.2mm">万円</small></b><span>最終月商（3年目）</span></div><div><b>約16<small style="font-size:3.2mm">%</small></b><span>賃料比率（最終月）</span></div></div>
- <div class="kpi" style="margin-top:2.5mm"><div><b>94<small style="font-size:3.2mm">%</small></b><span>粗利率（自費100%）</span></div><div><b>約33<small style="font-size:3.2mm">%</small></b><span>営業利益率（最終月）</span></div></div>
+ <div class="kpi"><div><b>{ff['sales']:,}<small style="font-size:3.2mm">万円</small></b><span>最終月商（年商 約10億1,700万円）</span></div><div><b>約{rent_p:.0f}<small style="font-size:3.2mm">%</small></b><span>賃料比率（最終月）</span></div></div>
+ <div class="kpi" style="margin-top:2.5mm"><div><b>94<small style="font-size:3.2mm">%</small></b><span>粗利率（自費100%）</span></div><div><b>約{op_p:.0f}<small style="font-size:3.2mm">%</small></b><span>営業利益率（最終月）</span></div></div>
  <div class="sec" style="margin-top:5mm"><h3>① 超好立地による「広告費の代替」</h3>
- <p>JR東京駅（22番出口）徒歩1分・日本橋駅徒歩4分。日本有数のターミナル駅の通勤・出張・来訪動線上にあり、「通いやすい場所にある」こと自体が最大の集客力になります。慢性痛のコース施術は通院の継続が前提のため、駅至近の立地は継続率・紹介にも直結します。看板を大きく出さずとも駅前の認知と紹介・リピートで集客でき、<b>広告宣伝費を売上比 約4%</b>に抑える計画です。賃料と広告費を合わせた「集客コスト」で比べると、一般的な自費クリニックより低い水準です。</p>
+ <p>JR東京駅（22番出口）徒歩1分・日本橋駅徒歩4分。日本有数のターミナル駅の通勤・出張・来訪動線上にあり、「通いやすい場所にある」こと自体が最大の集客力になります。慢性痛のコース施術は通院の継続が前提のため、駅至近の立地は継続率・紹介にも直結します。看板を大きく出さずとも駅前の認知と紹介・リピートで集客でき、<b>広告宣伝費を売上比 約{ad_p:.0f}%</b>に抑える計画です。賃料と広告費を合わせた「集客コスト」で比べると、一般的な自費クリニックより低い水準です。</p>
  <div class="chart" style="margin-top:2mm">{D("fin_cac.svg")}</div></div>
  <div class="sec" style="margin-top:4mm"><h3>② 自費診療・自費施術による高い粗利率</h3>
  <p>1F整形外科（自費診療：診察3,000～9,000円・MRI 30,000～50,000円）と、4・5F整痛院のコース制施術（痛み消失コース6か月88万円・理想の体コース12か月132万円）はすべて自費のため、保険点数に左右されず<b>粗利率は約94%</b>。原価は消耗品・MRI保守・読影費程度で、売上増加分の大半が利益に残る構造です。</p></div>
  <div class="sec" style="margin-top:4mm"><h3>③ 賃料負担に耐えられる収益構造</h3>
- <p>固定費（人件費の固定分・賃料・広告・その他）に対する損益分岐売上は<b>月 約{bep:,.0f}万円</b>。最終月商5,600万円はその約{ff['sales']/bep*100:.0f}%で、売上が約{(1-bep/ff['sales'])*100:.0f}%下振れしても赤字にならない余裕があります。開業{F['breakeven']}か月目に単月黒字化、2年目以降は賃料比率が20%を切り、営業利益率25%以上で推移する計画です。</p></div>
- <p class="note" style="margin-top:3mm">※賃料・共益費は約900万円/月（最終月商比 約16%）として試算。正式な賃料条件・人員計画にあわせて更新します。数値はすべて概算。業界平均は自費クリニックの一般的な目安値。</p>
+ <p>固定費（人件費の固定分・賃料・広告・その他）に対する損益分岐売上は<b>月 約{bep:,.0f}万円</b>。最終月商{ff['sales']:,}万円はその約{ff['sales']/bep*100:.0f}%で、売上が約{(1-bep/ff['sales'])*100:.0f}%下振れしても赤字にならない余裕があります。開業{F['breakeven']}か月目に単月黒字化、2年目以降は賃料比率 約{y2['rent']/y2['sales']*100:.0f}%以下、営業利益率 約{y2['op']/y2['sales']*100:.0f}%以上で推移する計画です。</p></div>
+ <p class="note" style="margin-top:3mm">※賃料・共益費は約900万円/月（最終月商比 約{rent_p:.0f}%）として試算。人件費等の固定費は月商規模に応じて増員する前提。正式な賃料条件・人員計画にあわせて更新します。数値はすべて概算。業界平均は自費クリニックの一般的な目安値。</p>
 </div>
 <div style="position:absolute;left:158mm;top:0;width:230mm">
  <h3 style="font-size:3.9mm;margin:0 0 1mm">月商・営業利益の推移（開業から36か月）</h3>
