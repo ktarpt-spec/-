@@ -261,6 +261,10 @@ p12 = f"""<div style="position:absolute;left:0;top:0;width:200mm"><h3 style="fon
 <div style="position:absolute;left:208mm;top:0;width:180mm"><h3 style="font-size:4.2mm;margin:0 0 3mm">内装マニュアル（ビル規定）への対応</h3>
 <table style="font-size:2.85mm">{rr}</table>
 <p class="note" style="margin-top:3mm">※出典：内装マニュアル（2026年8月7日発行）、募集資料。本資料は出店審査用の基本計画です。図面寸法は募集図面・1F CADからの読取り値で、実施設計時にビル側の白図・設備図に基づき確定します。パースはイメージで、実際の仕上・家具とは異なる場合があります。</p></div>"""
+p12 += """<div style="position:absolute;right:0;bottom:0;width:120mm;height:46mm;display:flex;gap:4mm;align-items:center;background:#f6f1e8;border-radius:1.2mm;padding:3mm 4mm">
+ <img src="images/qr_fukka.png" style="width:40mm;height:40mm;display:block;background:#fff">
+ <div style="font-size:3mm;line-height:1.7"><b style="font-size:3.6mm">整痛院ふっか</b><br>お問い合わせ・詳細はこちら<br>
+ <span style="font-size:2.4mm;color:#6b625b">https://s.fukka.jp/l/u/EhhbGg18mMxd4lXL</span></div></div>"""
 pages.append(page("仕上表・ビル規定への対応", "FINISH SCHEDULE / COMPLIANCE", p12, "P.14"))
 
 html = f'<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head><body>{"".join(pages)}</body></html>'
