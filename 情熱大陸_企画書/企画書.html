@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>情熱大陸 取材ご提案</title>
+<style>
+  @page { size: A4; margin: 0; }
+  :root{
+    --ink:#1b1b1f; --sub:#55555c; --line:#d9d6d0; --paper:#fbfaf7;
+    --red:#c2172b; --red-soft:#f7e6e8; --navy:#1d2a55;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#888}
+  body{font-family:"Noto Sans CJK JP","Noto Sans JP",sans-serif;color:var(--ink);font-size:8.6pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .serif{font-family:"Noto Serif CJK JP","Noto Serif JP",serif}
+  .page{width:210mm;height:297mm;margin:0 auto 8mm;background:var(--paper);position:relative;overflow:hidden;padding:11mm 12mm 10mm}
+  @media print{html,body{background:none}.page{margin:0;page-break-after:always}}
+
+  /* header strip */
+  .strip{display:flex;justify-content:space-between;align-items:center;font-size:7.4pt;letter-spacing:.12em;color:var(--sub);border-bottom:1.2pt solid var(--ink);padding-bottom:2mm}
+  .strip b{color:var(--red);font-weight:700}
+
+  h2{font-family:"Noto Serif CJK JP",serif;font-size:12.5pt;font-weight:900;letter-spacing:.04em;display:flex;align-items:baseline;gap:2.2mm;margin-bottom:2mm}
+  h2 .no{font-family:"Noto Sans CJK JP",sans-serif;font-size:7pt;font-weight:700;color:#fff;background:var(--red);padding:.4mm 1.6mm;letter-spacing:.1em;transform:translateY(-1.2pt)}
+  h2 .en{font-family:"Noto Sans CJK JP",sans-serif;font-size:6.6pt;color:var(--red);letter-spacing:.2em;font-weight:700;margin-left:auto}
+  p{text-align:justify}
+  .em{background:linear-gradient(transparent 62%,#f4c9cf 62%);font-weight:700}
+  .todo{background:#fff3b0;color:#6b5600;font-size:.92em;padding:0 1mm;border-radius:1mm}
+
+  /* ===== FRONT ===== */
+  .hero{display:grid;grid-template-columns:1fr 54mm;gap:5mm;margin-top:5mm;height:104mm}
+  .kicker{font-size:8pt;font-weight:700;color:var(--red);letter-spacing:.14em}
+  .catch{font-family:"Noto Serif CJK JP",serif;font-weight:900;font-size:30pt;line-height:1.22;letter-spacing:.02em;margin:2mm 0 3mm}
+  .catch .r{color:var(--red)}
+  .lead{font-family:"Noto Serif CJK JP",serif;font-size:11pt;font-weight:700;line-height:1.65;margin-bottom:3mm}
+  .name{display:flex;align-items:baseline;gap:3mm;border-top:.6pt solid var(--line);padding-top:2.5mm}
+  .name .jp{font-family:"Noto Serif CJK JP",serif;font-size:19pt;font-weight:900;letter-spacing:.12em;white-space:nowrap}
+  .name .meta{font-size:7.6pt;color:var(--sub);line-height:1.5}
+  .photo{position:relative;background:var(--red-soft);border-radius:1mm;overflow:hidden}
+  .photo img{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:100%;}
+  .photo .cap{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:6.6pt;padding:6mm 2.5mm 2mm;letter-spacing:.05em}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1.2pt solid var(--ink);border-bottom:.6pt solid var(--line);margin:4mm 0 4.5mm}
+  .stat{padding:2.4mm 2.5mm 2mm;border-right:.6pt solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat .v{font-family:"Noto Serif CJK JP",serif;font-weight:900;font-size:17pt;line-height:1.1;color:var(--red)}
+  .stat .v small{font-size:8.5pt;color:var(--ink);margin-left:.5mm}
+  .stat .l{font-size:7pt;color:var(--sub);line-height:1.45;margin-top:1mm}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+  ul.badges{list-style:none;display:grid;gap:1.3mm;margin-top:1mm}
+  ul.badges li{padding-left:4mm;position:relative;line-height:1.5}
+  ul.badges li::before{content:"";position:absolute;left:0;top:1.7mm;width:2mm;height:2mm;background:var(--red);transform:rotate(45deg)}
+  .stoic{margin-top:2.6mm;background:#fff;border:.6pt solid var(--line);border-left:2pt solid var(--ink);padding:2mm 3mm;font-size:8pt}
+  .stoic b{color:var(--red)}
+
+  .tl{list-style:none;position:relative;margin-top:1mm}
+  .tl::before{content:"";position:absolute;left:12.5mm;top:1.5mm;bottom:1.5mm;width:.6pt;background:var(--line)}
+  .tl li{display:grid;grid-template-columns:11mm 1fr;gap:3.5mm;margin-bottom:1.2mm;position:relative;line-height:1.5}
+  .tl li::after{content:"";position:absolute;left:11.7mm;top:1.6mm;width:1.8mm;height:1.8mm;border-radius:50%;background:var(--paper);border:1pt solid var(--ink)}
+  .tl li.hot::after{background:var(--red);border-color:var(--red)}
+  .tl .y{font-weight:700;font-size:7.6pt;text-align:right;font-feature-settings:"tnum"}
+  .tl li.hot .t{font-weight:700}
+
+  .why{margin-top:4.5mm;background:var(--ink);color:#fff;padding:4.5mm 6mm;display:grid;grid-template-columns:1fr 1.15fr;gap:6mm;align-items:center}
+  .why h2{color:#fff}
+  .why .quote{font-family:"Noto Serif CJK JP",serif;font-size:12.5pt;font-weight:700;line-height:1.7}
+  .why .quote .r{color:#ff8a98}
+  .why p{font-size:8pt;color:#e6e6ea}
+  .why .src{font-size:6.8pt;color:#a9a9b3;margin-top:1.5mm}
+
+  /* ===== BACK ===== */
+  .chain{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin:2mm 0 3mm}
+  .chain>div{position:relative;background:#fff;border:.6pt solid var(--line);padding:2.2mm 2mm 2mm 3.6mm;min-height:21mm}
+  .chain>div:not(:last-child)::after{content:"";position:absolute;right:-2.3mm;top:50%;margin-top:-2.3mm;border:2.3mm solid transparent;border-left-color:var(--red);border-right:0;z-index:2}
+  .chain .k{font-family:"Noto Serif CJK JP",serif;font-weight:900;font-size:10pt;color:var(--red);line-height:1.3}
+  .chain .d{font-size:6.9pt;line-height:1.5;color:var(--sub);margin-top:1mm}
+  .chain>div:last-child{background:var(--red);border-color:var(--red)}
+  .chain>div:last-child .k,.chain>div:last-child .d{color:#fff}
+
+  .model{display:grid;grid-template-columns:1.25fr 1fr;gap:5mm;align-items:stretch}
+  .model img{width:100%;height:56mm;object-fit:cover;border-radius:1mm;display:block}
+  .vs{display:grid;grid-template-columns:auto 1fr 1fr;font-size:7.4pt;margin-top:2mm;border-top:1pt solid var(--ink)}
+  .vs>div{padding:1.3mm 2mm;border-bottom:.6pt solid var(--line)}
+  .vs .h{font-weight:700;color:var(--sub);font-size:7pt}
+  .vs .me{background:var(--red-soft);font-weight:700}
+
+  .watch{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:1.5mm}
+  .watch div{border-top:2pt solid var(--red);background:#fff;padding:2.4mm 2.8mm}
+  .watch b{display:block;font-family:"Noto Serif CJK JP",serif;font-size:9.6pt;line-height:1.4;margin-bottom:1mm}
+  .watch p{font-size:7.5pt;line-height:1.55;color:#333}
+
+  table.plan{width:100%;border-collapse:collapse;font-size:7.6pt;margin-top:1mm}
+  table.plan th{width:15mm;background:var(--ink);color:#fff;font-family:"Noto Serif CJK JP",serif;font-size:10pt;font-weight:900;vertical-align:middle;text-align:center;letter-spacing:.1em}
+  table.plan td{border-bottom:.6pt solid var(--line);padding:1.8mm 2.5mm;vertical-align:top;line-height:1.55;background:#fff}
+  table.plan td.scene{width:46%;color:#333}
+  table.plan td b{color:var(--red)}
+  table.plan tr:first-child td{border-top:.6pt solid var(--line)}
+  table.plan tr+tr th{border-top:.6pt solid #444}
+
+  .photos{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:3mm}
+  .photos figure{position:relative}
+  .photos img{width:100%;height:21mm;object-fit:cover;display:block;border-radius:.8mm}
+  .photos figcaption{font-size:6.4pt;color:var(--sub);margin-top:.6mm}
+
+  .climax{margin-top:3.5mm;display:grid;grid-template-columns:1fr auto;gap:5mm;align-items:center;border:1.2pt solid var(--ink);padding:3mm 4.5mm}
+  .climax .t{font-family:"Noto Serif CJK JP",serif;font-weight:900;font-size:11.5pt;line-height:1.5}
+  .climax .t span{color:var(--red)}
+  .climax p{font-size:7.6pt;color:#333;margin-top:.8mm}
+  .contact{font-size:7.4pt;line-height:1.6;border-left:.6pt solid var(--line);padding-left:4.5mm;white-space:nowrap}
+  .contact b{font-size:8pt}
+  .foot{position:absolute;left:12mm;right:12mm;bottom:5.5mm;display:flex;justify-content:space-between;font-size:6.4pt;color:#8a8a90;letter-spacing:.06em}
+</style>
+</head>
+<body>
+
+<!-- ============ 表面 ============ -->
+<section class="page">
+  <div class="strip"><span><b>「情熱大陸」</b>ご取材のお願い　｜　企画ご提案書</span><span>株式会社Medical Book Group　2026.10</span></div>
+
+  <div class="hero">
+    <div>
+      <div class="kicker">腰痛 × 理学療法士 × 新しい医療モデル</div>
+      <h1 class="catch">腰痛は、<br><span class="r">医者には</span><br>治せない。</h1>
+      <p class="lead">“痛みの第一選択”をつくる──<br>病院でも、整体でもない「第三の場所」に人生を賭ける<br>39歳・理学療法士の挑戦を、密着していただけませんか。</p>
+      <div class="name">
+        <span class="jp">松田 圭太</span>
+        <span class="meta">まつだ・けいた／1987年 宮崎県生まれ（39歳）／理学療法士<br>株式会社Medical Book Group 代表取締役<br>整痛院ふっか 総院長</span>
+      </div>
+    </div>
+    <div class="photo">
+      <img src="img/matsuda.jpg" alt="松田圭太">
+      <div class="cap">妻と4人の子の父。福岡を拠点に、東京・銀座へ。</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v">3<small>万人+</small></div><div class="l">医療機関で診てきた<br>患者数（理学療法士として）</div></div>
+    <div class="stat"><div class="v">4,000<small>人+</small></div><div class="l">学長を務める<br>日本最大級の治療家コミュニティ</div></div>
+    <div class="stat"><div class="v">23<small>万人</small></div><div class="l">YouTube等<br>SNS総登録者数</div></div>
+    <div class="stat"><div class="v">11.76<small>億円</small></div><div class="l">創業5期目のグループ年商<br>社員13人・1人あたり全国平均の4倍超</div></div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h2><span class="no">01</span>すごい人<span class="en">WHO</span></h2>
+      <ul class="badges">
+        <li>独自の痛み治療法<b>「MSMメソッド」</b>創始者（商標登録）。全国で<b>2,500名以上</b>の治療家が受講</li>
+        <li><b>大阪・関西万博</b>でゲストスピーカー登壇（2025）</li>
+        <li><b>東久邇宮文化褒賞</b>を受賞（2025）</li>
+        <li><b>世界経済フォーラム</b>／国連後援国際サミット（インド）に登壇（2026）</li>
+        <li>初の著書<b>『腰痛は医者には治せない』（小学館）</b>出版（2026）</li>
+        <li>自費整体院で累計<b>12,000名超</b>を施術。米国・ドバイからも問い合わせ</li>
+      </ul>
+      <div class="stoic"><b>ストイックな素顔：</b>現場に立ち続けながら経営。自らも国内外で技術に投資し、スタッフを米国の解剖学実習に送り出す。「痛み治療で日本トップ」を本気で口にする。<span class="todo">※日々のルーティン等を追記</span></div>
+    </div>
+    <div>
+      <h2><span class="no">02</span>生い立ち<span class="en">ORIGIN</span></h2>
+      <ul class="tl">
+        <li><span class="y">1987</span><span class="t">宮崎県に生まれる <span class="todo">幼少期・PTを志した原体験を追記</span></span></li>
+        <li><span class="y">2009</span><span class="t">理学療法士免許取得。整形・内科・神経疾患まで累計3万人以上を治療</span></li>
+        <li class="hot"><span class="y">臨床</span><span class="t">「医師一強」の現場と、薬・手術中心の治療の限界に直面</span></li>
+        <li><span class="y">旅</span><span class="t">世界を旅し、日本医療のモラルとホスピタリティの価値を知る</span></li>
+        <li class="hot"><span class="y">2016</span><span class="t">独立。慢性腰痛専門「整体院 福佳 -fukka-」開院</span></li>
+        <li><span class="y">2021</span><span class="t">治療家教育の会社を設立。オンライン大学「疼痛治療カレッジ」</span></li>
+        <li class="hot"><span class="y">2025</span><span class="t">新モデル「整痛院ふっか」銀座に開院。連日予約で満員</span></li>
+        <li class="hot"><span class="y">2027</span><span class="t">整形外科クリニック開院へ（準備中）</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="why">
+    <div>
+      <h2><span class="no">03</span>なぜ、やるのか<span class="en">WHY</span></h2>
+      <p>腰痛を抱えても「どこに行けばいいかわからない」。病院では薬や手術といった対処療法が中心で、根本的な改善に届かない人が多くいる。一方で、一部の天才にしかできない技術では医療は変わらない──。松田は、<b style="color:#fff">再現性のある、科学的根拠に基づいた治療</b>を仕組みとして広げることを選んだ。</p>
+    </div>
+    <div>
+      <div class="quote">「痛みが起きても、どこに行っていいかわからない。<span class="r">“ここに行けば大丈夫”</span>と言える場所をつくれば、救える人生がもっとある。」</div>
+      <div class="src">― 松田圭太（会社紹介資料「最後に」より要約）</div>
+    </div>
+  </div>
+
+  <div class="foot"><span>1 / 2　表面</span><span>裏面：何をやろうとしているのか／取材のご提案</span></div>
+</section>
+
+<!-- ============ 裏面 ============ -->
+<section class="page">
+  <div class="strip"><span><b>「情熱大陸」</b>ご取材のお願い　｜　企画ご提案書</span><span>松田圭太 × 整痛院ふっか</span></div>
+
+  <div style="margin-top:5mm">
+    <h2><span class="no">04</span>何をやろうとしているのか ── 新しい試み「整痛院」<span class="en">WHAT</span></h2>
+    <div class="chain">
+      <div><div class="k">腰痛</div><div class="d">日本人の自覚症状で常に上位の“国民病”。慢性化に悩む人が多い</div></div>
+      <div><div class="k">新しい<br>治療</div><div class="d">運動療法×認知行動療法×徒手療法を組み合わせる</div></div>
+      <div><div class="k">科学的<br>根拠</div><div class="d">慢性疼痛診療ガイドラインで推奨度の高い治療を軸に</div></div>
+      <div><div class="k">新しい<br>モデル</div><div class="d">理学療法士が主役の自費リハ＋整形外科の融合</div></div>
+      <div><div class="k">健康<br>寿命</div><div class="d">平均寿命との差は男性8.8年・女性12.1年（厚労省）</div></div>
+      <div><div class="k">社会<br>貢献</div><div class="d">痛みで諦める人生をなくし、医療人の新たな活躍の場を</div></div>
+    </div>
+
+    <div class="model">
+      <div>
+        <p>「整痛院（せいつういん）」は、急性期は医療機関、<span class="em">慢性の痛みは整痛院</span>という役割分担で、痛みの“第一選択”を目指す新しい医療モデル。腰痛特化型の検査で根本原因を突き止め、エビデンスの高い<span class="em">運動療法・認知行動療法</span>で改善へ導く。施術するのは国家資格を持つ理学療法士・作業療法士。2025年6月に銀座で開院し、1年以上連日予約で埋まる。2027年には整形外科と融合した「総合疼痛医療」へ踏み出す。</p>
+        <div class="vs">
+          <div class="h"></div><div class="h">これまで</div><div class="h me">整痛院ふっか</div>
+          <div class="h">治療</div><div>薬・注射・手術中心の対処療法</div><div class="me">根本原因への運動療法・認知行動療法</div>
+          <div class="h">担い手</div><div>医師一強／技術は属人的</div><div class="me">PT・OTが専門性を発揮、研修で再現性を担保</div>
+          <div class="h">目標</div><div>痛みを“抑える”</div><div class="me">痛みに強い体と、健康寿命の延伸</div>
+        </div>
+      </div>
+      <img src="img/treatment.jpg" alt="整痛院ふっか銀座での施術の様子">
+    </div>
+  </div>
+
+  <div style="margin-top:4.5mm">
+    <h2><span class="no">05</span>視聴者が見たいもの ── 番組としての見どころ<span class="en">WHY NOW</span></h2>
+    <div class="watch">
+      <div><b>「自分の腰痛」に<br>直結する</b><p>誰もが一度は経験する腰痛。視聴者自身や家族の悩みと地続きで、“治る道筋”を知りたい層は幅広い。</p></div>
+      <div><b>医療の常識に<br>挑む男</b><p>「腰痛は医者には治せない」と言い切る理学療法士。挑発的な主張の裏にある、科学的根拠と覚悟を描ける。</p></div>
+      <div><b>ストイックさと<br>家族の素顔</b><p>年商10億超の経営者であり、4人の子の父。現場と経営と家庭を行き来する、普通の人とは違う日常。</p></div>
+    </div>
+  </div>
+
+  <div style="margin-top:4.5mm">
+    <h2><span class="no">06</span>取材のご提案 ── ヒト・モノ・場所<span class="en">SHOOTING PLAN</span></h2>
+    <table class="plan">
+      <tr><th>ヒト</th>
+        <td><b>松田圭太</b>（主人公）／重度の慢性腰痛から回復を目指す<b>患者さん</b>／PT出身の若手スタッフ（川田大輔、内藤隆之介 ほか）／<b>妻と4人の子ども</b>／全国の治療家コミュニティの受講生</td>
+        <td class="scene">患者の初診から改善までの経過を追う。若手PTが「治す」技術を身につけ成長する姿。家族との時間に見せる父の顔。</td></tr>
+      <tr><th>モノ</th>
+        <td><b>MSMメソッド</b>（商標登録の独自治療法）／腰痛特化型検査とタブレット・骨格模型を使った説明／著書<b>『腰痛は医者には治せない』</b></td>
+        <td class="scene">「なぜ痛むのか」を患者に見せる独自の説明法。治療法を“誰でも再現できる”形に落とし込む開発の裏側。</td></tr>
+      <tr><th>場所</th>
+        <td><b>整痛院ふっか 銀座院</b>（東京都中央区銀座3-13-19）／<b>福岡本社</b>／日本最大級の治療家イベント<b>「MBJ SUMMIT」</b>／米国デンバーの<b>解剖学研修</b>／<b>開院準備中の整形外科</b></td>
+        <td class="scene">銀座の診療現場の緊張感。数百人の治療家を前に語るステージ。海外研修。新クリニック立ち上げの奔走。</td></tr>
+    </table>
+    <div class="photos">
+      <figure><img src="img/summit.jpg" alt="MBJ SUMMIT 集合写真"><figcaption>日本最大級の治療家の祭典「MBJ SUMMIT」</figcaption></figure>
+      <figure><img src="img/team.jpg" alt="整痛院ふっか銀座院スタッフ"><figcaption>整痛院ふっか 銀座院のスタッフ（理学療法士・作業療法士）</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="climax">
+    <div>
+      <div class="t">密着のクライマックス：<span>2027年、整形外科クリニック開院。</span><br>「痛みの第一選択」への第一歩を、カメラの前で。</div>
+      <p>開院準備から患者を迎える初日まで、今まさに動いている挑戦をリアルタイムで記録いただけます。撮影時期・内容は柔軟にご相談に応じます。</p>
+    </div>
+    <div class="contact">
+      <b>お問い合わせ</b><br>
+      株式会社Medical Book Group<br>
+      担当：<span class="todo">ご担当者名</span><br>
+      TEL：<span class="todo">番号</span><br>
+      Mail：<span class="todo">アドレス</span>
+    </div>
+  </div>
+
+  <div class="foot"><span>2 / 2　裏面</span><span>※数値は自社資料（2026年時点）より</span></div>
+</section>
+
+</body>
+</html>
