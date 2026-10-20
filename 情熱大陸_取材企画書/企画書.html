@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>情熱大陸 取材企画書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#C21A30; --red-d:#8E1222; --ink:#1E1E22; --sub:#55555C; --line:#E4DCDC;
+    --paper:#FFFFFF; --warm:#FBF6F3; --gold:#B8862E;
+  }
+  @page{ size:A4; margin:0; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:#888; }
+  body{ font-family:"Noto Sans JP",sans-serif; color:var(--ink); font-size:8.6pt; line-height:1.6;
+        -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .page{ width:210mm; height:297mm; background:var(--paper); margin:0 auto 8mm; position:relative; overflow:hidden;
+         padding:10mm 11mm 9mm; display:flex; flex-direction:column; gap:3.6mm; }
+  @media print{ html,body{background:none} .page{ margin:0; page-break-after:always; } }
+  .serif{ font-family:"Noto Serif JP",serif; }
+  img{ display:block; width:100%; height:100%; object-fit:cover; }
+
+  /* header */
+  .top{ display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1.2pt solid var(--ink); padding-bottom:1.6mm; }
+  .top .tag{ font-weight:700; font-size:8.4pt; letter-spacing:.08em; }
+  .top .tag b{ background:var(--red); color:#fff; padding:.4mm 2mm; margin-right:2mm; letter-spacing:.12em; }
+  .top .meta{ font-size:7.2pt; color:var(--sub); text-align:right; }
+
+  /* hero */
+  .hero{ display:grid; grid-template-columns:1fr 58mm; gap:5mm; height:92mm; }
+  .hero .copy{ display:flex; flex-direction:column; justify-content:center; }
+  .kicker{ color:var(--red); font-weight:700; font-size:9pt; letter-spacing:.06em; }
+  .catch{ font-size:27pt; line-height:1.28; font-weight:900; margin:2mm 0 3mm; letter-spacing:-.01em; }
+  .catch em{ font-style:normal; color:var(--red); }
+  .lead{ font-size:9.4pt; line-height:1.75; font-weight:500; }
+  .name{ margin-top:4mm; display:flex; align-items:baseline; gap:3mm; border-left:3pt solid var(--red); padding-left:3mm; }
+  .name .n{ font-size:17pt; font-weight:900; letter-spacing:.12em; }
+  .name .r{ font-size:7.4pt; color:var(--sub); line-height:1.5; }
+  .hero .photo{ position:relative; background:var(--warm); }
+  .hero .photo img{ object-position:50% 20%; }
+  .hero .photo .cap{ position:absolute; left:0; bottom:0; background:var(--red); color:#fff; font-size:7pt; padding:1mm 2.4mm; font-weight:700; }
+
+  /* stats */
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); background:var(--ink); color:#fff; }
+  .stat{ padding:2.6mm 3mm 2.2mm; border-right:.6pt solid #44444a; }
+  .stat:last-child{ border-right:0; }
+  .stat .v{ font-size:19pt; font-weight:900; line-height:1.1; letter-spacing:-.01em; }
+  .stat .v small{ font-size:9pt; font-weight:700; margin-left:.4mm; }
+  .stat .l{ font-size:7pt; color:#D6D6DA; margin-top:.8mm; line-height:1.35; }
+
+  /* section heads */
+  h2{ display:flex; align-items:center; gap:2mm; font-size:11.4pt; font-weight:900; letter-spacing:.04em; margin-bottom:1.8mm; }
+  h2 .no{ font-family:"Noto Serif JP",serif; color:#fff; background:var(--red); font-size:8pt; padding:.3mm 1.8mm; letter-spacing:.1em; }
+  h2 .en{ font-size:7pt; color:var(--red); font-weight:700; letter-spacing:.14em; margin-left:auto; }
+
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:5mm; }
+  ul.dots{ list-style:none; }
+  ul.dots li{ position:relative; padding-left:3.4mm; margin-bottom:1mm; }
+  ul.dots li::before{ content:""; position:absolute; left:0; top:2mm; width:1.6mm; height:1.6mm; background:var(--red); }
+  ul.dots li b{ color:var(--red-d); }
+  p + p{ margin-top:1.4mm; }
+  .quote{ margin-top:2.2mm; background:var(--warm); border-left:3pt solid var(--red); padding:2.2mm 3mm; font-family:"Noto Serif JP",serif; font-weight:700; font-size:8.8pt; line-height:1.7; }
+  .quote .by{ display:block; text-align:right; font-family:"Noto Sans JP",sans-serif; font-weight:500; font-size:6.8pt; color:var(--sub); margin-top:.6mm; }
+
+  /* timeline */
+  .tl{ display:grid; grid-template-columns:repeat(8,1fr); position:relative; margin-top:1mm; }
+  .tl::before{ content:""; position:absolute; left:0; right:0; top:6.4mm; height:1.2pt; background:var(--red); }
+  .tl .y{ font-family:"Noto Serif JP",serif; font-weight:900; font-size:10pt; color:var(--red); }
+  .tl .dot{ width:2.6mm; height:2.6mm; border-radius:50%; background:#fff; border:1.4pt solid var(--red); margin:.6mm 0 1.4mm; position:relative; z-index:1; }
+  .tl .ev{ font-size:7.1pt; line-height:1.45; padding-right:1.6mm; }
+  .tl .ev b{ display:block; font-size:7.5pt; }
+  .tl .future .y{ color:var(--gold); }
+  .tl .future .dot{ border-color:var(--gold); background:var(--gold); }
+
+  .strip{ display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:2mm; flex:1; min-height:0; }
+  .strip figure{ position:relative; overflow:hidden; }
+  .strip figcaption, .ph figcaption{ position:absolute; left:0; bottom:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.72)); color:#fff; font-size:6.8pt; font-weight:700; padding:4mm 2mm 1.2mm; }
+
+  /* page 2 */
+  .p2head{ display:grid; grid-template-columns:1fr auto; align-items:end; gap:4mm; }
+  .p2head .catch{ font-size:19pt; margin:1mm 0 0; }
+  .flow{ display:grid; grid-template-columns:1fr 5mm 1.15fr 5mm 1fr; align-items:stretch; }
+  .box{ border:1pt solid var(--line); padding:2.4mm 2.8mm; background:#fff; }
+  .box h3{ font-size:9pt; font-weight:900; margin-bottom:1.2mm; display:flex; gap:1.6mm; align-items:center; }
+  .box h3 span{ white-space:nowrap; font-size:6.6pt; font-weight:700; color:#fff; background:var(--sub); padding:.2mm 1.4mm; letter-spacing:.08em; }
+  .box.new{ border:1.4pt solid var(--red); background:#FFF8F8; }
+  .box.new h3 span{ background:var(--red); }
+  .box.goal h3 span{ background:var(--gold); }
+  .box p, .box li{ font-size:7.6pt; line-height:1.55; }
+  .arrow{ display:flex; align-items:center; justify-content:center; color:var(--red); font-size:11pt; font-weight:900; }
+  .model{ display:grid; grid-template-columns:1fr 1fr; gap:1.4mm; margin:1.4mm 0; }
+  .model div{ text-align:center; font-size:7.2pt; padding:1.2mm .6mm; background:#fff; border:.8pt solid var(--line); line-height:1.35; }
+  .model div b{ display:block; font-size:8.4pt; }
+  .model .hl{ border-color:var(--red); color:var(--red-d); }
+  .ev-tag{ display:inline-block; font-size:6.8pt; font-weight:700; border:.8pt solid var(--red); color:var(--red-d); padding:0 1.2mm; margin:.4mm .6mm 0 0; background:#fff; }
+  .gap{ display:flex; gap:2mm; margin:1.2mm 0; }
+  .gap div{ flex:1; text-align:center; background:var(--ink); color:#fff; padding:1.2mm 0; font-size:6.8pt; }
+  .gap div b{ display:block; font-size:13pt; font-weight:900; line-height:1.15; }
+
+  .shoot{ display:grid; grid-template-columns:repeat(3,1fr); gap:2.4mm; }
+  .card{ border:1pt solid var(--line); display:flex; flex-direction:column; }
+  .card .ph{ height:20mm; position:relative; overflow:hidden; background:var(--warm); }
+  .card .bd{ padding:1.8mm 2.4mm 2mm; }
+  .card .k{ font-size:6.6pt; font-weight:700; color:var(--red); letter-spacing:.1em; }
+  .card h4{ font-size:8.8pt; font-weight:900; line-height:1.35; margin:.3mm 0 .8mm; }
+  .card p{ font-size:7.2pt; line-height:1.5; color:#333; }
+  .hmp{ display:grid; grid-template-columns:auto 1fr; gap:.6mm 2.4mm; font-size:7.6pt; line-height:1.5; margin-top:2mm; }
+  .hmp dt{ font-weight:900; color:#fff; background:var(--red); text-align:center; padding:0 2mm; height:fit-content; font-size:7.2pt; }
+
+  .why{ display:grid; grid-template-columns:repeat(4,1fr); gap:2.4mm; }
+  .why div{ background:var(--warm); padding:2.2mm 2.6mm; border-top:2pt solid var(--red); }
+  .why b{ display:block; font-size:8.6pt; font-weight:900; line-height:1.35; margin-bottom:.8mm; }
+  .why span{ font-size:7.1pt; line-height:1.5; display:block; }
+
+  .story{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1pt solid var(--line); }
+  .story div{ padding:2.2mm 2.6mm; border-right:1pt solid var(--line); position:relative; }
+  .story div:last-child{ border-right:0; }
+  .story i{ font-style:normal; font-family:"Noto Serif JP",serif; font-weight:900; color:#fff; background:var(--red); display:inline-block; width:5.4mm; height:5.4mm; line-height:5.4mm; text-align:center; font-size:8.6pt; margin-bottom:1mm; }
+  .story b{ display:block; font-size:8.4pt; font-weight:900; line-height:1.35; margin-bottom:.6mm; }
+  .story span{ font-size:7.1pt; line-height:1.5; display:block; }
+  .close{ margin-top:auto; display:grid; grid-template-columns:1fr 66mm; gap:4mm; align-items:stretch; }
+  .close .msg{ background:var(--ink); color:#fff; padding:3mm 4mm; font-family:"Noto Serif JP",serif; font-weight:700; font-size:9.4pt; line-height:1.7; display:flex; flex-direction:column; justify-content:center; }
+  .close .msg small{ font-family:"Noto Sans JP",sans-serif; font-weight:400; font-size:6.8pt; color:#C9C9CF; margin-top:1mm; }
+  .contact{ border:1pt solid var(--ink); padding:2.4mm 3mm; font-size:7.3pt; line-height:1.6; }
+  .contact b{ font-size:8pt; }
+  .note{ font-size:6.2pt; color:#8a8a90; line-height:1.4; }
+</style>
+</head>
+<body>
+
+<!-- ============ 表面 ============ -->
+<section class="page">
+  <div class="top">
+    <div class="tag"><b>取材のご提案</b>MBS／TBS系「情熱大陸」ご担当者様</div>
+    <div class="meta">2026年10月<br>株式会社Medical Book Group</div>
+  </div>
+
+  <div class="hero">
+    <div class="copy">
+      <div class="kicker">日本人の「国民病」腰痛に、たった一人の理学療法士が挑む。</div>
+      <h1 class="catch serif">「腰痛は、<br><em>医者には治せない。</em>」</h1>
+      <p class="lead">
+        薬と手術が中心の“痛み治療”に、科学的根拠のある新しい選択肢を。<br>
+        病院で患者と向き合い続けた理学療法士が、自ら整体院を立ち上げ、<br>
+        いま医師と組んだ<b>新しい医療モデル</b>で「痛みの第一選択」をつくろうとしている。
+      </p>
+      <div class="name">
+        <span class="n serif">松田 圭太</span>
+        <span class="r">まつだ・けいた／39歳　理学療法士<br>株式会社Medical Book Group 代表取締役／整痛院ふっか 総院長</span>
+      </div>
+    </div>
+    <div class="photo">
+      <img src="img/matsuda.jpg" alt="松田圭太">
+      <div class="cap">宮崎県出身・福岡在住／4児の父</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v">3万<small>人超</small></div><div class="l">医療現場から整体院まで<br>自ら治療してきた患者数</div></div>
+    <div class="stat"><div class="v">23万<small>人超</small></div><div class="l">YouTube・Instagram<br>SNS総登録者数</div></div>
+    <div class="stat"><div class="v">4,000<small>人超</small></div><div class="l">学長を務める日本最大級の<br>治療家コミュニティ</div></div>
+    <div class="stat"><div class="v">11.7<small>億円</small></div><div class="l">創業5期のグループ年商<br>社員13人で達成</div></div>
+  </div>
+
+  <div class="two">
+    <div>
+      <h2><span class="no">01</span>こんな人です<span class="en">WHO</span></h2>
+      <ul class="dots">
+        <li>独自の腰痛治療法<b>「MSMメソッド」</b>の創始者（商標登録済）。全国で<b>2,500名以上</b>の治療家が受講</li>
+        <li><b>大阪・関西万博</b>でゲストスピーカー登壇（2025）</li>
+        <li><b>東久邇宮文化褒賞</b>を受賞（2025）</li>
+        <li><b>世界経済フォーラム</b>、国連後援の国際サミット（インド）に登壇（2026）</li>
+        <li>初の著書<b>『腰痛は医者には治せない』（小学館）</b>を出版（2026）</li>
+        <li>自身も今なお<b>年2回の海外解剖実習</b>など技術に投資し続ける。合言葉は「圧倒的自責」</li>
+      </ul>
+    </div>
+    <div>
+      <h2><span class="no">02</span>なぜ、やっているのか<span class="en">WHY</span></h2>
+      <p>病院の理学療法士として7年間、臨床の最前線へ。そこで見たのは、<b>医師一強の現場と、薬・手術による“対処療法”の限界</b>だった。痛みを抱えた人が「どこに行けばいいかわからない」まま、根本から良くならない。</p>
+      <p>一方、世界を旅する中で知った<b>日本の医療の誠実さとホスピタリティ</b>。「Made in Japanの“安心・安全”な医療で、世界と戦える会社をつくる」──それが原点にある。</p>
+      <div class="quote">「一部の天才にしかできない治療技術には、医療を変えるパワーはない。」<span class="by">── 松田圭太</span></div>
+    </div>
+  </div>
+
+  <div>
+    <h2><span class="no">03</span>生い立ちと歩み<span class="en">HISTORY</span></h2>
+    <div class="tl">
+      <div><div class="y">1987</div><div class="dot"></div><div class="ev"><b>宮崎県に生まれる</b></div></div>
+      <div><div class="y">2009</div><div class="dot"></div><div class="ev"><b>理学療法士に</b>病院で7年間、臨床に携わる</div></div>
+      <div><div class="y">2016</div><div class="dot"></div><div class="ev"><b>自費で独立</b>慢性腰痛専門「整体院 福佳」開院</div></div>
+      <div><div class="y">2021</div><div class="dot"></div><div class="ev"><b>教育事業を起業</b>治療家を育てるメディカルブックジャパン設立</div></div>
+      <div><div class="y">2023</div><div class="dot"></div><div class="ev"><b>（株）ふっか設立</b>北海道〜福岡へ店舗展開</div></div>
+      <div><div class="y">2025</div><div class="dot"></div><div class="ev"><b>銀座「整痛院」開院</b>大阪万博に登壇</div></div>
+      <div><div class="y">2026</div><div class="dot"></div><div class="ev"><b>世界の舞台へ</b>国際会議登壇・初著書出版</div></div>
+      <div class="future"><div class="y">2027</div><div class="dot"></div><div class="ev"><b>整形外科を開院予定</b>医療×整体の新モデルへ</div></div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <figure><img src="img/seminar.jpg" alt=""><figcaption>数百人の治療家を前に、技術を惜しみなく伝える</figcaption></figure>
+    <figure><img src="img/tablet.jpg" alt="" style="object-position:30% 40%"><figcaption>画像と解剖学で「痛みの原因」を説明する</figcaption></figure>
+    <figure><img src="img/summit.jpg" alt=""><figcaption>日本最大級の治療家の祭典「MBJ SUMMIT」</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 裏面 ============ -->
+<section class="page">
+  <div class="top">
+    <div class="tag"><b>取材のご提案</b>「情熱大陸」松田圭太 編</div>
+    <div class="meta">株式会社Medical Book Group</div>
+  </div>
+
+  <div class="p2head">
+    <div>
+      <div class="kicker">何をやろうとしているのか</div>
+      <h1 class="catch serif">痛みに悩むすべての人の<br>「<em>ここに行けば大丈夫</em>」をつくる。</h1>
+    </div>
+  </div>
+
+  <div>
+    <h2><span class="no">04</span>腰痛 → 新しい治療 → 健康寿命・社会貢献<span class="en">VISION</span></h2>
+    <div class="flow">
+      <div class="box">
+        <h3><span>いまの課題</span>痛み医療の“すき間”</h3>
+        <ul class="dots">
+          <li>痛みの第一選択は病院。しかし<b>薬・手術の対処療法</b>が中心</li>
+          <li>手術・薬物療法は慢性痛に対する<b>エビデンスが限定的</b></li>
+          <li>整形外科領域だけで<b>約3兆円</b>の市場に、根本治療の受け皿がない</li>
+        </ul>
+      </div>
+      <div class="arrow">▶</div>
+      <div class="box new">
+        <h3><span>新しいモデル</span>科学的根拠のある「整痛院」</h3>
+        <div class="model">
+          <div><b>急性の痛み</b>医療機関（整形外科）</div>
+          <div class="hl"><b>慢性の痛み</b>整痛院（運動療法×MSM）</div>
+        </div>
+        <p>国の『慢性疼痛診療ガイドライン』で推奨度の高い療法を軸に、徒手療法を組み合わせる。</p>
+        <div><span class="ev-tag">運動療法 推奨度1-B</span><span class="ev-tag">認知行動療法 推奨度2-B</span><span class="ev-tag">MSMメソッド</span></div>
+      </div>
+      <div class="arrow">▶</div>
+      <div class="box goal">
+        <h3><span>目指す先</span>健康寿命と日本復興</h3>
+        <p>平均寿命と健康寿命の差＝<b>誰かの介護が必要な期間</b></p>
+        <div class="gap"><div>男性<b>8.8年</b></div><div>女性<b>12.1年</b></div></div>
+        <p>この差を縮めることは、高齢化が進む世界共通の課題。<b>10年で年商300億、30年で世界の疼痛治療リーディングカンパニー</b>へ。</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2><span class="no">05</span>取材していただきたい「ヒト・モノ・場所」<span class="en">SCENES</span></h2>
+    <div class="shoot">
+      <div class="card">
+        <div class="ph"><img src="img/ginza.jpg" alt=""></div>
+        <div class="bd"><div class="k">場所 ① 東京・銀座</div><h4>「整痛院」の施術現場</h4><p>手術を勧められた重度の腰痛患者が、自分の足で歩き出す瞬間。医療と整体の“あいだ”の現場。</p></div>
+      </div>
+      <div class="card">
+        <div class="ph"><img src="img/seminar.jpg" alt="" style="object-position:50% 70%"></div>
+        <div class="bd"><div class="k">場所 ② 全国のセミナー会場</div><h4>治療家たちの祭典「MBJ SUMMIT」</h4><p>4,000人の治療家コミュニティを率いる学長の顔。技術を独占せず「誰でも結果が出る」形で手渡す。</p></div>
+      </div>
+      <div class="card">
+        <div class="ph"><img src="img/team.jpg" alt=""></div>
+        <div class="bd"><div class="k">ヒト ③ 共に挑む仲間</div><h4>整形外科クリニックの立ち上げへ</h4><p>2027年開院予定。医師と整体が手を組む前例のない挑戦と、理学療法士の仲間たちとの日々。</p></div>
+      </div>
+    </div>
+    <dl class="hmp">
+      <dt>ヒト</dt><dd>松田本人／痛みから回復していく患者さん／共に働く理学療法士・作業療法士／全国で学ぶ治療家たち／福岡で暮らす家族（4人の子の父としての素顔）</dd>
+      <dt>モノ</dt><dd>MSMメソッドの施術／著書『腰痛は医者には治せない』／自社開発テキスト『疼痛治療ハンドブック』／米国での解剖学実習</dd>
+      <dt>場所</dt><dd>銀座・整痛院、東京・福岡の両オフィス、全国の店舗（北海道・千葉・東京・静岡・福岡）、海外の国際会議・研修の場、故郷・宮崎</dd>
+    </dl>
+  </div>
+
+  <div>
+    <h2><span class="no">06</span>視聴者が見たくなる理由<span class="en">WHY NOW</span></h2>
+    <div class="why">
+      <div><b>誰もが“自分ごと”</b><span>腰痛は日本人が最も多く訴える症状のひとつ。視聴者自身、家族の悩みに直結するテーマ。</span></div>
+      <div><b>常識への挑戦</b><span>「医者には治せない」──賛否を呼ぶ強い言葉の裏に、科学的根拠と真摯な臨床がある。</span></div>
+      <div><b>ストイックな生き方</b><span>「お金がないと夢は語れない」。創業5年で年商10億超、それでも学び続け現場に立つ。</span></div>
+      <div><b>社会を変える物語</b><span>地方出身の一人の理学療法士が、健康寿命という国家課題に挑み、世界へ。</span></div>
+    </div>
+  </div>
+
+  <div>
+    <h2><span class="no">07</span>番組構成イメージ<span class="en">STORY</span></h2>
+    <div class="story">
+      <div><i>起</i><b>痛みに悩む人の“最後の砦”</b><span>朝の銀座・整痛院。手術を迷う患者が全国から訪れる。松田の真剣なまなざし。</span></div>
+      <div><i>承</i><b>原点──「治せない」現実</b><span>宮崎で育ち、病院の理学療法士として見た対処療法の限界。自費で独立した決断。</span></div>
+      <div><i>転</i><b>医師と組む、前例なき挑戦</b><span>2027年の整形外科開院へ。業界の常識、資金、人材──立ちはだかる壁。</span></div>
+      <div><i>結</i><b>世界へ、そして家族へ</b><span>国際会議の壇上と、福岡で4人の子と過ごす素顔。「痛みの第一選択」の先にある未来。</span></div>
+    </div>
+  </div>
+
+  <div class="close">
+    <div class="msg">
+      「痛みの第一選択」になることで、もっと救える命があること、<br>世界に通用する力があることを証明したい。
+      <small>── 松田圭太（会社紹介資料「最後に」より）</small>
+    </div>
+    <div class="contact">
+      <b>お問い合わせ</b><br>
+      株式会社Medical Book Group 広報担当：〇〇〇〇<br>
+      TEL：〇〇-〇〇〇〇-〇〇〇〇<br>
+      MAIL：〇〇〇〇@〇〇〇〇.jp<br>
+      <span class="note">※撮影場所・日程は柔軟に調整いたします。詳細資料・映像素材もご用意可能です。</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
