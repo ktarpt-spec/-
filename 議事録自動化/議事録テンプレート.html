@@ -1,0 +1,90 @@
+<!--
+  Plaud議事録テンプレート（Googleドキュメント変換用HTML）
+  - このHTMLを text/html で Google ドライブにアップロードすると、Google ドキュメントに自動変換されます。
+  - {{ }} の部分を置き換え、議題ブロック（AGENDA ITEM）は議題の数だけ繰り返します。
+  - Google ドキュメントへの変換で崩れないよう、CSSはインラインstyleのみ、図は表で描きます。
+-->
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Noto Sans JP', Arial, sans-serif; font-size: 11pt; color: #222;">
+
+<h1 style="color:#1a3d6d;">{{ミーティング名}} 議事録</h1>
+
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
+  <tr><td style="background:#e8eef7; width:22%;"><b>◆ 日時</b></td><td>{{YYYY年M月D日(曜) HH:MM〜HH:MM}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ 参加者</b></td><td>{{氏名（所属・役割）, ...}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ 目的</b></td><td>{{なぜこの会議を開いたか}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ ゴール</b></td><td>{{会議の終わりに何が決まっている／できている状態か}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ ゴール達成度</b></td><td>{{○ 達成 / △ 一部達成 / × 未達}} ― {{一言で理由}}</td></tr>
+</table>
+
+<h2 style="color:#1a3d6d;">■ 全体サマリー（3行で）</h2>
+<ul>
+  <li>{{要点1}}</li>
+  <li>{{要点2}}</li>
+  <li>{{要点3}}</li>
+</ul>
+
+<h2 style="color:#1a3d6d;">✅ 決定事項・アクション一覧</h2>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
+  <tr style="background:#1a3d6d; color:#ffffff;">
+    <td><b>#</b></td><td><b>議題</b></td><td><b>決定事項／アクション</b></td><td><b>責任者</b></td><td><b>デッドライン</b></td><td><b>状態</b></td>
+  </tr>
+  <tr><td>1</td><td>{{議題名}}</td><td>{{内容}}</td><td>{{氏名}}</td><td>{{YYYY/MM/DD}}</td><td>{{□ 未着手}}</td></tr>
+</table>
+
+<!-- ===== AGENDA ITEM（議題の数だけ繰り返す） ===== -->
+<h2 style="color:#1a3d6d;">議題{{n}}：{{議題名}}</h2>
+
+<table border="1" cellpadding="8" style="border-collapse:collapse; width:100%;">
+  <tr><td style="background:#fff6d6;"><b>★ 要約</b><br>{{2〜3文で、何が話され何が決まったかを一目でわかるように}}</td></tr>
+</table>
+
+<h3>詳細</h3>
+<ul>
+  <li><b>背景・現状：</b>{{}}</li>
+  <li><b>議論のポイント：</b>{{誰がどんな意見を出したか。賛否・懸念も}}</li>
+  <li><b>結論：</b>{{決まったこと／保留になったこと}}</li>
+</ul>
+
+<!-- 必要なときだけ入れる：比較表 -->
+<h3>比較表</h3>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
+  <tr style="background:#e8eef7;"><td><b>観点</b></td><td><b>案A</b></td><td><b>案B</b></td></tr>
+  <tr><td>{{コスト}}</td><td>{{}}</td><td>{{}}</td></tr>
+</table>
+
+<!-- 必要なときだけ入れる：流れ図（表で描く） -->
+<h3>流れ図</h3>
+<table cellpadding="8" style="border-collapse:collapse;">
+  <tr>
+    <td style="border:2px solid #1a3d6d; background:#e8eef7; text-align:center;">{{ステップ1}}</td>
+    <td style="text-align:center; font-size:16pt;">➡</td>
+    <td style="border:2px solid #1a3d6d; background:#e8eef7; text-align:center;">{{ステップ2}}</td>
+    <td style="text-align:center; font-size:16pt;">➡</td>
+    <td style="border:2px solid #1a3d6d; background:#d9f2e3; text-align:center;">{{ゴール}}</td>
+  </tr>
+</table>
+
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
+  <tr><td style="background:#e8eef7; width:22%;"><b>● 責任者</b></td><td>{{氏名}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>⏰ デッドライン</b></td><td>{{YYYY/MM/DD（未定なら「未定：次回会議で決定」）}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>➡ 次のアクション候補</b></td><td>{{・具体的な作業1<br>・具体的な作業2}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>⚠ 懸念・リスク</b></td><td>{{}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>❓ 未決事項</b></td><td>{{}}</td></tr>
+</table>
+<!-- ===== /AGENDA ITEM ===== -->
+
+<h2 style="color:#1a3d6d;">■ 次回ミーティング</h2>
+<ul>
+  <li><b>日時：</b>{{未定なら「未定」}}</li>
+  <li><b>確認事項：</b>{{}}</li>
+</ul>
+
+<hr>
+<p style="font-size:9pt; color:#888;">
+  自動生成：Plaudの文字起こしからClaudeが作成。内容は必ず確認してください。<br>
+  元データ：{{元ファイル名}}（{{元ファイルのURL}}）／推定・補完した項目には「（推定）」と記載
+</p>
+</body>
+</html>
