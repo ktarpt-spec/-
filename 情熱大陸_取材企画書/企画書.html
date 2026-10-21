@@ -63,6 +63,11 @@
   ul.dots li::before{ content:""; position:absolute; left:0; top:2mm; width:1.6mm; height:1.6mm; background:var(--red); }
   ul.dots li b{ color:var(--red-d); }
   p + p{ margin-top:1.4mm; }
+  .fall{ display:flex; flex-direction:column; gap:.8mm; margin-bottom:1.6mm; }
+  .fall .f1{ background:#F2F2F3; padding:1.4mm 2.4mm; font-size:7.5pt; line-height:1.5; border-left:3pt solid var(--ink); }
+  .fall .f1 b{ display:block; font-size:8.6pt; font-weight:900; }
+  .fall .fl{ float:right; font-size:6.2pt; font-weight:900; color:#fff; background:var(--ink); padding:0 1.6mm; letter-spacing:.1em; }
+  .fall .f2{ font-size:8pt; font-weight:900; color:var(--red); padding-left:2.4mm; }
   .quote{ margin-top:2.2mm; background:var(--warm); border-left:3pt solid var(--red); padding:2.2mm 3mm; font-family:"Noto Serif JP",serif; font-weight:700; font-size:8.8pt; line-height:1.7; }
   .quote .by{ display:block; text-align:right; font-family:"Noto Sans JP",sans-serif; font-weight:500; font-size:6.8pt; color:var(--sub); margin-top:.6mm; }
 
@@ -217,10 +222,14 @@
       </ul>
     </div>
     <div>
-      <h2><span class="no">02</span>なぜ、やっているのか<span class="en">WHY</span></h2>
-      <p>病院の理学療法士として7年間、臨床の最前線へ。そこで見たのは、<b>手術や薬に頼る“対処療法”の限界</b>だった。世界では運動療法が標準なのに、日本の病院ではほとんど受けられない。痛みを抱えた人が「どこに行けばいいかわからない」まま、根本から良くならない。</p>
-      <p>一方、世界を旅する中で知った<b>日本の医療の誠実さとホスピタリティ</b>。「Made in Japanの“安心・安全”な医療で、世界と戦える会社をつくる」──それが原点にある。</p>
-      <div class="quote">「一部の天才にしかできない治療技術には、医療を変えるパワーはない。」<span class="by">── 松田圭太</span></div>
+      <h2><span class="no">02</span>挫折から生まれた原点<span class="en">WHY</span></h2>
+      <div class="fall">
+        <div class="f1"><span class="fl">挫折 1</span><b>教科書どおりでは、全く治せなかった</b>入職1年目。学校で学んだとおりに施術しても、目の前の患者さんの痛みは全く変わらない。</div>
+        <div class="f2">→ 悔しさを糧に、解剖学から徹底的に学び直した</div>
+        <div class="f1"><span class="fl">挫折 2</span><b>入職半年で、31人の患者さんが亡くなった</b>何もできない無力感。医療者としての自分を見失いかけた。</div>
+        <div class="f2">→ 「一人でも多く救える治療家になる」と誓った</div>
+      </div>
+      <p>その後7年間の臨床で見たのは、<b>手術や薬に頼る“対処療法”の限界</b>。世界では運動療法が標準なのに、日本の病院ではほとんど受けられない──この現実を変えるため、自ら道を切り拓いた。</p>
     </div>
   </div>
 
@@ -228,7 +237,7 @@
     <h2><span class="no">03</span>生い立ちと歩み<span class="en">HISTORY</span></h2>
     <div class="tl">
       <div><div class="y">1987</div><div class="dot"></div><div class="ev"><b>宮崎県に生まれる</b></div></div>
-      <div><div class="y">2009</div><div class="dot"></div><div class="ev"><b>理学療法士に</b>病院で7年間、臨床に携わる</div></div>
+      <div><div class="y">2009</div><div class="dot"></div><div class="ev"><b>理学療法士に</b>1年目で挫折、半年で31人の死に直面</div></div>
       <div><div class="y">2016</div><div class="dot"></div><div class="ev"><b>自費で独立</b>慢性腰痛専門「整体院 福佳」開院</div></div>
       <div><div class="y">2021</div><div class="dot"></div><div class="ev"><b>教育事業を起業</b>治療家を育てるメディカルブックジャパン設立</div></div>
       <div><div class="y">2023</div><div class="dot"></div><div class="ev"><b>（株）ふっか設立</b>北海道〜福岡へ店舗展開</div></div>
@@ -331,7 +340,7 @@
     <h2><span class="no">07</span>番組構成イメージ<span class="en">STORY</span></h2>
     <div class="story">
       <div><i>起</i><b>「その手術、本当に必要？」</b><span>手術を迷う患者が全国から。MRI画像を前にした真剣なまなざし。</span></div>
-      <div><i>承</i><b>原点──「治せない」現実</b><span>病院の理学療法士として見た対処療法の限界。自費で独立した決断。</span></div>
+      <div><i>承</i><b>原点──二つの挫折</b><span>教科書では治せなかった1年目。半年で31人を見送った無力感。そして独立へ。</span></div>
       <div><i>転</i><b>東京駅前で“体系化”に挑む</b><span>医師と組み、検査から運動療法までを一つに。立ちはだかる業界の壁。</span></div>
       <div><i>結</i><b>世界へ、そして家族へ</b><span>国際会議の壇上と、4人の子の父の素顔。「痛みの第一選択」の先へ。</span></div>
     </div>
