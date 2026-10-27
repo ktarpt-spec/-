@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定例会アンケート ダッシュボード</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f4f4f1;
+    --surface: #fcfcfb;
+    --border: #e2e1dc;
+    --grid: #ecebe7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #7a7974;
+    --accent: #2a78d6;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
+    --good: #0ca30c;
+    --new-bg: #fff4d6;
+    --new-text: #7a5200;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121211;
+      --surface: #1a1a19;
+      --border: #2e2e2b;
+      --grid: #272725;
+      --text-primary: #f0efec;
+      --text-secondary: #c3c2b7;
+      --text-muted: #8f8e86;
+      --accent: #3987e5;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --seq-1: #1e2c3e; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #6da7ec;
+      --new-bg: #3a2e10;
+      --new-text: #f5cf73;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121211;
+    --surface: #1a1a19;
+    --border: #2e2e2b;
+    --grid: #272725;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8f8e86;
+    --accent: #3987e5;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --seq-1: #1e2c3e; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #6da7ec;
+    --new-bg: #3a2e10;
+    --new-text: #f5cf73;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text-primary);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    font-size: 14px; line-height: 1.6;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 20px 16px 48px; }
+  header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: .02em; }
+  .sub { color: var(--text-secondary); font-size: 13px; }
+  .live { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; margin-right: 6px; animation: pulse 2s infinite; }
+  .dot.off { background: var(--text-muted); animation: none; }
+  .dot.err { background: #d03b3b; animation: none; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(12,163,12,.5)} 70%{box-shadow:0 0 0 7px rgba(12,163,12,0)} 100%{box-shadow:0 0 0 0 rgba(12,163,12,0)} }
+  button, select, input[type=search] {
+    font: inherit; color: var(--text-primary); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px;
+  }
+  button { cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  .banner { background: var(--new-bg); color: var(--new-text); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; }
+  .banner.hidden { display: none; }
+  nav.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin: 8px 0 18px; overflow-x: auto; }
+  nav.tabs button { border: none; background: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 8px 14px; color: var(--text-secondary); white-space: nowrap; }
+  nav.tabs button.active { color: var(--text-primary); border-bottom-color: var(--accent); font-weight: 600; }
+  .panel.hidden { display: none; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .kpi .label { color: var(--text-secondary); font-size: 12px; }
+  .kpi .value { font-size: 30px; font-weight: 700; line-height: 1.2; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .kpi .value small { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-left: 2px; }
+  .kpi .note { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
+  .card h3 { font-size: 14px; margin: 0 0 2px; }
+  .card .q { color: var(--text-secondary); font-size: 12px; margin-bottom: 10px; }
+  .card .meta { color: var(--text-secondary); font-size: 12px; margin-bottom: 8px; }
+  .card .meta b { color: var(--text-primary); font-size: 16px; }
+  .chart-box { position: relative; height: 220px; }
+  .chart-box.tall { height: 260px; }
+  .wide { grid-column: 1 / -1; }
+  .section-title { font-size: 16px; margin: 26px 0 10px; }
+  .heat { border-collapse: separate; border-spacing: 2px; width: 100%; font-size: 12px; }
+  .heat th { font-weight: 500; color: var(--text-secondary); padding: 4px; text-align: center; }
+  .heat th.row { text-align: right; white-space: nowrap; }
+  .heat td { text-align: center; padding: 8px 4px; border-radius: 4px; font-variant-numeric: tabular-nums; }
+  .texts { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }
+  .texts li { border-top: 1px solid var(--grid); padding: 8px 2px; white-space: pre-wrap; word-break: break-word; }
+  .texts li:first-child { border-top: none; }
+  .texts .when { color: var(--text-muted); font-size: 11px; display: block; }
+  .badge { display: inline-block; background: var(--new-bg); color: var(--new-text); font-size: 10px; font-weight: 700; padding: 0 6px; border-radius: 4px; margin-left: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .chip { border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; font-size: 12px; color: var(--text-secondary); }
+  .chip b { color: var(--text-primary); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .toolbar input[type=search] { flex: 1 1 220px; }
+  .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+  table.all { border-collapse: collapse; width: 100%; font-size: 13px; }
+  table.all th, table.all td { border-bottom: 1px solid var(--grid); padding: 8px 10px; text-align: left; vertical-align: top; }
+  table.all th { position: sticky; top: 0; background: var(--surface); color: var(--text-secondary); font-weight: 600; font-size: 12px; white-space: nowrap; }
+  table.all td.txt { min-width: 220px; max-width: 360px; white-space: pre-wrap; word-break: break-word; }
+  table.all td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.all tr.new td { background: var(--new-bg); }
+  .score { display: inline-block; min-width: 22px; text-align: center; border-radius: 4px; padding: 0 4px; font-weight: 700; margin-left: 4px; font-size: 12px; }
+  .empty { color: var(--text-muted); padding: 24px 0; text-align: center; }
+  .toast { position: fixed; right: 16px; bottom: 16px; background: var(--text-primary); color: var(--surface); padding: 10px 16px; border-radius: 10px; font-size: 13px; opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: none; }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+    .kpi .value { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1 id="title">定例会アンケート</h1>
+      <div class="sub">回答が送信されると自動で反映されます</div>
+    </div>
+    <div class="live">
+      <span><span id="dot" class="dot off"></span><span id="status">接続中…</span></span>
+      <label>更新間隔
+        <select id="interval">
+          <option value="5">5秒</option>
+          <option value="10" selected>10秒</option>
+          <option value="30">30秒</option>
+          <option value="60">60秒</option>
+        </select>
+      </label>
+      <button id="refresh" type="button">今すぐ更新</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner hidden"></div>
+
+  <nav class="tabs" role="tablist">
+    <button class="active" data-tab="summary" role="tab">分析サマリー</button>
+    <button data-tab="texts" role="tab">自由記述</button>
+    <button data-tab="table" role="tab">全回答一覧</button>
+  </nav>
+
+  <section id="panel-summary" class="panel">
+    <div id="kpis" class="kpis"></div>
+    <div id="charts" class="grid"></div>
+    <h2 class="section-title">回答の推移・クロス分析</h2>
+    <div class="grid">
+      <div class="card"><h3>回答数の推移（累計）</h3><div class="q">回答が届いた時刻ごとの累計件数</div><div class="chart-box"><canvas id="timeline"></canvas></div></div>
+      <div class="card" id="cross-card"><h3 id="cross-title">クロス集計</h3><div class="q" id="cross-q"></div><div id="cross"></div></div>
+    </div>
+  </section>
+
+  <section id="panel-texts" class="panel hidden">
+    <div id="text-cards" class="grid"></div>
+  </section>
+
+  <section id="panel-table" class="panel hidden">
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="キーワードで絞り込み（例：進行、テーマ）">
+      <button id="csv" type="button">CSVダウンロード</button>
+      <span class="sub" id="table-count"></span>
+    </div>
+    <div class="table-wrap"><table class="all" id="all"></table></div>
+  </section>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ===== 設定 =====
+  // 設問の見出し（短い名前）。設問文にキーワードが含まれていれば置き換えます。
+  var SHORT_NAMES = [
+    ['満足度', '満足度'],
+    ['活かせ', '活用度'],
+    ['時間や進行', '時間・進行'],
+    ['良かった', '良かった・参考になった内容'],
+    ['テーマ', '次回取り上げてほしいテーマ'],
+    ['LaLa', 'LaLa 参加意向'],
+    ['フォーラム', 'フォーラム 参加意向'],
+    ['ご意見', 'ご意見・ご要望']
+  ];
+  var STOPWORDS = ['今回', '定例会', '内容', '自分', '部分', '特', '次回', '以降', '是非', 'ぜひ', '本当', '非常', '今後', '感想', '機会', '大変', '方々', '皆様', '皆さん'];
+
+  var params = new URLSearchParams(location.search);
+  var API_URL = params.get('api') || '';
+  var IN_GAS = typeof google !== 'undefined' && google.script && google.script.run;
+  var DEMO = !IN_GAS && !API_URL;
+
+  var state = { data: null, sig: '', seen: null, newIds: {}, timer: null, charts: {}, tab: 'summary' };
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ===== データ取得 =====
+  function fetchData() {
+    return new Promise(function (resolve, reject) {
+      if (IN_GAS) {
+        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getData();
+      } else if (API_URL) {
+        var cb = '__survey_cb_' + Date.now();
+        var s = document.createElement('script');
+        var done = function () { delete window[cb]; s.remove(); };
+        window[cb] = function (d) { done(); resolve(d); };
+        s.onerror = function () { done(); reject(new Error('APIに接続できません')); };
+        s.src = API_URL + (API_URL.indexOf('?') < 0 ? '?' : '&') + 'format=json&callback=' + cb;
+        document.head.appendChild(s);
+      } else {
+        resolve(demoData());
+      }
+    });
+  }
+
+  function poll() {
+    fetchData().then(function (d) {
+      setStatus('ok');
+      update(d);
+    }).catch(function (err) {
+      setStatus('err', err && err.message);
+    });
+  }
+
+  function schedule() {
+    clearInterval(state.timer);
+    state.timer = setInterval(poll, Number($('interval').value) * 1000);
+  }
+
+  function setStatus(kind, msg) {
+    var now = new Date();
+    $('dot').className = 'dot' + (kind === 'err' ? ' err' : '');
+    $('status').textContent = kind === 'err'
+      ? '取得エラー（' + (msg || '再試行します') + '）'
+      : 'リアルタイム更新中・最終取得 ' + fmtTime(now);
+  }
+
+  // ===== 集計 =====
+  function shortName(q) {
+    for (var i = 0; i < SHORT_NAMES.length; i++) {
+      if (q.title.indexOf(SHORT_NAMES[i][0]) >= 0) return SHORT_NAMES[i][1];
+    }
+    return q.title.length > 20 ? q.title.slice(0, 20) + '…' : q.title;
+  }
+  function isText(q) { return q.type === 'TEXT' || q.type === 'PARAGRAPH_TEXT'; }
+  function isChoice(q) { return q.type === 'MULTIPLE_CHOICE' || q.type === 'CHECKBOX' || q.type === 'LIST'; }
+  function isNumeric(q) { return q.type === 'SCALE' || q.type === 'RATING'; }
+
+  function scoreOf(q, v) {
+    if (!q.scored || v == null || v === '') return null;
+    if (isNumeric(q)) { var n = Number(v); return isNaN(n) ? null : n; }
+    var idx = q.choices.indexOf(v);
+    return idx < 0 ? null : q.choices.length - idx;
+  }
+  function scoreMax(q) { return isNumeric(q) ? q.max : q.choices.length; }
+
+  function countChoices(q, responses) {
+    var labels = q.choices.slice();
+    if (isNumeric(q)) { labels = []; for (var i = q.min; i <= q.max; i++) labels.push(String(i)); }
+    var counts = labels.map(function () { return 0; });
+    var other = 0, answered = 0;
+    responses.forEach(function (r) {
+      var v = r.answers[q.id];
+      if (v == null || v === '' || (Array.isArray(v) && !v.length)) return;
+      answered++;
+      (Array.isArray(v) ? v : [v]).forEach(function (x) {
+        var i = labels.indexOf(String(x));
+        if (i >= 0) counts[i]++; else other++;
+      });
+    });
+    if (other || q.other) { labels.push('その他'); counts.push(other); }
+    return { labels: labels, counts: counts, answered: answered };
+  }
+
+  function average(q, responses) {
+    var sum = 0, n = 0;
+    responses.forEach(function (r) {
+      var s = scoreOf(q, r.answers[q.id]);
+      if (s != null) { sum += s; n++; }
+    });
+    return n ? sum / n : null;
+  }
+
+  function keywords(texts) {
+    var freq = {};
+    texts.forEach(function (t) {
+      var seen = {};
+      (t.match(/[一-龠々〆ヵヶ]{2,}|[ァ-ヴー]{2,}|[A-Za-zＡ-Ｚａ-ｚ][A-Za-z0-9Ａ-Ｚａ-ｚ]{1,}/g) || []).forEach(function (w) {
+        if (STOPWORDS.indexOf(w) >= 0 || seen[w]) return;
+        seen[w] = 1;
+        freq[w] = (freq[w] || 0) + 1;
+      });
+    });
+    return Object.keys(freq).map(function (k) { return [k, freq[k]]; })
+      .sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10);
+  }
+
+  // ===== 描画 =====
+  function update(d) {
+    var last = d.responses.length ? d.responses[d.responses.length - 1].id : '';
+    var sig = d.responses.length + '|' + last + '|' + d.questions.length;
+    if (sig === state.sig) return;
+
+    if (state.seen) {
+      var added = d.responses.filter(function (r) { return !state.seen[r.id]; });
+      added.forEach(function (r) { state.newIds[r.id] = true; });
+      if (added.length) toast('新しい回答が ' + added.length + ' 件届きました');
+    }
+    state.seen = {};
+    d.responses.forEach(function (r) { state.seen[r.id] = true; });
+    state.sig = sig;
+    state.data = d;
+    render();
+  }
+
+  function render() {
+    var d = state.data;
+    if (!d) return;
+    $('title').textContent = d.title || 'アンケート';
+    document.title = (d.title || 'アンケート') + ' ダッシュボード';
+    renderKpis(d);
+    renderCharts(d);
+    renderTimeline(d);
+    renderCross(d);
+    renderTexts(d);
+    renderTable(d);
+  }
+
+  function renderKpis(d) {
+    var rs = d.responses;
+    var html = kpi('回答数', rs.length, '件', rs.length ? '最新：' + fmtDateTime(new Date(rs[rs.length - 1].timestamp)) : 'まだ回答がありません');
+    d.questions.forEach(function (q) {
+      if (q.scored) {
+        var avg = average(q, rs);
+        html += kpi(shortName(q) + '（平均点）', avg == null ? '–' : avg.toFixed(2), '/ ' + scoreMax(q), topShare(q, rs));
+      }
+    });
+    d.questions.forEach(function (q) {
+      if (isChoice(q) && !q.scored && q.choices.indexOf('参加する') >= 0) {
+        var c = countChoices(q, rs);
+        var n = c.counts[q.choices.indexOf('参加する')];
+        html += kpi(shortName(q), n, '名', c.answered ? '参加する ' + pct(n, c.answered) + '（回答 ' + c.answered + '件中）' : '');
+      }
+    });
+    $('kpis').innerHTML = html;
+  }
+  function topShare(q, rs) {
+    var c = countChoices(q, rs);
+    if (!c.answered) return '';
+    var top2 = c.counts[0] + (c.counts[1] || 0);
+    return '「' + c.labels[0] + '」「' + c.labels[1] + '」計 ' + pct(top2, c.answered);
+  }
+  function kpi(label, value, unit, note) {
+    return '<div class="kpi"><div class="label">' + esc(label) + '</div><div class="value">' + esc(String(value)) +
+      '<small>' + esc(unit) + '</small></div><div class="note">' + esc(note || '') + '</div></div>';
+  }
+
+  function renderCharts(d) {
+    var host = $('charts');
+    var choiceQs = d.questions.filter(function (q) { return isChoice(q) || isNumeric(q); });
+    var key = choiceQs.map(function (q) { return q.id; }).join(',');
+    if (host.dataset.key !== key) {
+      Object.keys(state.charts).forEach(function (k) { if (k.indexOf('q') === 0) { state.charts[k].destroy(); delete state.charts[k]; } });
+      host.innerHTML = choiceQs.map(function (q) {
+        return '<div class="card"><h3>' + esc(shortName(q)) + '</h3><div class="q">' + esc(q.title) + '</div>' +
+          '<div class="meta" id="meta-' + q.id + '"></div><div class="chart-box"><canvas id="c-' + q.id + '"></canvas></div></div>';
+      }).join('');
+      host.dataset.key = key;
+    }
+    choiceQs.forEach(function (q) {
+      var c = countChoices(q, d.responses);
+      var avg = q.scored ? average(q, d.responses) : null;
+      $('meta-' + q.id).innerHTML = '回答 <b>' + c.answered + '</b> 件' +
+        (avg != null ? '　平均 <b>' + avg.toFixed(2) + '</b> 点 / ' + scoreMax(q) : '');
+      barChart('q' + q.id, 'c-' + q.id, c.labels, c.counts, c.answered);
+    });
+  }
+
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  function barChart(key, canvasId, labels, counts, total) {
+    var color = css('--series-1');
+    var existing = state.charts[key];
+    if (existing) {
+      existing.data.labels = labels;
+      existing.data.datasets[0].data = counts;
+      existing.data.datasets[0].backgroundColor = color;
+      existing.$total = total;
+      existing.update();
+      return;
+    }
+    var ch = new Chart($(canvasId), {
+      type: 'bar',
+      data: { labels: labels, datasets: [{ data: counts, backgroundColor: color, borderRadius: 4, borderSkipped: 'start', barPercentage: 0.7, categoryPercentage: 0.9, maxBarThickness: 26 }] },
+      options: baseOptions({
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: function (ctx) { return ' ' + ctx.raw + ' 件（' + pct(ctx.raw, ctx.chart.$total) + '）'; } } }
+        },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0, color: css('--text-muted') }, grid: { color: css('--grid') }, border: { display: false } },
+          y: { ticks: { color: css('--text-secondary') }, grid: { display: false }, border: { color: css('--border') } }
+        }
+      }),
+      plugins: [valueLabels]
+    });
+    ch.$total = total;
+    state.charts[key] = ch;
+  }
+
+  // 棒の右端に「件数（割合）」を表示
+  var valueLabels = {
+    id: 'valueLabels',
+    afterDatasetsDraw: function (chart) {
+      var ctx = chart.ctx, meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.fillStyle = css('--text-secondary');
+      ctx.font = '12px ' + getComputedStyle(document.body).fontFamily;
+      ctx.textBaseline = 'middle';
+      meta.data.forEach(function (bar, i) {
+        var v = chart.data.datasets[0].data[i];
+        var label = v + '件' + (chart.$total ? '（' + pct(v, chart.$total) + '）' : '');
+        var w = ctx.measureText(label).width;
+        var x = bar.x + 6;
+        if (x + w > chart.chartArea.right) { x = bar.x - w - 6; ctx.fillStyle = '#fff'; } else { ctx.fillStyle = css('--text-secondary'); }
+        ctx.fillText(label, x, bar.y);
+      });
+      ctx.restore();
+    }
+  };
+
+  function baseOptions(o) {
+    o.responsive = true;
+    o.maintainAspectRatio = false;
+    o.animation = { duration: 400 };
+    o.layout = { padding: { right: 8 } };
+    return o;
+  }
+
+  function renderTimeline(d) {
+    var pts = d.responses.map(function (r, i) { return { x: new Date(r.timestamp).getTime(), y: i + 1 }; })
+      .sort(function (a, b) { return a.x - b.x; })
+      .map(function (p, i) { return { x: p.x, y: i + 1 }; });
+    var labels = pts.map(function (p) { return fmtDateTime(new Date(p.x)); });
+    var data = pts.map(function (p) { return p.y; });
+    var color = css('--series-1');
+    var ch = state.charts.timeline;
+    if (ch) {
+      ch.data.labels = labels; ch.data.datasets[0].data = data; ch.data.datasets[0].borderColor = color;
+      ch.update();
+      return;
+    }
+    state.charts.timeline = new Chart($('timeline'), {
+      type: 'line',
+      data: { labels: labels, datasets: [{ data: data, borderColor: color, borderWidth: 2, stepped: true, pointRadius: 0, pointHoverRadius: 5, pointHitRadius: 12, fill: false }] },
+      options: baseOptions({
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return ' 累計 ' + c.raw + ' 件'; } } } },
+        scales: {
+          x: { ticks: { color: css('--text-muted'), maxTicksLimit: 6, maxRotation: 0 }, grid: { display: false }, border: { color: css('--border') } },
+          y: { beginAtZero: true, ticks: { precision: 0, color: css('--text-muted') }, grid: { color: css('--grid') }, border: { display: false } }
+        }
+      })
+    });
+  }
+
+  // 点数のつく設問のうち最初の2問を掛け合わせたヒートマップ
+  function renderCross(d) {
+    var sq = d.questions.filter(function (q) { return q.scored && !isNumeric(q); });
+    if (sq.length < 2) { $('cross-card').style.display = 'none'; return; }
+    var a = sq[0], b = sq[1];
+    $('cross-title').textContent = 'クロス集計：' + shortName(a) + ' × ' + shortName(b);
+    $('cross-q').textContent = '行：' + shortName(a) + '　列：' + shortName(b) + '（セルは回答件数・色が濃いほど多い）';
+    var m = a.choices.map(function () { return b.choices.map(function () { return 0; }); });
+    var max = 0;
+    d.responses.forEach(function (r) {
+      var i = a.choices.indexOf(r.answers[a.id]), j = b.choices.indexOf(r.answers[b.id]);
+      if (i >= 0 && j >= 0) { m[i][j]++; max = Math.max(max, m[i][j]); }
+    });
+    var html = '<table class="heat"><tr><th></th>' + b.choices.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+    a.choices.forEach(function (ra, i) {
+      html += '<tr><th class="row">' + esc(ra) + '</th>';
+      b.choices.forEach(function (cb, j) {
+        var v = m[i][j];
+        var step = v === 0 ? 0 : Math.max(1, Math.ceil(v / max * 6));
+        var bg = step ? 'var(--seq-' + step + ')' : 'var(--grid)';
+        var fg = step >= 4 ? '#fff' : 'var(--text-primary)';
+        html += '<td style="background:' + bg + ';color:' + fg + '" title="' + esc(ra + ' × ' + cb + '：' + v + '件') + '">' + (v || '') + '</td>';
+      });
+      html += '</tr>';
+    });
+    $('cross').innerHTML = html + '</table>';
+  }
+
+  function renderTexts(d) {
+    var html = '';
+    var rs = d.responses.slice().reverse();
+    d.questions.filter(isText).forEach(function (q) {
+      var items = rs.filter(function (r) { var v = r.answers[q.id]; return v && String(v).trim(); });
+      var kws = keywords(items.map(function (r) { return String(r.answers[q.id]); }));
+      html += '<div class="card"><h3>' + esc(shortName(q)) + '</h3><div class="q">' + esc(q.title) + '</div>' +
+        '<div class="meta">回答 <b>' + items.length + '</b> 件</div>';
+      if (kws.length) {
+        html += '<div class="sub" style="margin-bottom:4px">よく出てくる言葉</div><div class="chips">' +
+          kws.map(function (k) { return '<span class="chip">' + esc(k[0]) + ' <b>' + k[1] + '</b></span>'; }).join('') + '</div>';
+      }
+      html += items.length ? '<ul class="texts">' + items.map(function (r) {
+        return '<li><span class="when">' + fmtDateTime(new Date(r.timestamp)) + (state.newIds[r.id] ? '<span class="badge">NEW</span>' : '') +
+          '</span>' + esc(String(r.answers[q.id])) + '</li>';
+      }).join('') + '</ul>' : '<div class="empty">まだ回答がありません</div>';
+      html += '</div>';
+    });
+    $('text-cards').innerHTML = html;
+  }
+
+  function cellText(q, v) {
+    if (v == null) return '';
+    return Array.isArray(v) ? v.join('、') : String(v);
+  }
+
+  function renderTable(d) {
+    var kw = $('search').value.trim().toLowerCase();
+    var qs = d.questions;
+    var scored = qs.filter(function (q) { return q.scored; });
+    var hasEmail = d.responses.some(function (r) { return r.email; });
+    var head = '<thead><tr><th>No.</th><th>回答日時</th>' + (hasEmail ? '<th>メール</th>' : '') +
+      qs.map(function (q) { return '<th title="' + esc(q.title) + '">' + esc(shortName(q)) + '</th>'; }).join('') +
+      (scored.length > 1 ? '<th>合計点</th>' : '') + '</tr></thead>';
+    var rows = d.responses.map(function (r, i) { return { r: r, no: i + 1 }; }).reverse();
+    if (kw) {
+      rows = rows.filter(function (x) {
+        return qs.some(function (q) { return cellText(q, x.r.answers[q.id]).toLowerCase().indexOf(kw) >= 0; }) ||
+          (x.r.email || '').toLowerCase().indexOf(kw) >= 0;
+      });
+    }
+    var body = rows.map(function (x) {
+      var r = x.r, total = 0, n = 0;
+      var cells = qs.map(function (q) {
+        var v = r.answers[q.id];
+        var s = scoreOf(q, v);
+        if (s != null) { total += s; n++; }
+        var cls = isText(q) ? ' class="txt"' : '';
+        return '<td' + cls + '>' + esc(cellText(q, v)) + (s != null ? scoreBadge(s, scoreMax(q)) : '') + '</td>';
+      }).join('');
+      return '<tr' + (state.newIds[r.id] ? ' class="new"' : '') + '><td class="num">' + x.no + '</td><td class="num">' +
+        fmtDateTime(new Date(r.timestamp)) + '</td>' + (hasEmail ? '<td>' + esc(r.email) + '</td>' : '') + cells +
+        (scored.length > 1 ? '<td class="num"><b>' + (n ? total : '') + '</b>' + (n ? ' / ' + sumMax(scored) : '') + '</td>' : '') + '</tr>';
+    }).join('');
+    $('all').innerHTML = head + '<tbody>' + (body || '<tr><td colspan="99" class="empty">該当する回答はありません</td></tr>') + '</tbody>';
+    $('table-count').textContent = rows.length + ' 件表示 / 全 ' + d.responses.length + ' 件';
+  }
+  function sumMax(qs) { return qs.reduce(function (s, q) { return s + scoreMax(q); }, 0); }
+  function scoreBadge(s, max) {
+    var step = Math.max(1, Math.round(s / max * 6));
+    return '<span class="score" style="background:var(--seq-' + step + ');color:' + (step >= 4 ? '#fff' : 'var(--text-primary)') + '">' + s + '点</span>';
+  }
+
+  function downloadCsv() {
+    var d = state.data;
+    if (!d) return;
+    var qs = d.questions;
+    var header = ['No.', '回答日時', 'メール'].concat(qs.map(function (q) { return q.title; }))
+      .concat(qs.filter(function (q) { return q.scored; }).map(function (q) { return shortName(q) + '（点）'; }));
+    var lines = [header].concat(d.responses.map(function (r, i) {
+      return [i + 1, fmtDateTime(new Date(r.timestamp)), r.email || '']
+        .concat(qs.map(function (q) { return cellText(q, r.answers[q.id]); }))
+        .concat(qs.filter(function (q) { return q.scored; }).map(function (q) { var s = scoreOf(q, r.answers[q.id]); return s == null ? '' : s; }));
+    })).map(function (row) {
+      return row.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
+    });
+    var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'アンケート回答_' + fmtDateTime(new Date()).replace(/[\/: ]/g, '') + '.csv';
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+
+  // ===== ユーティリティ =====
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+  }
+  function pct(n, total) { return total ? Math.round(n / total * 100) + '%' : '0%'; }
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+  function fmtTime(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); }
+  function fmtDateTime(d) { return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function toast(msg) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 3500);
+  }
+
+  // ===== デモデータ（API未設定でファイルを直接開いたとき） =====
+  var demo = null;
+  function demoData() {
+    if (!demo) {
+      var Q = [
+        { id: 1, title: '今回の定例会の満足度を教えてください。', type: 'MULTIPLE_CHOICE', choices: ['非常に満足', '満足', '普通', 'やや不満', '不満'], scored: true },
+        { id: 2, title: '今回の定例会で、特に良かった・参考になった内容を教えてください。', type: 'PARAGRAPH_TEXT', choices: [] },
+        { id: 3, title: '今回の内容は、今後の人生や活動に活かせそうですか？', type: 'MULTIPLE_CHOICE', choices: ['非常に活かせそう', '活かせそう', 'どちらともいえない', 'あまり活かせない', '活かせない'], scored: true },
+        { id: 4, title: '定例会の時間や進行について、どのように感じましたか？', type: 'MULTIPLE_CHOICE', choices: ['ちょうど良かった', '少し長かった', '少し短かった', '進行を改善してほしい'] },
+        { id: 5, title: '次回以降、取り上げてほしいテーマや、聞いてみたい内容があれば教えてください。', type: 'PARAGRAPH_TEXT', choices: [] },
+        { id: 6, title: 'テニュア限定のLaLaを開催したいと企画しています。開催した場合参加しますか？（希望者数の把握のための質問です）', type: 'MULTIPLE_CHOICE', choices: ['参加する', '参加しない'], other: true },
+        { id: 7, title: 'テニュア限定のフォーラムを開催したいと企画しています。開催した場合参加しますか？（希望者数の把握のための質問です）', type: 'MULTIPLE_CHOICE', choices: ['参加する', '参加しない'], other: true },
+        { id: 8, title: 'その他、定例会をより良くするためのご意見・ご要望があれば教えてください。', type: 'PARAGRAPH_TEXT', choices: [] }
+      ];
+      demo = { title: 'EOテニュア定例会の感想アンケート（デモ表示）', questions: Q, responses: [], n: 0 };
+      for (var i = 0; i < 14; i++) demo.responses.push(fakeResponse(Date.now() - (14 - i) * 9 * 60000));
+      demo.next = Date.now() + 15000;
+    }
+    if (Date.now() > demo.next) { demo.responses.push(fakeResponse(Date.now())); demo.next = Date.now() + 15000; }
+    return { title: demo.title, questions: demo.questions, responses: demo.responses.slice(), fetchedAt: new Date().toISOString() };
+  }
+  function pick(arr, w) {
+    var t = Math.random() * w.reduce(function (a, b) { return a + b; }, 0);
+    for (var i = 0; i < arr.length; i++) { t -= w[i]; if (t <= 0) return arr[i]; }
+    return arr[arr.length - 1];
+  }
+  function fakeResponse(ts) {
+    var Q = demo.questions;
+    var good = ['講師の実体験に基づく事業承継の話が非常に参考になりました', 'グループディスカッションで他のメンバーの経営課題を聞けたのが良かった', '組織づくりと採用の具体的な事例', 'フォーラムの振り返りと次期の計画共有', ''];
+    var theme = ['M&Aや事業承継', '次世代リーダーの育成', '健康経営', '海外展開の事例', '', ''];
+    var opinion = ['時間配分をもう少し工夫してほしい', '懇親会の時間が長めだと嬉しい', '', '', '資料を事前に共有してもらえると助かります'];
+    var a = {};
+    a[1] = pick(Q[0].choices, [6, 5, 2, 1, 0.3]);
+    a[2] = pick(good, [1, 1, 1, 1, 1]);
+    a[3] = pick(Q[2].choices, [5, 6, 2, 0.6, 0.2]);
+    a[4] = pick(Q[3].choices, [7, 3, 1, 1]);
+    a[5] = pick(theme, [1, 1, 1, 1, 1, 1]);
+    a[6] = pick(['参加する', '参加しない', '日程次第'], [6, 2, 1]);
+    a[7] = pick(['参加する', '参加しない'], [5, 3]);
+    a[8] = pick(opinion, [1, 1, 1, 1, 1]);
+    Object.keys(a).forEach(function (k) { if (a[k] === '') delete a[k]; });
+    demo.n++;
+    return { id: 'demo' + demo.n, timestamp: new Date(ts).toISOString(), email: '', answers: a };
+  }
+
+  // ===== 初期化 =====
+  document.querySelectorAll('nav.tabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('nav.tabs button').forEach(function (x) { x.classList.toggle('active', x === b); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('hidden', p.id !== 'panel-' + b.dataset.tab); });
+      try { localStorage.setItem('survey-tab', b.dataset.tab); } catch (e) {}
+    });
+  });
+  try {
+    var saved = localStorage.getItem('survey-tab');
+    var btn = saved && document.querySelector('nav.tabs button[data-tab="' + saved + '"]');
+    if (btn) btn.click();
+  } catch (e) {}
+
+  $('refresh').addEventListener('click', poll);
+  $('interval').addEventListener('change', schedule);
+  $('search').addEventListener('input', function () { if (state.data) renderTable(state.data); });
+  $('csv').addEventListener('click', downloadCsv);
+  // ダーク／ライト切り替え時にグラフの色を作り直す
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+    Object.keys(state.charts).forEach(function (k) { state.charts[k].destroy(); });
+    state.charts = {};
+    $('charts').dataset.key = '';
+    render();
+  });
+
+  if (DEMO) {
+    var bn = $('banner');
+    bn.classList.remove('hidden');
+    bn.textContent = 'デモ表示中です（架空のサンプルデータ。15秒ごとに回答が1件増えます）。実際の回答を表示するには README.md の手順でセットアップしてください。';
+  }
+  poll();
+  schedule();
+})();
+</script>
+</body>
+</html>
