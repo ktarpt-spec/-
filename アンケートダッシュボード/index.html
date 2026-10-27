@@ -18,6 +18,8 @@
     --accent: #2a78d6;
     --series-1: #2a78d6;
     --series-2: #eb6834;
+    --series-3: #6250d6;
+    --oth-1: #0f7a56; --oth-2: #1baf7a; --oth-3: #5cc79f; --oth-4: #93d9bd; --oth-5: #c4ebdb;
     --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
     --good: #0ca30c;
     --new-bg: #fff4d6;
@@ -36,6 +38,8 @@
       --accent: #3987e5;
       --series-1: #3987e5;
       --series-2: #d95926;
+      --series-3: #9085e9;
+      --oth-1: #2fbf8a; --oth-2: #199e70; --oth-3: #5cc79f; --oth-4: #86d3b5; --oth-5: #b3e5cf;
       --seq-1: #1e2c3e; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #6da7ec;
       --new-bg: #3a2e10;
       --new-text: #f5cf73;
@@ -53,6 +57,8 @@
     --accent: #3987e5;
     --series-1: #3987e5;
     --series-2: #d95926;
+    --series-3: #9085e9;
+    --oth-1: #2fbf8a; --oth-2: #199e70; --oth-3: #5cc79f; --oth-4: #86d3b5; --oth-5: #b3e5cf;
     --seq-1: #1e2c3e; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #6da7ec;
     --new-bg: #3a2e10;
     --new-text: #f5cf73;
@@ -110,6 +116,17 @@
   .texts .when { color: var(--text-muted); font-size: 11px; display: block; }
   .badge { display: inline-block; background: var(--new-bg); color: var(--new-text); font-size: 10px; font-weight: 700; padding: 0 6px; border-radius: 4px; margin-left: 6px; }
   .others { margin-top: 10px; }
+  .pie-row { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+  .pie-wrap { display: grid; grid-template-columns: 180px 1fr; gap: 24px; align-items: center; }
+  .pie-box { position: relative; height: 180px; }
+  .pie-legend { list-style: none; margin: 0; padding: 0; font-size: 13px; min-width: 0; }
+  .pie-legend li { display: grid; grid-template-columns: 12px 1fr auto 40px; gap: 8px; align-items: center; padding: 3px 0; }
+  .pie-legend li i { width: 10px; height: 10px; border-radius: 50%; }
+  .pie-legend li b { font-variant-numeric: tabular-nums; }
+  .pie-legend li em { font-style: normal; color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .pie-legend li.o span { color: var(--text-secondary); }
+  .pie-legend li.grp { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); font-size: 12px; font-weight: 700; color: var(--oth-1); }
+  @media (max-width: 420px) { .pie-wrap { grid-template-columns: 1fr; } .pie-box { height: 180px; } }
   .others .chips { margin: 4px 0 0; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
   .chip { border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; font-size: 12px; color: var(--text-secondary); }
@@ -382,11 +399,19 @@
     var key = choiceQs.map(function (q) { return q.id; }).join(',');
     if (host.dataset.key !== key) {
       Object.keys(state.charts).forEach(function (k) { if (k.indexOf('q') === 0) { state.charts[k].destroy(); delete state.charts[k]; } });
-      host.innerHTML = choiceQs.map(function (q) {
-        return '<div class="card"><h3>' + esc(shortName(q)) + '</h3><div class="q">' + esc(q.title) + '</div>' +
-          '<div class="meta" id="meta-' + q.id + '"></div><div class="chart-box"><canvas id="c-' + q.id + '"></canvas></div>' +
+      var cardHtml = function (q) {
+        var head = '<div class="card"><h3>' + esc(shortName(q)) + '</h3><div class="q">' + esc(q.title) + '</div>' +
+          '<div class="meta" id="meta-' + q.id + '"></div>';
+        if (isPie(q)) {
+          return head + '<div class="pie-wrap"><div class="pie-box"><canvas id="c-' + q.id + '"></canvas></div>' +
+            '<ul class="pie-legend" id="legend-' + q.id + '"></ul></div></div>';
+        }
+        return head + '<div class="chart-box"><canvas id="c-' + q.id + '"></canvas></div>' +
           '<div class="others" id="other-' + q.id + '"></div></div>';
-      }).join('');
+      };
+      var pieQs = choiceQs.filter(isPie);
+      host.innerHTML = choiceQs.filter(function (q) { return !isPie(q); }).map(cardHtml).join('') +
+        (pieQs.length ? '<div class="pie-row">' + pieQs.map(cardHtml).join('') + '</div>' : '');
       host.dataset.key = key;
     }
     choiceQs.forEach(function (q) {
@@ -394,12 +419,66 @@
       var avg = q.scored ? average(q, d.responses) : null;
       $('meta-' + q.id).innerHTML = '回答 <b>' + c.answered + '</b> 件' +
         (avg != null ? '　平均 <b>' + avg.toFixed(2) + '</b> 点 / ' + scoreMax(q) : '');
+      if (isPie(q)) { renderPie(q, c); return; }
       barChart('q' + q.id, 'c-' + q.id, c.labels, c.counts, c.answered);
       var ot = Object.keys(c.otherTexts);
       $('other-' + q.id).innerHTML = ot.length ? '<div class="sub">「その他」の内容</div><div class="chips">' +
         ot.map(function (t) { return '<span class="chip">' + esc(t) + (c.otherTexts[t] > 1 ? ' <b>' + c.otherTexts[t] + '</b>' : '') + '</span>'; }).join('') + '</div>' : '';
     });
   }
+
+  // 「その他」欄のある単一選択は、記入内容ごとに分けた円グラフにする
+  function isPie(q) { return q.type === 'MULTIPLE_CHOICE' && q.other && !q.scored; }
+
+  function renderPie(q, c) {
+    var main = q.choices.map(function (ch, i) { return { label: ch, n: c.counts[i] }; });
+    var others = Object.keys(c.otherTexts).map(function (t) { return { label: t, n: c.otherTexts[t] }; })
+      .sort(function (a, b) { return b.n - a.n; });
+    var mainColors = ['--series-1', '--series-2', '--series-3', '--series-4'];
+    var items = main.map(function (x, i) { x.color = css(mainColors[i] || '--text-muted'); return x; })
+      .concat(others.map(function (x, i) { x.color = css('--oth-' + Math.min(i + 1, 5)); return x; }));
+    var total = c.answered;
+    var otherSum = others.reduce(function (a, x) { return a + x.n; }, 0);
+    var li = function (x, cls) {
+      return '<li class="' + cls + '"><i style="background:' + x.color + '"></i><span>' + esc(x.label) + '</span><b>' + x.n +
+        '件</b><em>' + pct(x.n, total) + '</em></li>';
+    };
+    $('legend-' + q.id).innerHTML = main.map(function (x) { return li(x, ''); }).join('') +
+      (others.length ? '<li class="grp">その他の意見（' + otherSum + '件）</li>' + others.map(function (x) { return li(x, 'o'); }).join('') : '');
+
+    var key = 'q' + q.id;
+    if (state.charts[key]) state.charts[key].destroy();
+    var ch = new Chart($('c-' + q.id), {
+      type: 'pie',
+      data: { labels: items.map(function (x) { return x.label; }), datasets: [{ data: items.map(function (x) { return x.n; }),
+        backgroundColor: items.map(function (x) { return x.color; }), borderColor: css('--surface'), borderWidth: 2 }] },
+      options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: function (t) { return ' ' + t.raw + ' 件（' + pct(t.raw, total) + '）'; } } } } },
+      plugins: [pieLabels]
+    });
+    ch.$total = total;
+    state.charts[key] = ch;
+  }
+
+  // 20%以上の扇に割合を表示
+  var pieLabels = {
+    id: 'pieLabels',
+    afterDatasetsDraw: function (chart) {
+      var ctx = chart.ctx, data = chart.data.datasets[0].data;
+      ctx.save();
+      ctx.fillStyle = '#fff';
+      ctx.font = '700 13px ' + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      chart.getDatasetMeta(0).data.forEach(function (arc, i) {
+        if (!chart.$total || data[i] / chart.$total < 0.2) return;
+        var p = arc.tooltipPosition();
+        ctx.fillText(pct(data[i], chart.$total), p.x, p.y);
+      });
+      ctx.restore();
+    }
+  };
 
   function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
