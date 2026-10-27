@@ -109,6 +109,8 @@
   .texts li:first-child { border-top: none; }
   .texts .when { color: var(--text-muted); font-size: 11px; display: block; }
   .badge { display: inline-block; background: var(--new-bg); color: var(--new-text); font-size: 10px; font-weight: 700; padding: 0 6px; border-radius: 4px; margin-left: 6px; }
+  .others { margin-top: 10px; }
+  .others .chips { margin: 4px 0 0; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
   .chip { border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; font-size: 12px; color: var(--text-secondary); }
   .chip b { color: var(--text-primary); }
@@ -275,18 +277,19 @@
     var labels = q.choices.slice();
     if (isNumeric(q)) { labels = []; for (var i = q.min; i <= q.max; i++) labels.push(String(i)); }
     var counts = labels.map(function () { return 0; });
-    var other = 0, answered = 0;
+    var other = 0, answered = 0, otherTexts = {};
     responses.forEach(function (r) {
       var v = r.answers[q.id];
       if (v == null || v === '' || (Array.isArray(v) && !v.length)) return;
       answered++;
       (Array.isArray(v) ? v : [v]).forEach(function (x) {
         var i = labels.indexOf(String(x));
-        if (i >= 0) counts[i]++; else other++;
+        if (i >= 0) counts[i]++;
+        else { other++; otherTexts[x] = (otherTexts[x] || 0) + 1; }
       });
     });
     if (other || q.other) { labels.push('その他'); counts.push(other); }
-    return { labels: labels, counts: counts, answered: answered };
+    return { labels: labels, counts: counts, answered: answered, otherTexts: otherTexts };
   }
 
   function average(q, responses) {
@@ -309,6 +312,7 @@
       });
     });
     return Object.keys(freq).map(function (k) { return [k, freq[k]]; })
+      .filter(function (x) { return x[1] >= 2; })
       .sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10);
   }
 
@@ -380,7 +384,8 @@
       Object.keys(state.charts).forEach(function (k) { if (k.indexOf('q') === 0) { state.charts[k].destroy(); delete state.charts[k]; } });
       host.innerHTML = choiceQs.map(function (q) {
         return '<div class="card"><h3>' + esc(shortName(q)) + '</h3><div class="q">' + esc(q.title) + '</div>' +
-          '<div class="meta" id="meta-' + q.id + '"></div><div class="chart-box"><canvas id="c-' + q.id + '"></canvas></div></div>';
+          '<div class="meta" id="meta-' + q.id + '"></div><div class="chart-box"><canvas id="c-' + q.id + '"></canvas></div>' +
+          '<div class="others" id="other-' + q.id + '"></div></div>';
       }).join('');
       host.dataset.key = key;
     }
@@ -390,6 +395,9 @@
       $('meta-' + q.id).innerHTML = '回答 <b>' + c.answered + '</b> 件' +
         (avg != null ? '　平均 <b>' + avg.toFixed(2) + '</b> 点 / ' + scoreMax(q) : '');
       barChart('q' + q.id, 'c-' + q.id, c.labels, c.counts, c.answered);
+      var ot = Object.keys(c.otherTexts);
+      $('other-' + q.id).innerHTML = ot.length ? '<div class="sub">「その他」の内容</div><div class="chips">' +
+        ot.map(function (t) { return '<span class="chip">' + esc(t) + (c.otherTexts[t] > 1 ? ' <b>' + c.otherTexts[t] + '</b>' : '') + '</span>'; }).join('') + '</div>' : '';
     });
   }
 
