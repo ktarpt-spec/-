@@ -536,7 +536,7 @@ function renderAdmin() {
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
 
-$("btn-csv").addEventListener("click", () => {
+$("btn-csv").addEventListener("click", async () => {
   const hist = loadHistory();
   const secKeys = Object.keys(SECTIONS);
   const qIds = QUESTIONS.map(q => q.id);
@@ -546,9 +546,17 @@ $("btn-csv").addEventListener("click", () => {
     r.tScore, r.index, r.rank, r.usedSec, r.timeout ? 1 : 0, r.answered, r.blurCount, ...qIds.map(id => r.detail[id])]);
   const csv = [head, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
   const blob = new Blob(["﻿" + csv], { type: "text/csv" });   // BOM付きでExcelの文字化けを防ぐ
+  const filename = `情報処理能力テスト_結果_${new Date().toISOString().slice(0, 10)}.csv`;
+  // claude.ai上で開いた場合はdownloads機能、ローカルで開いた場合は通常のダウンロード
+  const downloads = window.claude ? await window.claude.use("downloads").catch(() => null) : null;
+  if (downloads) {
+    try { await downloads.save({ filename, data: blob }); }
+    catch (e) { if (e && e.code !== "declined") alert("CSVを保存できませんでした：" + (e.message || e.code)); }
+    return;
+  }
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `情報処理能力テスト_結果_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
 });
