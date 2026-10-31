@@ -108,6 +108,10 @@
     .stats { gap: 18px; }
     .score { font-size: 30px; }
   }
+  .ask { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.45); display: grid; place-items: center; padding: 16px; }
+  .ask-box { background: var(--card); color: var(--text); border-radius: 10px; padding: 22px; max-width: 420px; width: 100%; }
+  .ask-box p { margin: 0 0 18px; }
+  .ask-row { display: flex; justify-content: flex-end; gap: 8px; }
 </style>
 </head>
 <body>
@@ -206,8 +210,28 @@
 
 </div>
 
+<!-- 確認ダイアログ（ブラウザ標準のconfirmが使えない環境向け） -->
+<div id="ask" class="ask hidden" role="dialog" aria-modal="true">
+  <div class="ask-box">
+    <p id="ask-msg"></p>
+    <div class="ask-row"><button id="ask-no">キャンセル</button><button id="ask-yes" class="primary">OK</button></div>
+  </div>
+</div>
+
 <script src="items.js"></script>
 <script>
+// 画面内の確認ダイアログ。OKならtrueで解決する
+function ask(msg) {
+  return new Promise((resolve) => {
+    const box = document.getElementById("ask");
+    document.getElementById("ask-msg").textContent = msg;
+    box.classList.remove("hidden");
+    const done = (v) => { box.classList.add("hidden"); yes.onclick = no.onclick = null; resolve(v); };
+    const yes = document.getElementById("ask-yes"), no = document.getElementById("ask-no");
+    yes.onclick = () => done(true); no.onclick = () => done(false);
+  });
+}
+
 /* =========================================================
    設定
    ========================================================= */
@@ -308,9 +332,9 @@ function render() {
 $("btn-prev").addEventListener("click", () => { if (state.idx > 0) go(state.idx - 1); });
 $("btn-next").addEventListener("click", () => { if (state.idx < BUILT.length - 1) go(state.idx + 1); });
 $("btn-flag").addEventListener("click", () => { state.flags[state.idx] = !state.flags[state.idx]; render(); });
-$("btn-finish").addEventListener("click", () => {
+$("btn-finish").addEventListener("click", async () => {
   const left = state.answers.filter((a) => a === null).length;
-  if (confirm(left ? `未回答の問題が ${left} 問あります。提出してよろしいですか？` : "回答を提出してよろしいですか？")) finish(false);
+  if (await ask(left ? `未回答の問題が ${left} 問あります。提出してよろしいですか？` : "回答を提出してよろしいですか？")) finish(false);
 });
 document.addEventListener("visibilitychange", () => { if (state && !state.finished && document.hidden) state.blurCount++; });
 window.addEventListener("beforeunload", (e) => { if (state && !state.finished) { e.preventDefault(); e.returnValue = ""; } });
@@ -404,8 +428,8 @@ $("btn-new").addEventListener("click", () => {
   $("cid").value = ""; $("cname").value = ""; $("p-feedback").innerHTML = ""; $("p-explain").classList.add("hidden");
   validateStart(); show("v-start");
 });
-$("btn-clear").addEventListener("click", () => {
-  if (confirm("この端末に保存されたすべての受験記録を削除します。先にCSVを書き出しましたか？")) { saveHistory([]); renderAdmin(); }
+$("btn-clear").addEventListener("click", async () => {
+  if (await ask("この端末に保存されたすべての受験記録を削除します。先にCSVを書き出しましたか？")) { saveHistory([]); renderAdmin(); }
 });
 </script>
 </body>

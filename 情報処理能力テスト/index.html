@@ -88,6 +88,10 @@
   .hist th, .hist td { border: 1px solid var(--line); padding: 5px 8px; text-align: center; white-space: nowrap; }
   .hist th { background: #f0f2f6; }
   .scroll { overflow-x: auto; }
+  .ask { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.45); display: grid; place-items: center; padding: 16px; }
+  .ask-box { background: var(--card); color: var(--text); border-radius: 10px; padding: 22px; max-width: 420px; width: 100%; }
+  .ask-box p { margin: 0 0 18px; }
+  .ask-row { display: flex; justify-content: flex-end; gap: 8px; }
 </style>
 </head>
 <body>
@@ -177,11 +181,32 @@
       <button id="btn-new">次の受験者へ</button>
       <button id="btn-clear" style="margin-left:auto">記録をすべて削除</button>
     </div>
+    <p class="muted small" id="csv-msg"></p>
   </section>
 
 </div>
 
+<!-- 確認ダイアログ（ブラウザ標準のconfirmが使えない環境向け） -->
+<div id="ask" class="ask hidden" role="dialog" aria-modal="true">
+  <div class="ask-box">
+    <p id="ask-msg"></p>
+    <div class="ask-row"><button id="ask-no">キャンセル</button><button id="ask-yes" class="primary">OK</button></div>
+  </div>
+</div>
+
 <script>
+// 画面内の確認ダイアログ。OKならtrueで解決する
+function ask(msg) {
+  return new Promise((resolve) => {
+    const box = document.getElementById("ask");
+    document.getElementById("ask-msg").textContent = msg;
+    box.classList.remove("hidden");
+    const done = (v) => { box.classList.add("hidden"); yes.onclick = no.onclick = null; resolve(v); };
+    const yes = document.getElementById("ask-yes"), no = document.getElementById("ask-no");
+    yes.onclick = () => done(true); no.onclick = () => done(false);
+  });
+}
+
 /* =========================================================
    設定
    ========================================================= */
@@ -416,10 +441,10 @@ function render() {
 $("btn-prev").addEventListener("click", () => { if (state.idx > 0) { state.idx--; render(); } });
 $("btn-next").addEventListener("click", () => { if (state.idx < QUESTIONS.length - 1) { state.idx++; render(); } });
 $("btn-flag").addEventListener("click", () => { state.flags[state.idx] = !state.flags[state.idx]; render(); });
-$("btn-finish").addEventListener("click", () => {
+$("btn-finish").addEventListener("click", async () => {
   const left = state.answers.filter(a => a === null).length;
   const msg = left ? `未回答の問題が ${left} 問あります。提出してよろしいですか？` : "回答を提出してよろしいですか？";
-  if (confirm(msg)) finish(false);
+  if (await ask(msg)) finish(false);
 });
 
 document.addEventListener("visibilitychange", () => {
@@ -504,6 +529,7 @@ $("btn-pin").addEventListener("click", () => {
 function fmtTime(sec) { return `${Math.floor(sec / 60)}分${String(sec % 60).padStart(2, "0")}秒`; }
 
 function renderAdmin() {
+  $("csv-msg").textContent = "";
   if (lastResult) {
     const r = lastResult;
     const bars = Object.entries(SECTIONS).map(([k, s]) => {
@@ -551,7 +577,7 @@ $("btn-csv").addEventListener("click", async () => {
   const downloads = window.claude ? await window.claude.use("downloads").catch(() => null) : null;
   if (downloads) {
     try { await downloads.save({ filename, data: blob }); }
-    catch (e) { if (e && e.code !== "declined") alert("CSVを保存できませんでした：" + (e.message || e.code)); }
+    catch (e) { if (e && e.code !== "declined") $("csv-msg").textContent = "CSVを保存できませんでした：" + (e.message || e.code); }
     return;
   }
   const a = document.createElement("a");
@@ -567,8 +593,8 @@ $("btn-new").addEventListener("click", () => {
   show("v-start");
 });
 
-$("btn-clear").addEventListener("click", () => {
-  if (confirm("この端末に保存されたすべての受験記録を削除します。先にCSVを書き出しましたか？")) {
+$("btn-clear").addEventListener("click", async () => {
+  if (await ask("この端末に保存されたすべての受験記録を削除します。先にCSVを書き出しましたか？")) {
     saveHistory([]);
     renderAdmin();
   }
