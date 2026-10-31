@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>図形推理テスト 解答一覧</title>
+<style>
+  body { margin: 0; background: #f4f5f7; color: #1d2330; font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p { color: #5d6677; font-size: 13px; margin: 0 0 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+  .item { background: #fff; border: 1px solid #dde1e8; border-radius: 10px; padding: 12px; break-inside: avoid; }
+  .head { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .head span { color: #5d6677; font-weight: 400; }
+  .m { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid #1d2330; }
+  .m > div { aspect-ratio: 1; border-right: 1px solid #c9ced8; border-bottom: 1px solid #c9ced8; display: grid; place-items: center; }
+  .m > div:nth-child(3n) { border-right: none; } .m > div:nth-child(n+7) { border-bottom: none; }
+  .m > div.ans { background: #e8f5ee; outline: 2px solid #1f8a4c; outline-offset: -2px; }
+  svg { width: 86%; height: 86%; }
+  .rule { font-size: 12.5px; margin-top: 8px; line-height: 1.6; }
+  @media print { body { background: #fff; } .item { border-color: #999; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>図形推理テスト 解答一覧（試験官用・取扱注意）</h1>
+  <p>緑枠が正解の図形です。受験者の目に触れない場所で保管してください。</p>
+  <div class="grid" id="grid"></div>
+</div>
+<script src="items.js"></script>
+<script>
+const RULES = {
+  M01: "行ごとに形が同じ。左から右へ個数が1→2→3。",
+  M02: "行ごとに形が同じ。左から右へ大→中→小。",
+  M03: "行ごとに形が同じ。左から右へ白→灰→黒。",
+  M04: "左から右へ矢印が時計回りに45°ずつ回転。",
+  M05: "各行に○□△が1つずつ。塗りは行ごとに同じ。",
+  M06: "黒丸が四隅を時計回りに1つずつ移動。",
+  M07: "個数は列、塗りは行で決まり、形は各行に1つずつ。",
+  M08: "左＋中を重ねると右になる（足し算）。",
+  M09: "左と中を重ね、共通する線を消すと右になる（排他的論理和）。",
+  M10: "左から中の点を取り除くと右になる（引き算）。",
+  M11: "右の個数＝左の個数＋中の個数。",
+  M12: "矢印は左から右へ90°ずつ回転。塗りは各行に白・灰・黒が1つずつ。",
+  M13: "外枠は行ごとに同じ。内側の図形は各行に1つずつ。",
+  M14: "左から右へ個数が減り、大きさが増える。",
+  M15: "黒丸は時計回り、灰色の四角は反時計回りに四隅を移動。",
+  M16: "形・塗り・個数がそれぞれ各行・各列に1回ずつ現れる。",
+  M17: "回転量が行ごとに異なる（45°・90°・135°ずつ）。塗りは列で決まる。",
+  M18: "左と中に共通する点だけが右に残る。",
+  M19: "規則は縦方向：上から下へ個数が増え、形は列ごとに同じ。",
+  M20: "外枠は各行に1つずつ、矢印は90°ずつ回転、矢印の塗りは行ごとに同じ。",
+  M21: "左と中を重ね、共通する線を消すと右になる（放射線）。",
+  M22: "右の個数＝左と中の個数の差。",
+  M23: "黒丸は1つずつ、灰色の四角は2つずつ時計回りに移動。",
+  M24: "形・塗りがそれぞれ各行・各列に1回ずつ現れる。",
+  M25: "多角形の角の数が右へ・下へ1つずつ増える（右下は七角形）。",
+  M26: "矢印は反時計回りに90°ずつ回転、小さな黒丸は時計回りに1つずつ移動。",
+  M27: "右の個数＝左＋中の個数。右の形は中の形と同じ。",
+  M28: "点の配置全体が1列ずつ右へずれる（右端は左端へ回り込む）。",
+  M29: "左の図形は行の規則、右の図形は列の規則に従う。",
+  M30: "右の矢印の角度＝左＋中の角度。四隅の点は左と中で共通するものを消す。"
+};
+const { ITEMS, build, cellSVG } = window.MatrixItems;
+document.getElementById("grid").innerHTML = ITEMS.map((it, n) => {
+  const b = build(it);
+  const cells = b.cells.map((els, i) => `<div class="${i === 8 ? "ans" : ""}">${cellSVG(els)}</div>`).join("");
+  return `<div class="item"><div class="head">問${n + 1}<span>${it.id}</span></div><div class="m">${cells}</div><div class="rule">${RULES[it.id] || ""}</div></div>`;
+}).join("");
+</script>
+</body>
+</html>

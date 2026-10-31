@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>図形推理テスト</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #ffffff; --text: #1d2330; --muted: #5d6677;
+    --line: #dde1e8; --accent: #2457c5; --accent-weak: #e8eefb; --on-accent: #ffffff;
+    --ok: #1f8a4c; --ng: #c23b3b; --warn: #b7791f; --chip: #f0f2f6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151b; --card: #1b1f27; --text: #e6e9ef; --muted: #9aa3b2;
+      --line: #2c323d; --accent: #7aa2ff; --accent-weak: #1f2a44; --on-accent: #0d1220;
+      --ok: #4cc38a; --ng: #ff7b7b; --warn: #e0b04f; --chip: #242a35;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151b; --card: #1b1f27; --text: #e6e9ef; --muted: #9aa3b2;
+    --line: #2c323d; --accent: #7aa2ff; --accent-weak: #1f2a44; --on-accent: #0d1220;
+    --ok: #4cc38a; --ng: #ff7b7b; --warn: #e0b04f; --chip: #242a35;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 64px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 22px 0 8px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .small { font-size: 13px; }
+  label { display: block; font-size: 14px; margin: 14px 0 4px; font-weight: 600; }
+  input[type=text], input[type=password] {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 16px;
+    background: var(--card); color: var(--text);
+  }
+  button {
+    font: inherit; cursor: pointer; border-radius: 6px; padding: 10px 18px;
+    border: 1px solid var(--line); background: var(--card); color: var(--text);
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .rules { background: var(--accent-weak); border-radius: 8px; padding: 12px 18px; font-size: 14px; }
+  .rules ul { margin: 0; padding-left: 20px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; align-items: center; }
+  .hidden { display: none !important; }
+
+  /* マトリクス（図形パネルは常に白地） */
+  .matrix {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    width: min(100%, 420px); margin: 0 auto; background: #fff;
+    border: 2px solid #1d2330; border-radius: 4px; overflow: hidden;
+  }
+  .matrix > div { aspect-ratio: 1; border-right: 1px solid #c9ced8; border-bottom: 1px solid #c9ced8; display: grid; place-items: center; }
+  .matrix > div:nth-child(3n) { border-right: none; }
+  .matrix > div:nth-child(n+7) { border-bottom: none; }
+  .matrix svg, .opt svg { width: 88%; height: 88%; display: block; }
+  .matrix .q { font-size: 40px; font-weight: 800; color: #2457c5; background: #eef2fb; }
+  .opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+  .opt {
+    position: relative; padding: 0; aspect-ratio: 1; background: #fff; border: 2px solid #c9ced8; border-radius: 8px;
+    display: grid; place-items: center;
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.sel { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-weak); }
+  .opt .k {
+    position: absolute; top: 4px; left: 6px; font-size: 12px; font-weight: 700; color: #5d6677;
+  }
+  .opt.sel .k { color: #2457c5; }
+
+  .bar {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 8px 0 10px; border-bottom: 1px solid var(--line); margin-bottom: 14px;
+  }
+  .timer { font-variant-numeric: tabular-nums; font-size: 20px; font-weight: 700; }
+  .timer.low { color: var(--ng); }
+  .nav { display: flex; justify-content: space-between; gap: 8px; margin-top: 18px; }
+  .nav button { white-space: nowrap; }
+  .palette { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .palette button { width: 36px; height: 32px; padding: 0; font-size: 13px; }
+  .palette button.done { background: var(--chip); }
+  .palette button.cur { border: 2px solid var(--accent); font-weight: 700; }
+  .palette button.flag { box-shadow: inset 0 -3px 0 var(--warn); }
+  .feedback { margin-top: 12px; font-weight: 600; }
+  .ok { color: var(--ok); } .ng { color: var(--ng); }
+
+  .score { font-size: 38px; font-weight: 800; line-height: 1.2; }
+  .stats { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-end; }
+  .hist { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  .hist th, .hist td { border: 1px solid var(--line); padding: 5px 8px; text-align: center; white-space: nowrap; }
+  .hist th { background: var(--chip); }
+  .scroll { overflow-x: auto; }
+  .dots { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 8px; }
+  .dots span { width: 16px; height: 16px; border-radius: 3px; font-size: 9px; display: grid; place-items: center; color: #fff; }
+  .dots .y { background: var(--ok); } .dots .n { background: var(--ng); } .dots .e { background: var(--line); color: var(--muted); }
+
+  @media (max-width: 480px) {
+    .card { padding: 16px; }
+    .opts { gap: 6px; }
+    .nav button { padding: 10px 12px; font-size: 15px; }
+    .stats { gap: 18px; }
+    .score { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 受付 -->
+  <section id="v-start" class="card">
+    <h1>図形推理テスト</h1>
+    <p class="sub">新卒採用 適性検査（社内版） ／ 全30問・制限時間25分</p>
+    <div class="rules">
+      <ul>
+        <li>各問題には、3×3に並んだ図形があり、右下の1マスが空いています。</li>
+        <li>図形は<b>横の行・縦の列</b>に沿って、ある規則で変化しています。規則を見抜き、空いたマスに入る図形を8つの選択肢から選んでください。</li>
+        <li>問題は後半ほど難しくなります。全問解けなくても問題ありません。</li>
+        <li>誤答による減点はありません。分からない問題も推測で回答してください。</li>
+        <li>問題は前後に移動でき、回答はいつでも変更できます。</li>
+        <li>別のタブやウィンドウへの移動回数は記録されます。</li>
+      </ul>
+    </div>
+    <label for="cid">受験番号</label>
+    <input id="cid" type="text" autocomplete="off" placeholder="例）2027-0123">
+    <label for="cname">氏名</label>
+    <input id="cname" type="text" autocomplete="off" placeholder="例）山田 太郎">
+    <div class="row">
+      <button id="btn-practice" class="primary" disabled>例題に進む</button>
+      <button id="btn-admin" class="small" style="margin-left:auto">試験官メニュー</button>
+    </div>
+  </section>
+
+  <!-- 例題 -->
+  <section id="v-practice" class="card hidden">
+    <h1>例題</h1>
+    <p class="sub">採点されません。空いたマスに入る図形を選んでください。</p>
+    <div class="matrix" id="p-matrix"></div>
+    <div class="opts" id="p-opts"></div>
+    <div class="feedback" id="p-feedback"></div>
+    <p class="muted hidden" id="p-explain">この例題では、<b>横の行ごとに形が同じ</b>で、<b>左から右へ「白→灰→黒」</b>と塗りが変わっています。そのため右下は「黒いひし形」になります。</p>
+    <div class="row">
+      <button id="btn-begin" class="primary">本番を開始する（25分）</button>
+    </div>
+  </section>
+
+  <!-- 検査 -->
+  <section id="v-test" class="hidden">
+    <div class="bar">
+      <div class="muted" id="progress"></div>
+      <div class="timer" id="timer">25:00</div>
+    </div>
+    <div class="card">
+      <div class="matrix" id="t-matrix"></div>
+      <div class="opts" id="t-opts"></div>
+      <div class="nav">
+        <button id="btn-prev">← 前へ</button>
+        <button id="btn-flag">あとで見直す</button>
+        <button id="btn-next" class="primary">次へ →</button>
+      </div>
+      <div class="palette" id="palette"></div>
+      <div class="row" style="justify-content:flex-end">
+        <button id="btn-finish">回答を終了して提出する</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 終了 -->
+  <section id="v-done" class="card hidden">
+    <h1>検査は終了しました</h1>
+    <p class="sub">おつかれさまでした。試験官の指示があるまで、そのままお待ちください。</p>
+    <div class="row"><button id="btn-done-admin" class="small">試験官メニュー</button></div>
+  </section>
+
+  <!-- PIN -->
+  <section id="v-pin" class="card hidden">
+    <h1>試験官メニュー</h1>
+    <label for="pin">試験官PIN</label>
+    <input id="pin" type="password" autocomplete="off">
+    <p class="muted" id="pin-msg"></p>
+    <div class="row">
+      <button id="btn-pin" class="primary">開く</button>
+      <button id="btn-pin-back">戻る</button>
+    </div>
+  </section>
+
+  <!-- 試験官 -->
+  <section id="v-admin" class="card hidden">
+    <div id="last-result"></div>
+    <h2>この端末の受験記録</h2>
+    <p class="muted">結果はこのブラウザ内に保存されています。実施日ごとにCSVを書き出してください。</p>
+    <div class="scroll"><table class="hist" id="hist"></table></div>
+    <div class="row">
+      <button id="btn-csv" class="primary">全記録をCSVで書き出す</button>
+      <button id="btn-new">次の受験者へ</button>
+      <button id="btn-clear" style="margin-left:auto">記録をすべて削除</button>
+    </div>
+    <p class="muted small" id="csv-msg"></p>
+  </section>
+
+</div>
+
+<script src="items.js"></script>
+<script>
+/* =========================================================
+   設定
+   ========================================================= */
+const CONFIG = {
+  TIME_LIMIT_SEC: 25 * 60,   // 制限時間（秒）。合理的配慮で延長する場合はここを変更
+  ADMIN_PIN: "2027",         // 試験官PIN（運用前に必ず変更）
+  STORAGE_KEY: "matrix_results_v1",
+  // 社内ノルム（基準値）。受験データが30件以上集まったら実データの平均・標準偏差に差し替える
+  NORM: { mean: 15, sd: 5 },
+  IQ_FLOOR: 70, IQ_CEIL: 145   // 推定IQの表示範囲（30問ではこれ以上の精度は出ない）
+};
+
+const { ITEMS, PRACTICE, build, cellSVG } = window.MatrixItems;
+const BUILT = ITEMS.map(build);
+const KEYS = "ABCDEFGH";
+const $ = (id) => document.getElementById(id);
+let state = null, lastResult = null, timerId = null;
+
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function show(v) { for (const id of ["v-start", "v-practice", "v-test", "v-done", "v-pin", "v-admin"]) $(id).classList.toggle("hidden", id !== v); window.scrollTo(0, 0); }
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function loadHistory() { try { return JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY) || "[]"); } catch { return []; } }
+function saveHistory(list) { try { localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(list)); } catch { /* 保存できない環境ではCSVで回収 */ } }
+
+function matrixHTML(b) {
+  return b.cells.map((els, i) => i === 8 ? `<div class="q">?</div>` : `<div>${cellSVG(els, 'aria-hidden="true"')}</div>`).join("");
+}
+function optsHTML(b, order, selected) {
+  return order.map((orig, pos) => `<button class="opt${selected === orig ? " sel" : ""}" data-p="${pos}" aria-label="選択肢${KEYS[pos]}"><span class="k">${KEYS[pos]}</span>${cellSVG(b.options[orig], 'aria-hidden="true"')}</button>`).join("");
+}
+
+/* ---------- 受付 ---------- */
+function validateStart() { $("btn-practice").disabled = !($("cid").value.trim() && $("cname").value.trim()); }
+$("cid").addEventListener("input", validateStart);
+$("cname").addEventListener("input", validateStart);
+
+/* ---------- 例題 ---------- */
+const PB = build(PRACTICE);
+const pOrder = shuffle([0, 1, 2, 3, 4, 5, 6, 7]);
+let pSel = null;
+function renderPractice() {
+  $("p-matrix").innerHTML = matrixHTML(PB);
+  $("p-opts").innerHTML = optsHTML(PB, pOrder, pSel);
+  $("p-opts").querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => {
+    pSel = pOrder[+b.dataset.p];
+    renderPractice();
+    const ok = pSel === PB.answer;
+    $("p-feedback").innerHTML = ok ? `<span class="ok">正解です。</span>` : `<span class="ng">不正解です。もう一度考えてみてください。</span>`;
+    $("p-explain").classList.toggle("hidden", !ok);
+  }));
+}
+$("btn-practice").addEventListener("click", () => { renderPractice(); show("v-practice"); });
+
+/* ---------- 検査 ---------- */
+$("btn-begin").addEventListener("click", () => {
+  state = {
+    cid: $("cid").value.trim(), cname: $("cname").value.trim(), startedAt: new Date(),
+    remaining: CONFIG.TIME_LIMIT_SEC, idx: 0,
+    order: BUILT.map(() => shuffle([0, 1, 2, 3, 4, 5, 6, 7])),
+    answers: BUILT.map(() => null), flags: BUILT.map(() => false),
+    times: BUILT.map(() => 0), blurCount: 0, lastTick: Date.now()
+  };
+  $("palette").innerHTML = BUILT.map((_, i) => `<button data-i="${i}">${i + 1}</button>`).join("");
+  $("palette").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => go(+b.dataset.i)));
+  render();
+  show("v-test");
+  const deadline = Date.now() + CONFIG.TIME_LIMIT_SEC * 1000;
+  timerId = setInterval(() => {
+    state.remaining = Math.max(0, Math.round((deadline - Date.now()) / 1000));
+    renderTimer();
+    if (state.remaining <= 0) finish(true);
+  }, 250);
+  renderTimer();
+});
+
+function tick() { const now = Date.now(); state.times[state.idx] += now - state.lastTick; state.lastTick = now; }
+function go(i) { tick(); state.idx = i; render(); }
+function renderTimer() {
+  const m = Math.floor(state.remaining / 60), s = state.remaining % 60;
+  $("timer").textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  $("timer").classList.toggle("low", state.remaining <= 180);
+}
+function render() {
+  const i = state.idx, b = BUILT[i];
+  $("progress").textContent = `問題 ${i + 1} / ${BUILT.length}　（回答済み ${state.answers.filter((a) => a !== null).length}）`;
+  $("t-matrix").innerHTML = matrixHTML(b);
+  $("t-opts").innerHTML = optsHTML(b, state.order[i], state.answers[i]);
+  $("t-opts").querySelectorAll(".opt").forEach((el) => el.addEventListener("click", () => { state.answers[i] = state.order[i][+el.dataset.p]; render(); }));
+  $("btn-prev").disabled = i === 0;
+  $("btn-next").disabled = i === BUILT.length - 1;
+  $("btn-flag").textContent = state.flags[i] ? "見直し印を外す" : "あとで見直す";
+  $("palette").querySelectorAll("button").forEach((el, k) => {
+    el.classList.toggle("done", state.answers[k] !== null);
+    el.classList.toggle("cur", k === i);
+    el.classList.toggle("flag", state.flags[k]);
+  });
+}
+$("btn-prev").addEventListener("click", () => { if (state.idx > 0) go(state.idx - 1); });
+$("btn-next").addEventListener("click", () => { if (state.idx < BUILT.length - 1) go(state.idx + 1); });
+$("btn-flag").addEventListener("click", () => { state.flags[state.idx] = !state.flags[state.idx]; render(); });
+$("btn-finish").addEventListener("click", () => {
+  const left = state.answers.filter((a) => a === null).length;
+  if (confirm(left ? `未回答の問題が ${left} 問あります。提出してよろしいですか？` : "回答を提出してよろしいですか？")) finish(false);
+});
+document.addEventListener("visibilitychange", () => { if (state && !state.finished && document.hidden) state.blurCount++; });
+window.addEventListener("beforeunload", (e) => { if (state && !state.finished) { e.preventDefault(); e.returnValue = ""; } });
+
+/* ---------- 採点 ---------- */
+function finish(timeout) {
+  if (state.finished) return;
+  tick();
+  state.finished = true;
+  clearInterval(timerId);
+  const correct = state.answers.filter((a, i) => a === BUILT[i].answer).length;
+  const z = (correct - CONFIG.NORM.mean) / CONFIG.NORM.sd;
+  const iqRaw = Math.round(100 + 15 * z);
+  lastResult = {
+    cid: state.cid, cname: state.cname, date: state.startedAt.toLocaleString("ja-JP"),
+    usedSec: CONFIG.TIME_LIMIT_SEC - state.remaining, timeout, blurCount: state.blurCount,
+    answered: state.answers.filter((a) => a !== null).length,
+    correct, total: BUILT.length,
+    tScore: Math.round(50 + 10 * z),
+    iq: Math.min(CONFIG.IQ_CEIL, Math.max(CONFIG.IQ_FLOOR, iqRaw)),
+    iqLabel: iqRaw >= CONFIG.IQ_CEIL ? `${CONFIG.IQ_CEIL}以上` : iqRaw <= CONFIG.IQ_FLOOR ? `${CONFIG.IQ_FLOOR}以下` : String(iqRaw),
+    detail: Object.fromEntries(BUILT.map((b, i) => [b.id, state.answers[i] === null ? "" : (state.answers[i] === b.answer ? 1 : 0)])),
+    secs: Object.fromEntries(BUILT.map((b, i) => [b.id, Math.round(state.times[i] / 1000)]))
+  };
+  const hist = loadHistory(); hist.push(lastResult); saveHistory(hist);
+  show("v-done");
+}
+
+/* ---------- 試験官 ---------- */
+function openPin() { $("pin").value = ""; $("pin-msg").textContent = ""; show("v-pin"); $("pin").focus(); }
+$("btn-admin").addEventListener("click", openPin);
+$("btn-done-admin").addEventListener("click", openPin);
+$("btn-pin-back").addEventListener("click", () => show(state && state.finished ? "v-done" : "v-start"));
+$("pin").addEventListener("keydown", (e) => { if (e.key === "Enter") $("btn-pin").click(); });
+$("btn-pin").addEventListener("click", () => {
+  if ($("pin").value !== CONFIG.ADMIN_PIN) { $("pin-msg").textContent = "PINが違います。"; return; }
+  renderAdmin(); show("v-admin");
+});
+const fmtTime = (sec) => `${Math.floor(sec / 60)}分${String(sec % 60).padStart(2, "0")}秒`;
+
+function renderAdmin() {
+  $("csv-msg").textContent = "";
+  if (lastResult) {
+    const r = lastResult;
+    const dots = BUILT.map((b, i) => { const v = r.detail[b.id]; return `<span class="${v === 1 ? "y" : v === 0 ? "n" : "e"}" title="${b.id}">${i + 1}</span>`; }).join("");
+    $("last-result").innerHTML = `
+      <h1>直近の受験結果</h1>
+      <p class="sub">${escapeHtml(r.cid)}　${escapeHtml(r.cname)}　（${r.date}）</p>
+      <div class="stats">
+        <div><div class="muted">正答数</div><div class="score">${r.correct}<span style="font-size:17px"> / ${r.total}</span></div></div>
+        <div><div class="muted">偏差値</div><div class="score">${r.tScore}</div></div>
+        <div><div class="muted">推定IQ</div><div class="score">${r.iqLabel}</div></div>
+      </div>
+      <h2>問題別の正誤</h2>
+      <div class="dots">${dots}</div>
+      <p class="muted">所要時間 ${fmtTime(r.usedSec)}${r.timeout ? "（時間切れ）" : ""}／回答数 ${r.answered}／画面離脱
+        <span class="${r.blurCount ? "ng" : "ok"}">${r.blurCount}回</span></p>
+      <p class="muted small">※偏差値・推定IQは社内ノルム（平均${CONFIG.NORM.mean}点・標準偏差${CONFIG.NORM.sd}点）による換算値です。標準化された公式のIQではありません。</p>`;
+  } else {
+    $("last-result").innerHTML = `<h1>試験官メニュー</h1>`;
+  }
+  const hist = loadHistory();
+  $("hist").innerHTML = `<tr><th>受験番号</th><th>氏名</th><th>実施日時</th><th>正答</th><th>偏差値</th><th>推定IQ</th><th>時間</th><th>離脱</th></tr>` +
+    (hist.length ? hist.slice().reverse().map((r) => `<tr><td>${escapeHtml(r.cid)}</td><td>${escapeHtml(r.cname)}</td><td>${r.date}</td><td>${r.correct}</td><td>${r.tScore}</td><td>${r.iqLabel}</td><td>${fmtTime(r.usedSec)}</td><td>${r.blurCount}</td></tr>`).join("")
+      : `<tr><td colspan="8">記録はまだありません</td></tr>`);
+}
+
+$("btn-csv").addEventListener("click", async () => {
+  const hist = loadHistory();
+  const ids = BUILT.map((b) => b.id);
+  const head = ["受験番号", "氏名", "実施日時", "正答数", "満点", "偏差値", "推定IQ", "所要秒", "時間切れ", "回答数", "画面離脱回数",
+    ...ids.map((id) => `${id}_正誤`), ...ids.map((id) => `${id}_秒`)];
+  const rows = hist.map((r) => [r.cid, r.cname, r.date, r.correct, r.total, r.tScore, r.iqLabel, r.usedSec, r.timeout ? 1 : 0, r.answered, r.blurCount,
+    ...ids.map((id) => r.detail[id]), ...ids.map((id) => r.secs ? r.secs[id] : "")]);
+  const csv = [head, ...rows].map((row) => row.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv" });   // BOM付きでExcelの文字化けを防ぐ
+  const filename = `図形推理テスト_結果_${new Date().toISOString().slice(0, 10)}.csv`;
+  // claude.ai上ではdownloads機能、ローカルで開いた場合は通常のダウンロード
+  const downloads = window.claude ? await window.claude.use("downloads").catch(() => null) : null;
+  if (downloads) {
+    try { await downloads.save({ filename, data: blob }); }
+    catch (e) { if (e && e.code !== "declined") $("csv-msg").textContent = "CSVを保存できませんでした：" + (e.message || e.code); }
+    return;
+  }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+  URL.revokeObjectURL(a.href);
+});
+$("btn-new").addEventListener("click", () => {
+  state = null; lastResult = null; pSel = null;
+  $("cid").value = ""; $("cname").value = ""; $("p-feedback").innerHTML = ""; $("p-explain").classList.add("hidden");
+  validateStart(); show("v-start");
+});
+$("btn-clear").addEventListener("click", () => {
+  if (confirm("この端末に保存されたすべての受験記録を削除します。先にCSVを書き出しましたか？")) { saveHistory([]); renderAdmin(); }
+});
+</script>
+</body>
+</html>
