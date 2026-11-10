@@ -67,14 +67,24 @@
 <path d="M146.01,55.85 A23.0,23.0 0 0 0 146.01,101.15 L147.87,90.56 A12.25,12.25 0 0 1 147.87,66.44 Z" fill="#b8946a" stroke="#7d6347" stroke-width="0.2" />
 <rect x="150.00" y="52.75" width="7.00" height="47.25" fill="#d9c3a3" stroke="#7d6347" stroke-width="0.2" />
 <text x="139.50" y="77.00" font-size="2.4" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >受付</text>
-<rect x="77.00" y="184.00" width="15.00" height="15.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
-<rect x="99.50" y="184.00" width="15.00" height="15.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
-<rect x="122.00" y="184.00" width="15.00" height="15.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
-<rect x="88.25" y="159.00" width="15.00" height="15.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
-<rect x="110.75" y="159.00" width="15.00" height="15.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="70.00" y="192.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="70.00" y="177.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="70.00" y="162.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="70.00" y="147.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="70.00" y="132.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="70.00" y="117.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="92.50" y="174.50" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="107.50" y="174.50" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="122.50" y="174.50" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="92.50" y="148.25" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="107.50" y="148.25" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="122.50" y="148.25" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="92.50" y="122.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="107.50" y="122.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
+<rect x="122.50" y="122.00" width="14.00" height="14.00" fill="#ece3d6" stroke="#9b8b78" stroke-width="0.12" />
 <text x="74.25" y="72.75" font-size="2.4" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >玄関ポーチ</text>
 <text x="74.25" y="81.50" font-size="1.9" fill="#7a726b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >（既設・造作なし）</text>
-<text x="112.00" y="139.00" font-size="2.6" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >待合</text>
+<text x="114.50" y="112.75" font-size="2.6" fill="#2b2522" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >待合（15席）</text>
 <text x="19.50" y="66.50" font-size="2.2" fill="#b5523b" text-anchor="middle" font-weight="bold" font-family="'IPAGothic','IPAPGothic',sans-serif" >道路（歩道）</text>
 <line x1="17.00" y1="77.12" x2="123.25" y2="77.12" stroke="#b5523b" stroke-width="0.45" marker-end="url(#arr)"/>
 <text x="33.25" y="91.50" font-size="2.0" fill="#b5523b" text-anchor="middle" font-weight="normal" font-family="'IPAGothic','IPAPGothic',sans-serif" >開放</text>

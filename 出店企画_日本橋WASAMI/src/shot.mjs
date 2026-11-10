@@ -1,8 +1,11 @@
 // usage: node shot.mjs <in.svg|html> <out.png|pdf> [widthPx heightPx]
 import { chromium } from 'playwright-core'
 import path from 'path'
+import fs from 'fs'
+const exe = ['/opt/pw-browsers/chromium', ...fs.readdirSync('/opt/pw-browsers').filter(d => d.startsWith('chromium-')).map(d => `/opt/pw-browsers/${d}/chrome-linux/chrome`)]
+  .find(f => { try { return fs.statSync(f).isFile() } catch { return false } })
 const [inp, out, w = 1600, h = 1131] = process.argv.slice(2)
-const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+const b = await chromium.launch({ executablePath: exe,
   args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] })
 const p = await b.newPage({ viewport: { width: +w, height: +h } })
 await p.goto('file://' + path.resolve(inp))

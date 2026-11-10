@@ -297,12 +297,11 @@ def make_entry_detail():
     g.text(*P(rc["cx"] - 420, rc["cy"] + 60), "受付", 2.4, weight="bold")
     # 待合椅子
     for (cx_, cy_, _) in F1["chairs"]:
-        if cy_ < 2500:
-            rectm(cx_ - 300, cy_ - 300, cx_ + 300, cy_ + 300, fill="#ece3d6", st="#9b8b78", sw=0.12)
+        rectm(cx_ - 280, cy_ - 280, cx_ + 280, cy_ + 280, fill="#ece3d6", st="#9b8b78", sw=0.12)
     # 室名・動線
     g.text(*P(PORCH_X / 2, D - 900), "玄関ポーチ", 2.4, weight="bold")
     g.text(*P(PORCH_X / 2, D - 1250), "（既設・造作なし）", 1.9, fill=C["sub"])
-    g.text(*P(2400, 3000), "待合", 2.6, weight="bold")
+    g.text(*P(2500, 4050), "待合（15席）", 2.6, weight="bold")
     g.text(*P(-1300, 5900), "道路（歩道）", 2.2, fill=C["red"], weight="bold")
     g.line(*P(-1400, 5475), *P(rc["cx"] - rc["r"] - 150, 5475), st=C["red"], w=0.45, extra='marker-end="url(#arr)"')
     g.text(*P(-750, 4900), "開放", 2.0, fill=C["red"])

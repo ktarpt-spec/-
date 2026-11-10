@@ -215,7 +215,7 @@ def draw_floor(f, ox, oy, s, scan=None):
             for i in range(n + 1):
                 yy = lv["y0"] + i * (lv["y1"] - lv["y0"]) / n
                 _bx(lv["x"] - 25, yy - 18, lv["x"] + 25, yy + 18, fill="#b8946a", st="#7d6347", sw=0.06)
-            lx, ly = P(lv["x"] + 260, (lv["y0"] + lv["y1"]) / 2)
+            lx, ly = P(lv["x"] - 300, (lv["y0"] + lv["y1"]) / 2)
             g.add(f'<text x="{lx:.2f}" y="{ly:.2f}" font-size="1.55" fill="#7d6347" text-anchor="middle" font-family="{FONT}" '
                   f'transform="rotate(-90 {lx:.2f} {ly:.2f})">木調縦ルーバー（ガラス面より600mm後退）</text>')
         pd = f.get("porch_door")
@@ -391,14 +391,24 @@ def furniture(g, f, P, s):
             g.text(a, b - 14, "1.5T MRI（富士フイルム）", 1.7, fill=C["blue"], anchor="middle")
             # 5ガウスライン目安（破線）
             g.add(f'<ellipse cx="{a:.2f}" cy="{b:.2f}" rx="{2000*s:.2f}" ry="{2500*s:.2f}" fill="none" stroke="{C["blue"]}" stroke-width="0.15" stroke-dasharray="1,0.8"/>')
-        elif r["id"] == "ex":
-            box(x0 + 200, y1 - 750, x0 + 1600, y1 - 150)
-            a, b = P(x0 + 900, y1 - 1100); g.circle(a, b, 230 * s)
-            a, b = P(x0 + 1100, y0 + 1300); g.circle(a, b, 230 * s)
-            box(x1 - 900, y1 - 2100, x1 - 200, y1 - 200, rx=0.5)
-        elif r["id"] == "tr":
-            box(x0 + 950, y0 + 550, x0 + 1650, y0 + 2450, rx=0.5)
-            box(x0 + 100, y0 + 900, x0 + 550, y0 + 2400, fill="#ecebe8")
+        elif r["id"].startswith("ex"):
+            # 診察室：西壁に机＋医師いす、患者いす、東壁沿いに診察ベッド（北側の柱型を避ける）
+            box(x0 + 100, y0 + 1150, x0 + 600, y0 + 2150)
+            a, b = P(x0 + 850, y0 + 1700); g.circle(a, b, 200 * s)
+            a, b = P(x0 + 1150, y0 + 1250); g.circle(a, b, 190 * s, fill="#ece3d6")
+            box(x1 - 750, y0 + 300, x1 - 150, y0 + 2100, rx=0.5)
+        elif r["id"].startswith("tr"):
+            # 処置室：処置ベッド（横向き）＋器材棚＋ワゴン・スツール
+            box(x0 + 400, y0 + 450, x0 + 2300, y0 + 1150, rx=0.5)
+            box(x0 + 100, y0 + 1450, x0 + 550, y1 - 250, fill="#ecebe8")
+            a, b = P(x0 + 1400, y0 + 1550); g.circle(a, b, 200 * s)
+            box(x0 + 1900, y0 + 1500, x0 + 2300, y0 + 1900, fill="#ecebe8", rx=0.3)
+        elif r["id"] == "sf":
+            # スタッフ室：ロッカー（東壁）＋作業机
+            n = int((y1 - y0 - 400) / 450)
+            for i in range(n):
+                box(x1 - 500, y0 + 200 + i * 450, x1 - 100, y0 + 650 + i * 450, fill="#e8dccb")
+            box(x0 + 100, y0 + 200, x0 + 600, y0 + 1300, fill="#f4efe8")
         elif r["id"] == "op":
             box(x0 + 150, y1 - 750, x1 - 150, y1 - 150, fill="#ecebe8")
             a, b = P(x0 + 1000, y1 - 1150); g.circle(a, b, 220 * s)
@@ -527,7 +537,8 @@ def dims(g, f, P, s):
     yb = D + 2600 / (s * 100) * 0 + 1200
     if f["floor"] == "1F":
         hdim(0, W, D + 1900, f"{W:,}")
-        for a, b in [(0, 4200), (4200, 6300), (6300, 7400), (7400, 8800), (8800, W)]:
+        from geometry import EXAM_X
+        for a, b in [(0, 4200)] + EXAM_X + [(13030, W)]:
             hdim(a, b, D + 1150, f"{b-a:,}")
         vdim(0, D, -1300, f"{D:,}")
         for a, b in [(0, 2800), (2800, 4000), (4000, D)]:
@@ -583,8 +594,8 @@ def make_plan(floor):
     m2, tsubo = AREA[floor]
     notes = {
         "1F": ["・下図（グレー）は貸主提供の募集図面（1階 店舗区画）。赤線＝貸室区画（98.36㎡）、着色部・室配置が当社計画（C工事）。",
-               "・MRI：富士フイルム製1.5T（ゼロヘリウム型想定・クエンチ配管不要）。検査室約31.5㎡・機械室約5.4㎡・操作室約3.9㎡。破線は5ガウスライン目安。機種仕様書で要確認。",
-               "・床荷重5,000N/㎡の1Fに配置。荷重分散架台・搬入経路（マシンハッチ1,830×2,500）・振動・騒音・電源容量をビル側と協議。",
+               "・部屋構成：受付、待合（最大15名・15席）、診察室4室（各約5.6㎡）、処置室3室（各約7.6㎡）、スタッフ室・倉庫。診察室・処置室は全室に手洗い器。",
+               "・受付は玄関の既設扉の正面（扉から1,220mm）。待合は道路側ガラス面に面し、廊下（幅1,200）から診察室・処置室へ。館内側出入口からも廊下へ直接つながる。",
                "・玄関ポーチ（道路側開放）・奥の既設SUS両開き扉・道路側ガラス面（約4.5m）は既設（A工事）のまま。ガラス面から600mm内側に木調縦ルーバー、600mm以内に造作・サインなし（内装マニュアル7-(7)）。",
                "・トイレは館内共用トイレを利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
         "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。各室 約6.5㎡（約4畳）。間仕切は上部開放の欄間式（欄間h=500）。",
@@ -599,8 +610,8 @@ def make_plan(floor):
     no = {"1F": "A-01", "4F": "A-02", "5F": "A-03"}[floor]
     title_block(g, f["title"], scale, no, notes)
     if floor == "1F":
-        legend(g, 330, 70, [(C["tint"], f"貸室 {m2}㎡（約{tsubo}坪）"), ("#f8f4ee", "診察・処置・操作・更衣"),
-                            (C["mri"], "MRI室（シールド工事）"), (C["service"], "機械室"),
+        legend(g, 330, 70, [(C["tint"], f"貸室 {m2}㎡（約{tsubo}坪）"), ("#f8f4ee", "診察室・処置室"),
+                            ("#f3ebdd", "廊下"), (C["service"], "スタッフ室・倉庫"),
                             ("#eeeeee", "玄関ポーチ（既設・区画内）")])
         summary_table(g, 330, 104, f)
         g.text(14, 20, "← 正面道路（Y1通り・歩道）", 2.6, anchor="start", fill=C["red"], weight="bold")
