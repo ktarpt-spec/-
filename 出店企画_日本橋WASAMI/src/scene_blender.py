@@ -748,10 +748,8 @@ def build_1F(cut=None):
     H = 2700
     hh = (lambda h: min(h, cut)) if cut else (lambda h: h)
     plane("floor", m(W + 400), m(D + 400), m(W / 2), m(D / 2), 0, "carpet")
-    mri = next(r for r in f["rooms"] if r["id"] == "mri")
-    plane("mrifloor", m(mri["x1"] - mri["x0"]), m(mri["y1"] - mri["y0"]), m((mri["x0"] + mri["x1"]) / 2), m((mri["y0"] + mri["y1"]) / 2), 0.001, "vinyl")
-    tr = next(r for r in f["rooms"] if r["id"] == "tr")
-    plane("trfloor", m(tr["x1"] - tr["x0"]), m(tr["y1"] - tr["y0"]), m((tr["x0"] + tr["x1"]) / 2), m((tr["y0"] + tr["y1"]) / 2), 0.001, "vinyl")
+    for tr in [r for r in f["rooms"] if r["id"].startswith("tr")]:   # 処置室：ビニル床シート
+        plane("trfloor", m(tr["x1"] - tr["x0"]), m(tr["y1"] - tr["y0"]), m((tr["x0"] + tr["x1"]) / 2), m((tr["y0"] + tr["y1"]) / 2), 0.001, "vinyl")
     if not cut:
         plane("ceiling", m(W + 400), m(D + 400), m(W / 2), m(D / 2), CH, "ceiling", rot=(math.pi, 0, 0))
     vs = next(r for r in f["rooms"] if r["id"] == "vest")
@@ -806,50 +804,39 @@ def build_1F(cut=None):
         chair(x, y, {270: 90, 90: 270, 0: 180, 180: 0}[rot])
     for px, py in f.get("plants", []):
         plant(px, py, 1.2)
-    # MRI装置（平面図と同じ：1.5T、ボア軸Y方向、ガントリー北側・寝台は南側）
-    gx, gy = m(mri["x0"] + 2100), m(4350)
-    mri2 = next(r for r in f["rooms"] if r["id"] == "mri2")
-    plane("mrifloor2", m(mri2["x1"] - mri2["x0"]), m(mri2["y1"] - mri2["y0"]), m((mri2["x0"] + mri2["x1"]) / 2), m((mri2["y0"] + mri2["y1"]) / 2), 0.001, "vinyl")
-    box("gantry", 2.2, 2.0, 2.1, gx, gy, 0, "mri", bevel=0.3)
-    cyl("bore", 0.32, 2.08, gx, gy - 1.05, 1.0, "dark", rot=(-math.pi / 2, 0, 0))
-    cyl("bore_ring", 0.45, 0.02, gx, gy - 1.02, 1.0, "mriblue", rot=(-math.pi / 2, 0, 0), bevel=0.005)
-    tl = gy - 1.0 - m(500)
-    box("mritable", 0.6, tl, 0.72, gx, m(500) + tl / 2, 0, "mri", bevel=0.05)
-    box("mripad", 0.55, tl + 0.3, 0.06, gx, m(500) + tl / 2 + 0.15, 0.72, "bedcover", bevel=0.025)
-    box("mricab", 0.5, 1.2, 0.9, m(mri["x1"] - 300), m(1200), 0, "white", bevel=0.01)
-    # 操作室：操作卓・モニター
-    op = next(r for r in f["rooms"] if r["id"] == "op")
-    box("console", 0.6, 2.0, 0.72, m(op["x1"] - 350), m(1400), 0, "white", bevel=0.005)
-    for k in (-0.4, 0.4):
-        box("opmon", 0.03, 0.5, 0.32, m(op["x1"] - 450), m(1400) + k, 0.8, "screen")
-    mech = next(r for r in f["rooms"] if r["id"] == "mech")
-    for i in range(3):
-        box("cabinet", 0.6, 0.8, 1.9, m(mech["x0"] + 350 + i * 650), m(mech["y1"] - 450), 0, "white", bevel=0.005)
-    mch = next(r for r in f["rooms"] if r["id"] == "mch")
-    box("mlocker", 0.45, 0.45, 1.8, m(mch["x0"] + 300), m(400), 0, "oak", bevel=0.004)
-    box("mbench", 0.4, 1.0, 0.42, m(mch["x1"] - 300), m(1300), 0, "fabric", bevel=0.02)
     for r in f["rooms"]:
         for sx_, sy_ in r.get("sinks", []):
             box("sink", 0.5, 0.4, 0.82, m(sx_), m(sy_), 0, "white", bevel=0.02)
             box("faucet", 0.04, 0.04, 0.25, m(sx_), m(sy_) + (0.12 if sy_ > 3000 else -0.12), 0.82, "metal")
-    # 診察室・処置室
-    ex = next(r for r in f["rooms"] if r["id"] == "ex")
-    box("desk", 1.4, 0.6, 0.72, m(ex["x0"] + 900), m(ex["y1"] - 450), 0, "oakH", bevel=0.005)
-    box("monitor_ex", 0.5, 0.03, 0.32, m(ex["x0"] + 900), m(ex["y1"] - 250), 0.8, "screen", bevel=0.004)
-    chair(ex["x0"] + 900, ex["y1"] - 1100, 90)
-    stool(ex["x0"] + 1100, ex["y0"] + 1300)
-    bed(ex["x1"] - 550, ex["y1"] - 1150)
-    box("viewer", 0.03, 0.9, 0.6, m(ex["x0"] + 70), m(ex["y0"] + 1600), 1.2, "white", bevel=0.004)
-    bed(tr["x0"] + 1300, tr["y0"] + 1500)
-    box("cabinet_tr", 0.45, 1.5, 0.85, m(tr["x0"] + 325), m(tr["y0"] + 1650), 0, "white", bevel=0.005)
-    box("cabinet_trtop", 0.47, 1.52, 0.03, m(tr["x0"] + 325), m(tr["y0"] + 1650), 0.85, "top")
-    box("wagon_tr", 0.45, 0.45, 0.8, m(tr["x1"] - 400), m(tr["y0"] + 2300), 0, "steel", bevel=0.008)
+    # 診察室（平面図と同じ配置）：西壁の机＋モニター、医師いす、患者いす、東壁沿いの診察ベッド、シャウカステン
+    for ex in [r for r in f["rooms"] if r["id"].startswith("ex")]:
+        x0, y0, x1, y1 = ex["x0"], ex["y0"], ex["x1"], ex["y1"]
+        box("desk", 0.5, 1.0, 0.72, m(x0 + 350), m(y0 + 1650), 0, "oakH", bevel=0.005)
+        box("monitor_ex", 0.03, 0.5, 0.32, m(x0 + 180), m(y0 + 1650), 0.8, "screen", bevel=0.004)
+        chair(x0 + 850, y0 + 1700, 180)
+        stool(x0 + 1150, y0 + 1250)
+        bed(x1 - 450, y0 + 1200)
+    # 処置室：処置ベッド（横向き）、器材棚、ワゴン、スツール
+    for tr in [r for r in f["rooms"] if r["id"].startswith("tr")]:
+        x0, y0, x1, y1 = tr["x0"], tr["y0"], tr["x1"], tr["y1"]
+        bed(x0 + 1350, y0 + 800, along_x=True)
+        box("cabinet_tr", 0.45, 1.1, 0.85, m(x0 + 325), m(y0 + 2000), 0, "white", bevel=0.005)
+        box("cabinet_trtop", 0.47, 1.12, 0.03, m(x0 + 325), m(y0 + 2000), 0.85, "top")
+        box("wagon_tr", 0.4, 0.4, 0.8, m(x0 + 2100), m(y0 + 1700), 0, "steel", bevel=0.008)
+        stool(x0 + 1400, y0 + 1550)
+    # スタッフ室：ロッカー＋机
+    sf = next(r for r in f["rooms"] if r["id"] == "sf")
+    for i in range(5):
+        box("slocker", 0.4, 0.44, 1.8, m(sf["x1"] - 300), m(sf["y0"] + 425 + i * 450), 0, "oak", bevel=0.004)
+    box("sdesk", 0.5, 1.1, 0.72, m(sf["x0"] + 350), m(sf["y0"] + 750), 0, "oakH", bevel=0.005)
     if not cut:
-        linear_light(600, 1600, 3600, 1600, CH, 55); linear_light(600, 3300, 3600, 3300, CH, 55)
-        linear_light(4500, 3400, 8500, 3400, CH, 45)
-        linear_light(4600, 5300, 6300, 5300, CH, 45); linear_light(4500, 1400, 6000, 1400, CH, 45)
-        linear_light(7000, 5300, 8500, 5300, CH, 40); linear_light(7700, 1400, 8500, 1400, CH, 40); linear_light(6600, 1400, 7100, 1400, CH, 30)
-        linear_light(9400, 1200, 12600, 1200, CH, 55); linear_light(9400, 5600, 12600, 5600, CH, 55); linear_light(12900, 2600, 12900, 400, CH, 40)
+        linear_light(1000, 1600, 3600, 1600, CH, 55); linear_light(1000, 3000, 3600, 3000, CH, 55)
+        linear_light(4500, 3400, 12800, 3400, CH, 45)
+        for ex in [r for r in f["rooms"] if r["id"].startswith("ex")]:
+            linear_light(ex["x0"] + 400, 5400, ex["x1"] - 400, 5400, CH, 45)
+        for tr in [r for r in f["rooms"] if r["id"].startswith("tr")]:
+            linear_light(tr["x0"] + 400, 1400, tr["x1"] - 400, 1400, CH, 50)
+        linear_light(12500, 1400, 13600, 1400, CH, 30)
         sun_world(strength=0.6)
 
 
@@ -1036,10 +1023,9 @@ VIEWS = {
     "v5_staff": dict(build=lambda: build_upper("5F"), cam=(V(4700, 1650, 1500), V(800, 4300, 1000)), lens=17, exposure=-0.8),
     # 待合から玄関（既設SUS両開き扉）・受付・道路側ガラス面の木調ルーバーを望む
     "v1_lobby": dict(build=build_1F, cam=(V(3600, 1500, 1500), V(500, 5600, 1350)), lens=17, exposure=-0.8),
-    "v1_mri": dict(build=build_1F, cam=(V(12800, 300, 1600), V(10200, 4300, 1000)), lens=15, exposure=-0.8),
-    "v1_exam": dict(build=build_1F, cam=(V(4450, 4250, 1550), V(6500, 6300, 950)), lens=15, exposure=-0.35),
-    "v1_treat": dict(build=build_1F, cam=(V(6150, 2650, 1600), V(4600, 300, 800)), lens=15, exposure=-0.35),
-    "v1_op": dict(build=build_1F, cam=(V(7550, 2500, 1500), V(11000, 1700, 1050)), lens=17, exposure=-0.8),
+    "v1_corr": dict(build=build_1F, cam=(V(4450, 3400, 1550), V(12800, 3400, 1200)), lens=17, exposure=-0.8),
+    "v1_exam": dict(build=build_1F, cam=(V(7500, 4130, 1550), V(7400, 6400, 900)), lens=14, exposure=-0.35),
+    "v1_treat": dict(build=build_1F, cam=(V(8600, 2650, 1600), V(7300, 300, 750)), lens=15, exposure=-0.35),
     "ax1": dict(build=lambda: build_1F(cut=1500), cam=(V(9500, -7500, 12000), V(6900, 3300, 0)), lens=32, exposure=-0.5, axo=True),
     "ax4": dict(build=lambda: build_upper("4F", cut=1500), cam=(V(13500, -11000, 19000), V(10500, 3300, 0)), lens=30, exposure=-0.5, axo=True),
     "ax5": dict(build=lambda: build_upper("5F", cut=1500), cam=(V(13500, -11000, 19000), V(10500, 3300, 0)), lens=30, exposure=-0.5, axo=True),
