@@ -1,90 +1,161 @@
 <!--
-  Plaud議事録テンプレート（Googleドキュメント変換用HTML）
-  - このHTMLを text/html で Google ドライブにアップロードすると、Google ドキュメントに自動変換されます。
-  - {{ }} の部分を置き換え、議題ブロック（AGENDA ITEM）は議題の数だけ繰り返します。
-  - Google ドキュメントへの変換で崩れないよう、CSSはインラインstyleのみ、図は表で描きます。
+  Plaud議事録テンプレート v2（Googleドキュメント変換用HTML）
+  - text/html で Google ドライブにアップロードすると Google ドキュメントに自動変換されます。
+  - {{ }} を置き換え、AGENDA ITEM は議題の数だけ繰り返します。任意ブロックは必要なときだけ残します。
+  - 読みやすさのルール：
+      * 1行＝1つのこと。1行はおおむね40字以内。長い文は分けて改行する。
+      * 表の中で改行するときは <br> ではなく <p style="margin:0"> を1行ずつ使う（変換で改行が消えないように）。
+      * 数字はカード・棒グラフ・比較表に、流れはファネル図・流れ図に、日程はカレンダー表にする。
+      * 発言は「【話者】 内容」の形で1人1行。
+  - CSSはインラインstyleのみ。絵文字は U+FFFF 以下の記号（◆■★●□△○×✅⏰➡⚠❓▶▼）だけ使う。
 -->
 <html>
 <head><meta charset="utf-8"></head>
-<body style="font-family: 'Noto Sans JP', Arial, sans-serif; font-size: 11pt; color: #222;">
+<body style="font-family: 'Noto Sans JP', Arial, sans-serif; font-size: 11pt; color: #222; line-height: 1.6;">
 
 <h1 style="color:#1a3d6d;">{{ミーティング名}} 議事録</h1>
 
-<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
-  <tr><td style="background:#e8eef7; width:22%;"><b>◆ 日時</b></td><td>{{YYYY年M月D日(曜) HH:MM〜HH:MM}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>◆ 参加者</b></td><td>{{氏名（所属・役割）, ...}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>◆ 目的</b></td><td>{{なぜこの会議を開いたか}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>◆ ゴール</b></td><td>{{会議の終わりに何が決まっている／できている状態か}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>◆ ゴール達成度</b></td><td>{{○ 達成 / △ 一部達成 / × 未達}} ― {{一言で理由}}</td></tr>
+<!-- 基本情報 -->
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; border-color:#c9d3e3;">
+  <tr><td style="background:#e8eef7; width:20%;"><b>◆ 日時</b></td><td>{{YYYY年M月D日(曜) HH:MM〜HH:MM}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ 参加者</b></td><td>
+    <p style="margin:0">{{氏名（役割）}}</p>
+    <p style="margin:0">{{氏名（役割）}}</p>
+  </td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ 目的</b></td><td>{{1〜2行で}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ ゴール</b></td><td>{{1〜2行で}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>◆ 達成度</b></td><td><b>{{○ 達成 / △ 一部達成 / × 未達}}</b>
+    <p style="margin:0">{{理由を1行}}</p>
+  </td></tr>
 </table>
 
-<h2 style="color:#1a3d6d;">■ 全体サマリー（3行で）</h2>
-<ul>
-  <li>{{要点1}}</li>
-  <li>{{要点2}}</li>
-  <li>{{要点3}}</li>
-</ul>
-
-<h2 style="color:#1a3d6d;">✅ 決定事項・アクション一覧</h2>
-<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
-  <tr style="background:#1a3d6d; color:#ffffff;">
-    <td><b>#</b></td><td><b>議題</b></td><td><b>決定事項／アクション</b></td><td><b>責任者</b></td><td><b>デッドライン</b></td><td><b>状態</b></td>
+<!-- 任意：数字のカード（大事な数字が3〜4個あるとき） -->
+<h2 style="color:#1a3d6d;">■ 数字でひと目</h2>
+<table cellpadding="10" style="border-collapse:separate; border-spacing:6px; width:100%;">
+  <tr>
+    <td style="background:#e8eef7; text-align:center; width:25%;">
+      <p style="margin:0; font-size:9pt; color:#555;">{{指標名}}</p>
+      <p style="margin:0; font-size:18pt; color:#1a3d6d;"><b>{{数値}}</b></p>
+      <p style="margin:0; font-size:9pt;">{{ひとこと（目標比など）}}</p>
+    </td>
+    <!-- 同じ形のセルを3〜4個並べる。良い数字は #d9f2e3、悪い数字は #fde2e1 にする -->
   </tr>
-  <tr><td>1</td><td>{{議題名}}</td><td>{{内容}}</td><td>{{氏名}}</td><td>{{YYYY/MM/DD}}</td><td>{{□ 未着手}}</td></tr>
+</table>
+
+<h2 style="color:#1a3d6d;">■ 今日のポイント（3行で）</h2>
+<table border="1" cellpadding="8" style="border-collapse:collapse; width:100%; border-color:#e6d48a;">
+  <tr><td style="background:#fff6d6;">
+    <p style="margin:0">❶ {{要点1（1行）}}</p>
+    <p style="margin:0">❷ {{要点2（1行）}}</p>
+    <p style="margin:0">❸ {{要点3（1行）}}</p>
+  </td></tr>
+</table>
+
+<h2 style="color:#1a3d6d;">✅ やること一覧</h2>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; border-color:#c9d3e3;">
+  <tr style="background:#1a3d6d; color:#ffffff;">
+    <td><b>#</b></td><td><b>やること</b></td><td><b>だれが</b></td><td><b>いつまで</b></td><td><b>状態</b></td>
+  </tr>
+  <tr><td>1</td><td>{{動詞で終わる短い文}}</td><td>{{氏名}}</td><td>{{M/D}}</td><td>□ 未着手</td></tr>
 </table>
 
 <!-- ===== AGENDA ITEM（議題の数だけ繰り返す） ===== -->
-<h2 style="color:#1a3d6d;">議題{{n}}：{{議題名}}</h2>
+<h2 style="color:#ffffff; background:#1a3d6d; padding:4px;">議題{{n}}　{{議題名}}</h2>
 
-<table border="1" cellpadding="8" style="border-collapse:collapse; width:100%;">
-  <tr><td style="background:#fff6d6;"><b>★ 要約</b><br>{{2〜3文で、何が話され何が決まったかを一目でわかるように}}</td></tr>
+<table border="1" cellpadding="8" style="border-collapse:collapse; width:100%; border-color:#e6d48a;">
+  <tr><td style="background:#fff6d6;">
+    <p style="margin:0"><b>★ 要約</b></p>
+    <p style="margin:0">▶ {{何が話されたか（1行）}}</p>
+    <p style="margin:0">▶ {{何が決まったか（1行）}}</p>
+    <p style="margin:0">▶ {{残った課題（1行・あれば）}}</p>
+  </td></tr>
 </table>
 
-<h3>詳細</h3>
+<h3 style="color:#1a3d6d;">● 背景・現状</h3>
 <ul>
-  <li><b>背景・現状：</b>{{}}</li>
-  <li><b>議論のポイント：</b>{{誰がどんな意見を出したか。賛否・懸念も}}</li>
-  <li><b>結論：</b>{{決まったこと／保留になったこと}}</li>
+  <li>{{事実を1行ずつ}}</li>
 </ul>
 
-<!-- 必要なときだけ入れる：比較表 -->
-<h3>比較表</h3>
-<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
-  <tr style="background:#e8eef7;"><td><b>観点</b></td><td><b>案A</b></td><td><b>案B</b></td></tr>
-  <tr><td>{{コスト}}</td><td>{{}}</td><td>{{}}</td></tr>
+<h3 style="color:#1a3d6d;">● 議論のポイント</h3>
+<ul>
+  <li><b>【{{話者}}】</b> {{意見を1行}}</li>
+</ul>
+
+<h3 style="color:#1a3d6d;">● 結論</h3>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; border-color:#9fd3b4;">
+  <tr><td style="background:#d9f2e3;">
+    <p style="margin:0">✅ {{決まったこと（1行ずつ）}}</p>
+    <p style="margin:0">△ {{保留になったこと}}</p>
+  </td></tr>
 </table>
 
-<!-- 必要なときだけ入れる：流れ図（表で描く） -->
-<h3>流れ図</h3>
-<table cellpadding="8" style="border-collapse:collapse;">
+<!-- 任意：棒グラフ（数値の比較・目標と実績）。幅%を数値に比例させる -->
+<h3 style="color:#1a3d6d;">● グラフ：{{何の比較か}}</h3>
+<table cellpadding="4" style="border-collapse:collapse; width:100%;">
   <tr>
-    <td style="border:2px solid #1a3d6d; background:#e8eef7; text-align:center;">{{ステップ1}}</td>
-    <td style="text-align:center; font-size:16pt;">➡</td>
-    <td style="border:2px solid #1a3d6d; background:#e8eef7; text-align:center;">{{ステップ2}}</td>
-    <td style="text-align:center; font-size:16pt;">➡</td>
-    <td style="border:2px solid #1a3d6d; background:#d9f2e3; text-align:center;">{{ゴール}}</td>
+    <td style="width:22%;">{{項目A}}</td>
+    <td style="width:78%;"><table cellpadding="3" style="border-collapse:collapse; width:100%;"><tr>
+      <td style="background:#1a3d6d; color:#fff; width:{{比率}}%;"><b>{{数値}}</b></td><td></td>
+    </tr></table></td>
   </tr>
 </table>
 
-<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%;">
-  <tr><td style="background:#e8eef7; width:22%;"><b>● 責任者</b></td><td>{{氏名}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>⏰ デッドライン</b></td><td>{{YYYY/MM/DD（未定なら「未定：次回会議で決定」）}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>➡ 次のアクション候補</b></td><td>{{・具体的な作業1<br>・具体的な作業2}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>⚠ 懸念・リスク</b></td><td>{{}}</td></tr>
-  <tr><td style="background:#e8eef7;"><b>❓ 未決事項</b></td><td>{{}}</td></tr>
+<!-- 任意：ファネル図（段階ごとに減っていく数字）。下の段ほど幅を狭くする -->
+<h3 style="color:#1a3d6d;">● 図：{{何の流れか}}</h3>
+<table cellpadding="6" style="border-collapse:collapse; width:100%; text-align:center;">
+  <tr><td style="background:#1a3d6d; color:#fff;">{{段階1}}　<b>{{数}}</b></td></tr>
+  <tr><td style="font-size:9pt; color:#c0392b;">▼ {{減少率}}</td></tr>
+  <tr><td><table cellpadding="6" style="border-collapse:collapse; width:70%; margin:auto;"><tr><td style="background:#3d6aa8; color:#fff; text-align:center;">{{段階2}}　<b>{{数}}</b></td></tr></table></td></tr>
+</table>
+
+<!-- 任意：流れ図（手順・ステップ） -->
+<h3 style="color:#1a3d6d;">● 流れ図</h3>
+<table cellpadding="8" style="border-collapse:collapse;">
+  <tr>
+    <td style="border:2px solid #1a3d6d; background:#e8eef7; text-align:center;"><b>STEP1</b><p style="margin:0">{{短く}}</p></td>
+    <td style="text-align:center; font-size:16pt;">➡</td>
+    <td style="border:2px solid #1a3d6d; background:#e8eef7; text-align:center;"><b>STEP2</b><p style="margin:0">{{短く}}</p></td>
+    <td style="text-align:center; font-size:16pt;">➡</td>
+    <td style="border:2px solid #1a8a4a; background:#d9f2e3; text-align:center;"><b>ゴール</b><p style="margin:0">{{短く}}</p></td>
+  </tr>
+</table>
+
+<!-- 任意：比較表（案A/案B）。採用した案の列を #d9f2e3 にする -->
+<h3 style="color:#1a3d6d;">● 比較表</h3>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; border-color:#c9d3e3;">
+  <tr style="background:#e8eef7;"><td><b>観点</b></td><td><b>案A</b></td><td><b>案B</b></td></tr>
+  <tr><td>{{観点}}</td><td>{{}}</td><td>{{}}</td></tr>
+</table>
+
+<!-- 担当・期限・次の一手 -->
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; border-color:#c9d3e3; margin-top:8px;">
+  <tr><td style="background:#e8eef7; width:20%;"><b>● 責任者</b></td><td>{{氏名}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>⏰ 期限</b></td><td>{{M/D（未定なら「未定」）}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>➡ 次の一手</b></td><td>
+    <p style="margin:0">□ {{作業1}}</p>
+    <p style="margin:0">□ {{作業2}}</p>
+  </td></tr>
+  <tr><td style="background:#fde2e1;"><b>⚠ リスク</b></td><td>
+    <p style="margin:0">・{{1行ずつ}}</p>
+  </td></tr>
+  <tr><td style="background:#fff6d6;"><b>❓ 未決</b></td><td>
+    <p style="margin:0">・{{1行ずつ}}</p>
+  </td></tr>
 </table>
 <!-- ===== /AGENDA ITEM ===== -->
 
-<h2 style="color:#1a3d6d;">■ 次回ミーティング</h2>
-<ul>
-  <li><b>日時：</b>{{未定なら「未定」}}</li>
-  <li><b>確認事項：</b>{{}}</li>
-</ul>
+<h2 style="color:#1a3d6d;">■ 次回までに確認すること</h2>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; border-color:#c9d3e3;">
+  <tr><td style="background:#e8eef7; width:20%;"><b>日時</b></td><td>{{未定なら「未定」}}</td></tr>
+  <tr><td style="background:#e8eef7;"><b>確認事項</b></td><td>
+    <p style="margin:0">□ {{1行ずつ}}</p>
+  </td></tr>
+</table>
 
 <hr>
 <p style="font-size:9pt; color:#888;">
   自動生成：Plaudの文字起こしからClaudeが作成。内容は必ず確認してください。<br>
-  元データ：{{元ファイル名}}（{{元ファイルのURL}}）／推定・補完した項目には「（推定）」と記載
+  元データ：{{元ファイル名・メール件名}}（{{URL}}）／推定した項目には「（推定）」と記載
 </p>
 </body>
 </html>
