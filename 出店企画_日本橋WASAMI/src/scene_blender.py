@@ -643,6 +643,18 @@ def build_upper(key, cut=None):
             lockers(r)
         if r["id"] == "sr":
             staff_room(r)
+        if key == "5F" and r["id"].startswith("ev"):
+            eval_room(r)
+        if r["id"].startswith("cg"):
+            cog_room(r)
+        if r["id"] == "gym":
+            gym_area(r)
+        if r["id"] == "slk":
+            for i in range(9):
+                box("slocker", 0.3, 0.45, 1.8, m(r["x0"] + 300 + i * 300), m(r["y0"] + 300), 0, "oak", bevel=0.003)
+        if r["id"] == "ph":
+            box("tripod", 0.3, 0.3, 1.3, m(r["x1"] - 250), m(r["y0"] + 450), 0, "steel", bevel=0.02)
+            box("walkline", m(3200), 0.05, 0.002, m(r["x0"] + 1900), m(r["y0"] + 450), 0.001, "oak")
         if r["id"] == "dk":
             box("kitchen", m(2400), 0.6, 0.86, m(17650), 0.35, 0, "white", bevel=0.005)
             box("kitchentop", m(2400), 0.62, 0.03, m(17650), 0.35, 0.86, "top")
@@ -660,37 +672,63 @@ def build_upper(key, cut=None):
                 linear_light(r["x0"] + 500, (r["y0"] + r["y1"]) / 2, r["x1"] - 500, (r["y0"] + r["y1"]) / 2, z, 45)
             elif r["kind"] in ("room", "service"):
                 linear_light(r["x0"] + 400, (r["y0"] + r["y1"]) / 2, r["x1"] - 400, (r["y0"] + r["y1"]) / 2, z, 45)
-        linear_light(300, 5500, W - 300, 5500, z, 40)
-        for y in (700, 2300):
-            linear_light(6000, y, 8300, y, z, 45); linear_light(11900, y, 14800, y, z, 45)
-        linear_light(2300, 650, 5400 if key == "4F" else 7400, 650, z, 45)
-        linear_light(15800, 400, 15800, 4500, z, 40)
-        if key == "5F":
-            for y in (1200, 3400):
-                linear_light(8200, y, 14600, y, z, 50)
+        for r in f["rooms"]:
+            if r["kind"] == "hall" and r["x1"] - r["x0"] > 2500:
+                linear_light(r["x0"] + 300, (r["y0"] + r["y1"]) / 2, r["x1"] - 300, (r["y0"] + r["y1"]) / 2, z, 40)
+            elif r["kind"] == "open":
+                for k_ in range(1, 3):
+                    yy = r["y0"] + (r["y1"] - r["y0"]) * k_ / 3
+                    linear_light(r["x0"] + 500, yy, r["x1"] - 500, yy, z, 50)
         # 道路側の昼光
         sun_world(strength=0.35)
 
 
 def treat_furnish(r, cut):
+    """運動室：ベッド（180×80相当）、姿勢確認用の鏡2面、ホワイトボード1面（平面図と同じ配置）"""
     x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
-    if (y1 - y0) > (x1 - x0) - 100:     # 縦長：ベッドを南側の壁沿いに横向き
-        bed(x0 + 1150, y0 + 600, along_x=True)
-        stool(x1 - 450, y1 - 500)
-        box("basket", 0.42, 0.34, 0.24, m(x0 + 350), m(y1 - 350), 0, "oak", bevel=0.01)
-        hx, hy = (x0 + x1) / 2, y0 + 110
-    else:                               # 横長：北側の柱型から500mm離す
-        bed(x0 + 1275, y1 - 900, along_x=True)
-        stool(x0 + 450, y1 - 1650)
-        box("wagon", 0.42, 0.42, 0.75, m(x1 - 360), m(y0 + 360), 0, "oak", bevel=0.008)
-        box("wagontop", 0.44, 0.44, 0.02, m(x1 - 360), m(y0 + 360), 0.75, "top")
-        box("basket", 0.42, 0.34, 0.24, m(x1 - 900), m(y0 + 300), 0, "oak", bevel=0.01)
-        hx, hy = x0 + 110, (y0 + y1) / 2
-    if not cut:
-        if hy == y0 + 110:
-            box("hookshelf", 0.6, 0.2, 0.025, m(hx), m(hy), 1.6, "oak")
-        else:
-            box("hookshelf", 0.2, 0.6, 0.025, m(hx), m(hy), 1.6, "oak")
+    if (y1 - y0) > (x1 - x0):            # X1側の列（扉は南）：ベッドは東壁沿い
+        bed(x1 - 550, y0 + 1550)
+        box("mirrorW", 0.012, m(y1 - y0 - 1100), 1.7, m(x0) + 0.06, m((y0 + y1) / 2 - 50), 0.3, "metal")
+        box("mirrorN", m(x1 - x0 - 600), 0.012, 1.7, m((x0 + x1) / 2), m(y1 - 400), 0.3, "metal")
+        box("wboard", 0.012, 1.6, 0.9, m(x1) - 0.06, m(y0 + 1550), 1.05, "white")
+        stool(x0 + 700, y0 + 900)
+    else:                                # コア側の列（扉は北）：ベッドは南壁沿い
+        bed(x0 + 1200, y0 + 550, along_x=True)
+        box("mirrorW", 0.012, m(y1 - y0 - 600), 1.7, m(x0) + 0.06, m((y0 + y1) / 2), 0.3, "metal")
+        box("mirrorE", 0.012, m(y1 - y0 - 600), 1.7, m(x1) - 0.06, m((y0 + y1) / 2), 0.3, "metal")
+        box("wboard", 1.8, 0.012, 0.9, m(x0 + 1200), m(y0) + 0.06, 1.05, "white")
+        stool(x1 - 600, y0 + 1500)
+
+
+def eval_room(r):
+    """評価室 4,500×4,000：机・いす、ベッド、壁面ホワイトボード、スライド式の姿勢鏡"""
+    x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
+    box("edesk", 1.4, 0.6, 0.72, m(x0 + 900), m(y1 - 500), 0, "white", bevel=0.005)
+    box("emon", 0.5, 0.03, 0.32, m(x0 + 900), m(y1 - 330), 0.78, "screen", bevel=0.004)
+    chair(x0 + 900, y1 - 1150, 90); chair(x0 + 1700, y1 - 1250, 90)
+    bed(x1 - 600, y0 + 1800)
+    box("ewb", m(x1 - x0 - 2300), 0.012, 1.0, m(x0 + 2000 + (x1 - x0 - 2300) / 2), m(y1) - 0.06, 1.0, "white")
+    box("pmirror", 0.06, 1.3, 1.9, m(x0 + 110), m(y0 + 1950), 0.05, "metal")
+    box("prail", 0.04, 2.8, 0.04, m(x0 + 60), m(y0 + 1950), 2.0, "steel")
+
+
+def cog_room(r):
+    x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
+    box("cdesk", m(x1 - x0 - 300), 0.4, 0.72, m((x0 + x1) / 2), m(y1 - 350), 0, "oakH", bevel=0.004)
+    chair((x0 + x1) / 2, y1 - 850, 90)
+
+
+def gym_area(r):
+    x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
+    mat = principled("gymmat", (0.36, 0.33, 0.30), rough=0.9) if "gymmat" not in MATS else MATS["gymmat"]
+    for (a, b, c, d) in ((x0 + 400, y0 + 600, x0 + 2400, y0 + 1600), (x0 + 400, y0 + 2000, x0 + 2400, y0 + 3000)):
+        box("mat", m(c - a), m(d - b), 0.02, m((a + c) / 2), m((b + d) / 2), 0, mat, bevel=0.005)
+    for xx in (x0 + 3800, x0 + 5400):
+        box("machine", 1.2, 1.0, 1.4, m(xx), m(y1 - 1000), 0, "steel", bevel=0.05)
+        box("machine_seat", 0.5, 0.5, 0.5, m(xx), m(y1 - 1000), 0.0, "fabric", bevel=0.03)
+    box("gmirror", 0.012, m(y1 - y0 - 1000), 1.9, m(x1) - 0.06, m((y0 + y1) / 2), 0.3, "metal")
+    for i in range(4):
+        cyl("ball", 0.3, 0.6, m(x0 + 2900 + i * 650), m(y0 + 400), 0.3, "fabric2", seg=32, rot=(math.pi / 2, 0, 0))
 
 
 def lockers(r):
@@ -714,13 +752,13 @@ def lockers(r):
 
 def staff_room(r):
     x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
-    box("table", 2.2, 0.7, 0.72, m(x0 + 2000), m(y0 + 1500), 0, "oakH", bevel=0.006)
-    for dx in (-700, 0, 700):
-        chair(x0 + 2000 + dx, y0 + 700, 90)
-        chair(x0 + 2000 + dx, y0 + 2300, 270)
-    box("kitchen", 2.6, 0.6, 0.86, m(x0 + 1400), m(y1 - 350), 0, "white", bevel=0.005)
-    box("kitchentop", 2.6, 0.62, 0.03, m(x0 + 1400), m(y1 - 350), 0.86, "top")
-    box("fridge", 0.55, 0.6, 1.7, m(x1 - 425), m(y1 - 350), 0, "white", bevel=0.01)
+    box("table", 1.6, 0.8, 0.72, m(x0 + 3500), m(y0 + 1300), 0, "oakH", bevel=0.006)
+    for dx in (-600, 0, 600):
+        chair(x0 + 3500 + dx, y0 + 550, 90)
+        chair(x0 + 3500 + dx, y0 + 2050, 270)
+    box("kitchen", 2.0, 0.6, 0.86, m(x0 + 1300), m(y0 + 350), 0, "white", bevel=0.005)
+    box("kitchentop", 2.0, 0.62, 0.03, m(x0 + 1300), m(y0 + 350), 0.86, "top")
+    box("fridge", 0.55, 0.6, 1.7, m(x1 - 400), m(y1 - 400), 0, "white", bevel=0.01)
 
 
 def lounge(L):
@@ -1014,13 +1052,14 @@ def V(x, y, z):  # mm → m（平面座標）
 
 VIEWS = {
     # 4F：EVホールから正面の受付を望む（銀座院と同じ構図）
-    "v4_lobby": dict(build=lambda: build_upper("4F"), cam=(V(14700, 350, 1450), V(9300, 3700, 1250)), lens=17, exposure=-0.8),
-    "v4_front": dict(build=lambda: build_upper("4F"), cam=(V(10075, 250, 1400), V(10075, 4500, 1350)), lens=15, exposure=-0.8),
+    "v4_lobby": dict(build=lambda: build_upper("4F"), cam=(V(9450, 350, 1450), V(14200, 2900, 1150)), lens=17, exposure=-0.8),
+    "v4_front": dict(build=lambda: build_upper("4F"), cam=(V(9400, 4800, 1500), V(14000, 2200, 1100)), lens=16, exposure=-0.8),
     "v4_lobby2": dict(build=lambda: build_upper("4F"), cam=(V(14900, 700, 1450), V(7600, 3600, 1150)), lens=18, exposure=-0.8),
-    "v4_aisle": dict(build=lambda: build_upper("4F"), cam=(V(20600, 5500, 1500), V(3000, 5500, 1250)), lens=20, exposure=-0.8),
-    "v4_room": dict(build=lambda: build_upper("4F"), cam=(V(12900, 6350, 1550), V(11400, 8600, 800)), lens=16, exposure=-0.8),
-    "v5_free": dict(build=lambda: build_upper("5F"), cam=(V(14700, 600, 1450), V(8200, 4000, 1100)), lens=18, exposure=-0.8),
-    "v5_staff": dict(build=lambda: build_upper("5F"), cam=(V(4700, 1650, 1500), V(800, 4300, 1000)), lens=17, exposure=-0.8),
+    "v4_aisle": dict(build=lambda: build_upper("4F"), cam=(V(20600, 4700, 1500), V(3000, 4700, 1250)), lens=20, exposure=-0.8),
+    "v4_room": dict(build=lambda: build_upper("4F"), cam=(V(9450, 5600, 1600), V(11300, 8300, 900)), lens=14, exposure=-0.6),
+    "v5_free": dict(build=lambda: build_upper("5F"), cam=(V(13800, 3200, 1500), V(20500, 8000, 900)), lens=17, exposure=-0.8),
+    "v5_eval": dict(build=lambda: build_upper("5F"), cam=(V(4800, 4750, 1550), V(8600, 8200, 900)), lens=15, exposure=-0.6),
+    "v5_staff": dict(build=lambda: build_upper("5F"), cam=(V(16700, 2800, 1550), V(20700, 300, 850)), lens=15, exposure=-0.6),
     # 待合から玄関（既設SUS両開き扉）・受付・道路側ガラス面の木調ルーバーを望む
     "v1_lobby": dict(build=build_1F, cam=(V(3600, 1500, 1500), V(500, 5600, 1350)), lens=17, exposure=-0.8),
     "v1_corr": dict(build=build_1F, cam=(V(4450, 3400, 1550), V(12800, 3400, 1200)), lens=17, exposure=-0.8),

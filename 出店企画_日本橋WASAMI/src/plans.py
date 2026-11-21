@@ -299,7 +299,10 @@ def draw_floor(f, ox, oy, s, scan=None):
             a += sum(area(o) for o in f["rooms"] if o["id"] == "mri2")
         if r["kind"] == "treat":
             portrait = (r["y1"] - r["y0"]) > (r["x1"] - r["x0"]) - 100
-            cx, cy = P((r["x0"] + r["x1"]) / 2, r["y0"] + (1450 if portrait else 380))
+            if portrait:
+                cx, cy = P(r["x0"] + (r["x1"] - r["x0"] - 950) / 2, r["y0"] + 1600)
+            else:
+                cx, cy = P((r["x0"] + r["x1"]) / 2, r["y0"] + 1600)
             g.text(cx, cy - 2.3, r["name"].replace("\n", " "), 1.9, weight="bold")
             g.text(cx, cy + 0.2, f"{a:.1f}㎡（約{a/1.62:.1f}畳）", 1.6, fill=C["sub"])
         elif r["kind"] in ("corridor", "hall"):
@@ -371,17 +374,47 @@ def furniture(g, f, P, s):
         x0, y0, x1, y1 = r["x0"], r["y0"], r["x1"], r["y1"]
         cx = (x0 + x1) / 2
         if r["kind"] == "treat":
-            # ベッド（壁・柱型から離して配置）＋スツール＋荷物かご
-            if y1 - y0 > x1 - x0 - 100:     # 縦長の部屋：ベッドを奥（南）の壁沿いに横向き
-                box(x0 + 175, y0 + 200, x0 + 2125, y0 + 1000, fill="#fff", rx=0.6)
-                box(x0 + 1800, y0 + 280, x0 + 2050, y0 + 920, fill="#f2ede6", rx=0.3)
-                a, b = P(x1 - 450, y1 - 500); g.circle(a, b, 190 * s)
-                box(x0 + 150, y1 - 550, x0 + 550, y1 - 150, fill="#e8dccb")
-            else:                            # 横長の部屋：北側柱型から500mm離す
-                box(x0 + 300, y1 - 1300, x0 + 2250, y1 - 500, fill="#fff", rx=0.6)
-                box(x0 + 2000, y1 - 1220, x0 + 2230, y1 - 580, fill="#f2ede6", rx=0.3)
-                a, b = P(x0 + 450, y1 - 1650); g.circle(a, b, 190 * s)
-                box(x1 - 600, y0 + 150, x1 - 200, y0 + 500, fill="#e8dccb")
+            # 運動室：ベッド1,800×800、姿勢鏡2面（青）、ホワイトボード1面（灰）
+            mir = dict(st=C["blue"], w=0.5)
+            wb = dict(st="#6b6b6b", w=0.7)
+            if y1 - y0 > x1 - x0:      # 縦長（X1側の列・扉は南）：ベッドは東壁沿い
+                box(x1 - 950, y0 + 650, x1 - 150, y0 + 2450, fill="#fff", rx=0.6)
+                g.line(*P(x0 + 40, y0 + 500), *P(x0 + 40, y1 - 600), **mir)
+                g.line(*P(x0 + 300, y1 - 400), *P(x1 - 300, y1 - 400), **mir)
+                g.line(*P(x1 - 40, y0 + 700), *P(x1 - 40, y0 + 2400), **wb)
+            else:                       # 横長（コア側の列・扉は北）：ベッドは南壁沿い
+                box(x0 + 300, y0 + 150, x0 + 2100, y0 + 950, fill="#fff", rx=0.6)
+                g.line(*P(x0 + 40, y0 + 300), *P(x0 + 40, y1 - 300), **mir)
+                g.line(*P(x1 - 40, y0 + 300), *P(x1 - 40, y1 - 300), **mir)
+                g.line(*P(x0 + 300, y0 + 40), *P(x1 - 300, y0 + 40), **wb)
+        elif r["id"].startswith("ev") and f["floor"] == "5F":
+            # 評価室 4,500×4,000：机・いす2脚、ベッド180×80、壁面ホワイトボード、スライド式姿勢鏡
+            box(x0 + 200, y1 - 800, x0 + 1600, y1 - 200, fill="#f4efe8")
+            a, b = P(x0 + 900, y1 - 1150); g.circle(a, b, 220 * s)
+            a, b = P(x0 + 1700, y1 - 1250); g.circle(a, b, 220 * s)
+            box(x1 - 1000, y0 + 900, x1 - 200, y0 + 2700, fill="#fff", rx=0.6)
+            g.line(*P(x0 + 2000, y1 - 40), *P(x1 - 300, y1 - 40), st="#6b6b6b", w=0.7)
+            box(x0 + 60, y0 + 1300, x0 + 160, y0 + 2600, fill="#cfe0ee", st=C["blue"], sw=0.2)
+            g.text(*P(x0 + 600, y0 + 1950), "姿勢鏡", 1.3, fill=C["blue"])
+        elif r["id"].startswith("cg"):
+            box(x0 + 150, y1 - 550, x1 - 150, y1 - 150, fill="#f4efe8")
+            a, b = P((x0 + x1) / 2, y1 - 850); g.circle(a, b, 190 * s)
+        elif r["id"] == "ph":
+            g.line(*P(x0 + 300, y0 + 450), *P(x1 - 500, y0 + 450), st=C["accent"], w=0.3, dash="1.2,0.8", extra='marker-end="url(#arr)"')
+            g.text(*P(x0 + 1500, y0 + 600), "歩行路 約3,500", 1.3, fill=C["accent"])
+            a, b = P(x1 - 250, y0 + 450); g.circle(a, b, 150 * s, st=C["sub"])
+        elif r["id"] == "slk":
+            n = int((x1 - x0 - 300) / 300)
+            for i in range(n):
+                box(x0 + 150 + i * 300, y0 + 100, x0 + 450 + i * 300, y0 + 550, fill="#e8dccb")
+            g.text(*P((x0 + x1) / 2, y0 + 750), "ロッカー40（2段）", 1.3, fill=C["sub"])
+        elif r["id"] == "gym":
+            for i, (gx0, gy0, gx1, gy1) in enumerate([(x0 + 400, y0 + 600, x0 + 2400, y0 + 1600), (x0 + 400, y0 + 2000, x0 + 2400, y0 + 3000),
+                                                       (x0 + 3200, y1 - 1500, x0 + 4400, y1 - 500), (x0 + 4800, y1 - 1500, x0 + 6000, y1 - 500)]):
+                box(gx0, gy0, gx1, gy1, fill="#ecebe8", rx=0.5)
+            g.text(*P(x0 + 1400, y0 + 1100), "マット", 1.4, fill=C["sub"]); g.text(*P(x0 + 1400, y0 + 2500), "マット", 1.4, fill=C["sub"])
+            g.text(*P(x0 + 4600, y1 - 1000), "トレーニング機器", 1.4, fill=C["sub"])
+            g.line(*P(x1 - 40, y0 + 500), *P(x1 - 40, y1 - 500), st=C["blue"], w=0.5)
         elif r["kind"] == "mri" and r.get("mri_axis") == "y":
             # 1.5T 超電導MRI（ボア軸＝Y方向）。ガントリーを北側、寝台を南側（操作室の観察窓側）に配置
             gx, gy = x0 + 2100, 4350
@@ -436,13 +469,12 @@ def furniture(g, f, P, s):
             for i in range(3):
                 a, b = P(x0 + 800, y0 + 600 + i * 700); g.circle(a, b, 180 * s)
         elif r["id"] == "sr":
-            box(x0 + 900, y0 + 1150, x0 + 3100, y0 + 1850, rx=0.8, fill="#f4efe8")
-            for xx in (1300, 2000, 2700):
-                for yy in (700, 2300):
-                    a, b = P(x0 + xx, y0 + yy); g.circle(a, b, 220 * s)
-            box(x0 + 100, y1 - 650, x0 + 2700, y1 - 50, fill="#ecebe8")
-            g.text(*P(x0 + 1400, y1 - 400), "ミニキッチン", 1.5, fill=C["sub"])
-            box(x1 - 700, y1 - 650, x1 - 150, y1 - 50, fill="#ecebe8")
+            # スタッフルーム：大テーブル（8席）＋既設カウンターキッチン＋冷蔵庫
+            box(x0 + 2700, y0 + 900, x0 + 4300, y0 + 1700, rx=0.8, fill="#f4efe8")
+            for xx in (2900, 3500, 4100):
+                for yy in (550, 2050):
+                    a, b = P(x0 + xx, y0 + yy); g.circle(a, b, 200 * s)
+            box(x1 - 600, y1 - 650, x1 - 100, y1 - 100, fill="#ecebe8")
         elif r["id"] in ("cs",):
             box(x0 + 600, y0 + 1300, x0 + 2100, y0 + 2100, rx=0.6, fill="#f4efe8")
             for yy in (1000, 2400):
@@ -545,11 +577,12 @@ def dims(g, f, P, s):
             vdim(a, b, W + 700, f"{b-a:,}")
     else:
         hdim(0, W, D + 1900, f"{W:,}（想定）")
-        xs = sorted({r["x0"] for r in f["rooms"] if r["kind"] == "treat" and r["y1"] == D} | {W})
+        xs = sorted({r["x0"] for r in f["rooms"] if r["kind"] in ("treat", "room", "open") and r["y1"] == D} | {W})
         for a, b in zip(xs, xs[1:]):
             hdim(a, b, D + 1100, f"{b-a:,}")
         vdim(0, D, -1350, f"{D:,}（想定）")
-        for a, b in [(0, 1300), (1300, 4500), (4500, 6100), (6100, D)]:
+        ys = sorted({0, D} | {r[k] for r in f["rooms"] if r["kind"] == "hall" and r["x1"] - r["x0"] > 10000 for k in ("y0", "y1")})
+        for a, b in zip(ys, ys[1:]):
             vdim(a, b, W + 750, f"{b-a:,}")
 
 
@@ -565,10 +598,10 @@ def summary_table(g, x, y, f):
             if r["kind"] in ("treat", "room", "mri", "service") and r["name"]]
     g.text(x, y, "諸室面積表（内法・概算）", 2.4, anchor="start", weight="bold")
     yy = y + 3.6
-    tr = [a for n, a in rows if n.startswith("施術室")]
-    other = [(n, a) for n, a in rows if not n.startswith("施術室")]
+    tr = [a for n, a in rows if n.startswith("運動室")]
+    other = [(n, a) for n, a in rows if not n.startswith("運動室")]
     if tr:
-        g.text(x, yy, f"施術室 × {len(tr)}室", 2.0, anchor="start"); g.text(x + 52, yy, f"各{min(tr):.1f}～{max(tr):.1f}㎡", 2.0, anchor="end"); yy += 3.1
+        g.text(x, yy, f"運動室 × {len(tr)}室", 2.0, anchor="start"); g.text(x + 52, yy, f"各{min(tr):.1f}～{max(tr):.1f}㎡", 2.0, anchor="end"); yy += 3.1
     for n, a in other:
         g.text(x, yy, n, 2.0, anchor="start"); g.text(x + 52, yy, f"{a:.1f}㎡", 2.0, anchor="end"); yy += 3.1
     g.line(x, yy - 1.8, x + 52, yy - 1.8, st="#bbb", w=0.15)
@@ -598,14 +631,14 @@ def make_plan(floor):
                "・受付は玄関の既設扉の正面（扉から1,220mm）。待合は道路側ガラス面に面し、廊下（幅1,200）から診察室・処置室へ。館内側出入口からも廊下へ直接つながる。",
                "・玄関ポーチ（道路側開放）・奥の既設SUS両開き扉・道路側ガラス面（約4.5m）は既設（A工事）のまま。ガラス面から600mm内側に木調縦ルーバー、600mm以内に造作・サインなし（内装マニュアル7-(7)）。",
                "・トイレは館内共用トイレを利用。間仕切・内装材は全て不燃材、カーペットは防炎品。"],
-        "4F": [f"・施術室 4F {tc['4F']}室 ＋ 5F {tc['5F']}室 ＝ 計{tc['4F']+tc['5F']}室（要件15～20室）。各室 約6.5㎡（約4畳）。間仕切は上部開放の欄間式（欄間h=500）。",
-               "・受付はEVホール正面・フロア中央に大きく配置（銀座院と同じ円形カウンター＋木の天井リング）。ロビーは柱・壁のない開放的な空間。",
-               "・特別避難階段・共用トイレへは廊下・通路で直接つながる計画（EVホール～階段附室を廊下状に確保：内装マニュアル6-(7)）。",
-               "・X1側（施術室側）は窓なし。通路は両側居室部分を有効1,600mm（令119条）。平面は募集図面をもとに作図、実施設計時に白図で確定。"],
-        "5F": [f"・施術室 {tc['5F']}室（各 約6.5㎡・約4畳）、フリースペース、スタッフ休憩室・スタッフ更衣室（男女）・物品庫を5階に集約。",
-               "・フリースペースは施術前後の待合・カウンセリング・セミナー兼用のラウンジ。",
-               "・特別避難階段・共用トイレへは廊下・通路で直接つながる計画（4Fと同一）。",
-               "・X1側（施術室側）は窓なし。平面形状は募集図面（4・5階 G229.86㎡）をもとに作図、実施設計時にビル側白図で寸法を確定。"],
+        "4F": [f"・運動室 {tc['4F']}室（窓のないX1側に9室：約2,330×3,100、コア側に4室：3,000×2,400、各約7.2㎡・長方形）。10億モデル（13～15室）の下限13室。",
+               "・各運動室：ベッド1,800×800、壁1面ホワイトボード、姿勢確認用の鏡2面。完全個室を基本とし、間仕切上部の開放（欄間）も可。",
+               "・受付・待合はEVホール正面のロビー（待合12席、最大24名はロビー・通路で対応）。女性更衣室はパウダー付で通路側から出入り。男性は運動室内で着替え。",
+               "・特別避難階段・倉庫へは廊下（幅1,500）、共用トイレへは通路で直接つながる。通路は両側居室部分を有効1,600mm（令119条）。実施設計時に白図で確定。"],
+        "5F": ["・評価室3室（各4,500×4,000＝18㎡・完全個室：ホワイトボード、スライド式姿勢鏡、ベッド180×80）、認知室4室（各約1,500×1,700・完全個室）、撮影室（歩行撮影 4,000×1,700）。",
+               "・フリースペース（ジム予定）約42㎡（約12.7坪）。スタッフルーム約13.8㎡（既設カウンターキッチン・テーブル）＋スタッフ更衣・ロッカー室（ロッカー40人分）。",
+               "・ジムの20～30坪・40名規模のスタッフルームは、評価室・撮影室の数や大きさとの調整が必要（本案は評価室3室を優先）。",
+               "・特別避難階段・共用トイレへは廊下で直接つながる計画。平面形状は募集図面（4・5階 G229.86㎡）をもとに作図、実施設計時にビル側白図で寸法を確定。"],
     }[floor]
     no = {"1F": "A-01", "4F": "A-02", "5F": "A-03"}[floor]
     title_block(g, f["title"], scale, no, notes)
@@ -616,8 +649,8 @@ def make_plan(floor):
         summary_table(g, 330, 104, f)
         g.text(14, 20, "← 正面道路（Y1通り・歩道）", 2.6, anchor="start", fill=C["red"], weight="bold")
     else:
-        legend(g, 330, 70, [(C["tint"], f"貸室 G{m2}㎡（約{tsubo}坪）"), (C["treat"], "施術室（銀座院仕様）"),
-                            ("#f8f4ee", "個室（更衣・カウンセリング等）"), (C["service"], "バックヤード"),
+        legend(g, 330, 70, [(C["tint"], f"貸室 G{m2}㎡（約{tsubo}坪）"), (C["treat"], "運動室（銀座院仕様）"),
+                            ("#f8f4ee", "個室（評価・認知・撮影・更衣・スタッフ）"), (C["service"], "倉庫"),
                             ("#f3ebdd", "廊下・通路（階段・トイレへ）"), (C["core"], "共用部（コア）")])
         summary_table(g, 330, 108, f)
         g.text(14, 20, "← 正面道路（Y1通り）", 2.6, anchor="start", fill=C["red"], weight="bold")

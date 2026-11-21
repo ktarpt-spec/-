@@ -38,10 +38,10 @@ pages.append(f"""<div class="pg" style="background:#f4efe6">
  <div style="font-size:4.4mm;margin-top:1mm;line-height:1.6">1F 整形外科ふっか 東京駅院<br>4・5F 整痛院ふっか 東京駅院</div>
  <div style="margin-top:10mm;font-size:3.3mm;line-height:1.95;border-top:0.4mm solid #9a7b55;padding-top:4mm">
   物件：日本橋WASAMIビル<br>　　　東京都中央区日本橋三丁目（JR東京駅 徒歩1分）<br>
-  1階：店舗区画 {m1}㎡（約{t1}坪）<br>4階・5階：各 G{m4}㎡（約{t4}坪）<br>合計：約168.8坪／施術室 {N}室・診察室4室・処置室3室</div>
+  1階：店舗区画 {m1}㎡（約{t1}坪）<br>4階・5階：各 G{m4}㎡（約{t4}坪）<br>合計：約168.8坪／運動室{N}室・評価室3室・診察室4室・処置室3室</div>
 
  <div style="position:relative;margin-top:8mm;height:58mm;border-radius:1.2mm;overflow:hidden"><img src="images_jpg/v5_free.jpg" style="width:100%;height:100%;object-fit:cover"></div>
- <div style="font-size:2.8mm;color:#6b625b;margin-top:1.5mm">5F フリースペース</div>
+ <div style="font-size:2.8mm;color:#6b625b;margin-top:1.5mm">5F フリースペース（ジム予定）</div>
  <div style="font-size:3mm;margin-top:6mm;color:#6b625b">2026年10月　基本計画</div>
 </div></div>""")
 
@@ -49,29 +49,29 @@ pages.append(f"""<div class="pg" style="background:#f4efe6">
 fl_rows = ""
 for k, f in FLOORS.items():
     items = "、".join(dict.fromkeys(r["name"].replace("\n", "") for r in f["rooms"]
-                                     if r["name"] and r["kind"] not in ("corridor", "existing", "hall") and not r["name"].startswith("施術室")))
-    t = f"施術室 {tc[k]}室（各約4畳）、" if tc[k] else ""
+                                     if r["name"] and r["kind"] not in ("corridor", "existing", "hall") and not r["name"].startswith("運動室")))
+    t = f"運動室 {tc[k]}室（各約7.2㎡）、" if tc[k] else ""
     m2, tb = AREA[k]
     fl_rows += f"<tr><th>{k}<br><span style='font-weight:normal;font-size:2.6mm'>{m2}㎡<br>約{tb}坪</span></th><td>{t}{items}</td></tr>"
 rows = ""
 for i, (fl, ph, ax, ttl, txt) in enumerate([
         ("1F", "v1_lobby.png", "ax1.png", "医療フロア", "道路から玄関ポーチ（既設扉）で直接入れる医療フロア。受付・待合15席（道路側ガラス面に木調ルーバー）・診察室4室・処置室3室"),
-        ("4F", "v4_lobby.png", "ax4.png", "受付・施術フロア", f"EVを降りると正面に円形受付の開放的なロビー。男女更衣室・施術室{tc['4F']}室"),
-        ("5F", "v5_free.png", "ax5.png", "施術・スタッフフロア", f"施術室{tc['5F']}室・フリースペース。スタッフ休憩室・更衣室・物品庫を集約")]):
+        ("4F", "v4_lobby.png", "ax4.png", "受付・運動フロア", f"EVを降りると受付・待合ロビー。運動室{tc['4F']}室（ベッド・鏡2面・ホワイトボード）・女性更衣室"),
+        ("5F", "v5_free.png", "ax5.png", "評価・ジム・スタッフフロア", "評価室3室・認知室4室・撮影室、フリースペース（ジム予定）、スタッフルーム・ロッカー")]):
     y = i * 83
     rows += absimg(ph, 134, y, 128, 78) + absimg(ax, 266, y, 122, 78)
     rows += f'<div style="position:absolute;left:136mm;top:{y+2}mm;background:#9a7b55;color:#fff;font-size:3.6mm;font-weight:bold;padding:1mm 3mm;border-radius:0.8mm">{fl}　{ttl}</div>'
     rows += f'<div style="position:absolute;left:136mm;top:{y+70}mm;width:124mm;background:rgba(40,34,30,.6);color:#fff;font-size:2.6mm;padding:1mm 2mm;border-radius:0.6mm">{txt}</div>'
 overview = f"""
 <div style="position:absolute;left:0;top:0;width:126mm">
- <div class="kpi"><div><b>168.8<small style="font-size:3.5mm">坪</small></b><span>1F {t1}坪＋4F・5F 各{t4}坪</span></div><div><b>{N}</b><span>施術室（各 約4畳）</span></div></div>
+ <div class="kpi"><div><b>168.8<small style="font-size:3.5mm">坪</small></b><span>1F {t1}坪＋4F・5F 各{t4}坪</span></div><div><b>{N}</b><span>運動室（各 約7.2㎡）</span></div></div>
  <div class="kpi" style="margin-top:3mm"><div><b>4＋3</b><span>1F 診察室4室・処置室3室</span></div><div><b>1<small style="font-size:3.5mm">分</small></b><span>JR東京駅（22番出口）徒歩</span></div></div>
  <h3 style="font-size:4.2mm;margin:6mm 0 2mm">コンセプト</h3>
  <p style="font-size:3.1mm;line-height:1.75;margin:0">銀座院の空間（白い塗り壁、木目、ベージュのカーペット、中央の円形受付と木の天井リング）をそのまま拡大し、施術室を増やした「銀座院の大型版」。外観はビルの意匠を活かし、看板を目立たせない落ち着いた表現とします。</p>
  <h3 style="font-size:4.2mm;margin:6mm 0 2mm">フロア構成</h3>
  <table>{fl_rows}</table>
  <h3 style="font-size:4.2mm;margin:5mm 0 2mm">動線</h3>
- <p style="font-size:3mm;line-height:1.7;margin:0">診察：道路 → 1F玄関ポーチ（既設扉）→ 受付・待合 → 診察室・処置室<br>施術：ビルEV → 4F受付 → 更衣室 → 4F／5F施術室<br>スタッフ：5F休憩室・更衣室・物品庫を拠点に各階へ</p>
+ <p style="font-size:3mm;line-height:1.7;margin:0">診察：道路 → 1F玄関ポーチ（既設扉）→ 受付・待合 → 診察室・処置室<br>施術：ビルEV → 4F受付 → 更衣室 → 運動室／5F評価室・認知室・ジム<br>スタッフ：5F休憩室・更衣室・物品庫を拠点に各階へ</p>
 </div>
 {rows}
 """
@@ -100,20 +100,21 @@ pages.append(page("内装イメージ　1階（受付・待合・診察室・処
 
 # ---------------------------------------------------------------- 10 4F
 p4 = f"""{img("v4_lobby.png", 0, 0, 236, 148)}{img("v4_front.png", 242, 0, 146, 91)}{img("v4_room.png", 242, 128, 146, 91)}
-{cap(0, 152, 236, "4F 受付ロビー", "EVホールから続く柱・壁のない開放的なロビー。中央に大きな円形受付、木の天井リング、棚とロゴ壁で銀座院の雰囲気を再現。待合いすはゆとりをもって配置。", "4F")}
+{cap(0, 152, 236, "4F 受付・待合ロビー", "EVを降りると受付・待合ロビー。円形受付、木の天井リング、棚とロゴ壁で銀座院の雰囲気を再現。待合12席（最大24名はロビー・通路で対応）。", "4F")}
 {img("v4_aisle.png", 0, 176, 116, 72)}{img("ax4.png", 120, 176, 116, 72)}
-{cap(242, 94, 146, "EVホール側から見た受付", "エレベーターを降りて正面に受付が見える配置です。", "4F")}
-{cap(242, 222, 146, f"施術室（約6.6㎡・約4畳）", "ベッド・スツール・荷物かご・フック。木目の引戸で統一（窓なし）。", "4F")}
+{cap(242, 94, 146, "通路側から見た受付・待合", "運動室13室へは幅1,600mmの通路で直接。女性更衣室（パウダー付）も通路側から出入り。", "4F")}
+{cap(242, 222, 146, "運動室（約7.2㎡・長方形）", "ベッド（180×80）、姿勢確認用の鏡2面、壁1面のホワイトボード。15分モビライゼーション＋15分運動の30分枠。", "4F")}
 """
-pages.append(page("内装イメージ　4階（受付ロビー・更衣室・施術室）", "INTERIOR IMAGE 4F", p4, "P.10"))
+pages.append(page("内装イメージ　4階（受付・待合・運動室）", "INTERIOR IMAGE 4F", p4, "P.10"))
 
 # ---------------------------------------------------------------- 11 5F
-p5 = f"""{img("v5_free.png", 0, 0, 236, 148)}{img("v5_staff.png", 242, 0, 146, 91)}{img("ax5.png", 242, 128, 146, 91)}
-{cap(0, 152, 236, "5F フリースペース", "施術前後の待合・カウンセリング・セミナーに使えるラウンジ。造作ベンチと丸テーブル、銀座院と同じ素材と色。", "5F")}
-{cap(242, 94, 146, "スタッフ休憩室（約18㎡）", "道路側の窓に面した明るい休憩室。ミニキッチン・冷蔵庫付き。スタッフ更衣室（男女）・物品庫も5階に集約。", "5F")}
-{cap(242, 222, 146, "5F 俯瞰", f"施術室{tc['5F']}室／フリースペース／スタッフ休憩室・更衣室／物品・リネン庫", "5F")}
+p5 = f"""{img("v5_free.png", 0, 0, 236, 148)}{img("v5_eval.png", 242, 0, 146, 91)}{img("v5_staff.png", 242, 128, 146, 91)}
+{cap(0, 152, 236, "5F フリースペース（ジム予定・約42㎡）", "マット・トレーニング機器・壁面ミラーを置くジムスペース。運動療法の延長やセミナーにも使えます。", "5F")}
+{cap(242, 94, 146, "評価室（4,500×4,000・18㎡）", "完全個室。壁面ホワイトボード、スライド式の姿勢鏡（全身）、ベッド180×80、机。3室。", "5F")}
+{cap(242, 222, 146, "スタッフルーム（約13.8㎡）", "既設カウンターキッチン・テーブル。隣にロッカー40人分のスタッフ更衣室。", "5F")}
+{img("ax5.png", 0, 176, 116, 72)}
 """
-pages.append(page("内装イメージ　5階（施術室・フリースペース・スタッフエリア）", "INTERIOR IMAGE 5F", p5, "P.11"))
+pages.append(page("内装イメージ　5階（評価室・認知室・ジム・スタッフルーム）", "INTERIOR IMAGE 5F", p5, "P.11"))
 
 
 # ---------------------------------------------------------------- 12. 収支計画・賃料比率について
@@ -137,7 +138,7 @@ tbl = ("<tr><th>万円／月（年平均）</th><th>1年目</th><th>2年目</th>
 finp = f"""
 <style>.chart svg{{width:100%;height:auto;display:block}} .sec h3{{font-size:3.9mm;margin:0 0 1.5mm}} .sec p{{font-size:2.85mm;line-height:1.7;margin:0}} table.fin th, table.fin td{{padding:0.9mm 2mm}}</style>
 <div style="position:absolute;left:0;top:0;width:150mm">
- <div class="kpi"><div><b>{ff['sales']:,}<small style="font-size:3.2mm">万円</small></b><span>最終月商（年商 約10億1,700万円）</span></div><div><b>約{rent_p:.0f}<small style="font-size:3.2mm">%</small></b><span>賃料比率（最終月）</span></div></div>
+ <div class="kpi"><div><b>{ff['sales']:,}<small style="font-size:3.2mm">万円</small></b><span>最終月商（年商 約{ff['sales'] * 12 / 10000:.0f}億円）</span></div><div><b>約{rent_p:.0f}<small style="font-size:3.2mm">%</small></b><span>賃料比率（最終月）</span></div></div>
  <div class="kpi" style="margin-top:2.5mm"><div><b>94<small style="font-size:3.2mm">%</small></b><span>粗利率（自費100%）</span></div><div><b>約{op_p:.0f}<small style="font-size:3.2mm">%</small></b><span>営業利益率（最終月）</span></div></div>
  <div class="sec" style="margin-top:5mm"><h3>① 超好立地による「広告費の代替」</h3>
  <p>JR東京駅（22番出口）徒歩1分・日本橋駅徒歩4分。日本有数のターミナル駅の通勤・出張・来訪動線上にあり、「通いやすい場所にある」こと自体が最大の集客力になります。慢性痛のコース施術は通院の継続が前提のため、駅至近の立地は継続率・紹介にも直結します。看板を大きく出さずとも駅前の認知と紹介・リピートで集客でき、<b>広告宣伝費を売上比 約{ad_p:.0f}%</b>に抑える計画です。賃料と広告費を合わせた「集客コスト」で比べると、一般的な自費クリニックより低い水準です。</p>
@@ -181,7 +182,7 @@ ginza = f"""
  <div><b>2025<small style="font-size:3.5mm">年</small></b><span>銀座 新モデル大型院を開院</span></div></div>
 <div style="position:absolute;left:0;top:190mm;width:236mm;font-size:3.05mm;line-height:1.75">
  腰痛・坐骨神経痛など慢性的な痛み・しびれに特化した「整痛院」。2025年には大阪・関西万博のステージで「整痛」の取り組みを講演。
- 東京駅院では、銀座院の施術モデルに<b>整形外科の医療フロア（診察室4室・処置室3室）</b>を加え、診察から施術まで一貫して提供します。
+ 東京駅院は「10億モデル店舗」として、銀座院の施術モデルを運動室13室・評価室3室に拡大し、<b>整形外科の医療フロア（診察室4室・処置室3室）</b>を加えて、診察から評価・施術まで一貫して提供します。
  東京駅院の内装は、写真の銀座院（白い塗り壁・木目・ベージュのカーペット・円形受付）をそのまま踏襲します。</div>
 <div style="position:absolute;left:244mm;top:0;width:144mm">
  <h3 style="font-size:4.4mm;margin:0 0 3mm">会社・銀座院の概要（公開情報）</h3>
@@ -197,9 +198,9 @@ pages.append(page("銀座院のご紹介（整痛院ふっか）", "GINZA CLINIC
 fin = [
     ("床", "タイルカーペット（防炎品・防炎表示付、ベージュ系・銀座院同等柄）／処置室：ビニル床シート", "4・5F：既設OAフロア（h=100）上に施工／1F：コンクリート直（FL-300）のため置床で嵩上げ"),
     ("巾木", "ソフト巾木 H60（ベージュ）", ""),
-    ("壁", "軽量鉄骨下地＋石膏ボード（不燃）AEP塗装（白・塗り壁調）／受付背面：木目調不燃化粧板", "施術室間仕切は上部開放の欄間式（欄間 h=500）"),
+    ("壁", "軽量鉄骨下地＋石膏ボード（不燃）AEP塗装（白・塗り壁調）／受付背面：木目調不燃化粧板", "運動室間仕切は完全個室（必要に応じ上部開放の欄間式）"),
     ("天井", "4・5F：既設天井（CH2,800）／1F：直天（想定FL+3,700）のため石膏ボード天井を新設（CH約3,000）　受付上部：木目調リング（不燃）", "既設の感知器・スプリンクラー・非常照明の機能を妨げない"),
-    ("建具", "施術室：木目調不燃化粧板 引戸 W900×H2,100／診察室・処置室：木目調不燃化粧板 引戸／1F玄関：既設SUS製両開き扉（A工事）をそのまま使用", "鍵1本をビル側へお預け。B工事の扉は室内側へ内開き"),
+    ("建具", "運動室・評価室・認知室：木目調不燃化粧板 引戸 W900×H2,100／診察室・処置室：木目調不燃化粧板 引戸／1F玄関：既設SUS製両開き扉（A工事）をそのまま使用", "鍵1本をビル側へお預け。B工事の扉は室内側へ内開き"),
     ("家具", "受付カウンター（木目＋白天板）、待合いす（ベージュ張地・木脚）、施術ベッド", "防災設備の機能を妨げない配置"),
     ("照明", "LEDライン照明・ダウンライト（電球色～温白色 3,000～3,500K、調光）", "4・5F電気容量：1Φ約100VA/㎡、3Φ約200VA/㎡（募集資料）"),
     ("カーテン等", "4・5F道路側窓：防炎ロールスクリーン（アイボリー）／1F道路側ガラス面：木調縦ルーバー（不燃・ガラス面から600mm後退）", "防炎物品（防炎ラベル縫付）。ガラス面へのフィルム等は貼らない"),
