@@ -67,7 +67,7 @@ overview = f"""
  <div class="kpi"><div><b>168.8<small style="font-size:3.5mm">坪</small></b><span>1F {t1}坪＋4F・5F 各{t4}坪</span></div><div><b>{N}</b><span>運動室（各 約7.2㎡）</span></div></div>
  <div class="kpi" style="margin-top:3mm"><div><b>4＋3</b><span>1F 診察室4室・処置室3室</span></div><div><b>1<small style="font-size:3.5mm">分</small></b><span>JR東京駅（22番出口）徒歩</span></div></div>
  <h3 style="font-size:4.2mm;margin:6mm 0 2mm">コンセプト</h3>
- <p style="font-size:3.1mm;line-height:1.75;margin:0">銀座院の空間（白い塗り壁、木目、ベージュのカーペット、中央の円形受付と木の天井リング）をそのまま拡大し、施術室を増やした「銀座院の大型版」。外観はビルの意匠を活かし、看板を目立たせない落ち着いた表現とします。</p>
+ <p style="font-size:3.1mm;line-height:1.75;margin:0">銀座院の空間（白い塗り壁、木目、ベージュのカーペット、中央の円形受付と木の天井リング）をそのまま拡大し、運動室・評価室を増やした「銀座院の大型版（10億モデル店舗）」。外観はビルの意匠を活かし、看板を目立たせない落ち着いた表現とします。</p>
  <h3 style="font-size:4.2mm;margin:6mm 0 2mm">フロア構成</h3>
  <table>{fl_rows}</table>
  <h3 style="font-size:4.2mm;margin:5mm 0 2mm">動線</h3>
